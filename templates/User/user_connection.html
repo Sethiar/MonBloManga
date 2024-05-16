@@ -1,0 +1,32 @@
+{% extends 'baseform.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Connexion utilisateur au blog">
+    <title>{% block title %}Authentification Utilisateur{% endblock %}</title>
+{% endblock %}
+
+{% block header_content %}
+
+{% endblock %}
+{% block body_content %}
+<form method="POST" action="{{ url_for('login', next_url=next_url) }}">
+    <div class="imgcontainer">
+        <img src="{{ url_for('static', filename='Images/images_formulaire/fruit1.jpg') }}" alt="Avatar" class="avatar">
+    </div>
+    <h3>Authentification Utilisateur</h3>
+		 {{ form.csrf_token }}
+    <div class="container">
+        {{ form.pseudo.label }} {{ form.pseudo() }}
+        <br><br>
+        {{ form.password.label }} {{ form.password() }}
+
+        <div class="container" style="background-color:#f1f1f1">
+            <button type="submit" class="validatedbtn">Connexion au compte utilisateur</button>
+            <button type="button" class="cancelledbtn"><a href="{{ url_for('landing_page') }}">Annulation de l'authentification utilisateur</a></button>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block footer_content %}
+{% endblock %}

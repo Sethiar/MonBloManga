@@ -1,0 +1,58 @@
+{% extends 'base.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Forum du blog permettant de discuter, interagir et donner son avis sur le blog.">
+    <title>{% block title %}Bienvenue sur le forum du blog{% endblock %}</title>
+
+{% endblock %}
+
+    {% block header_content %}
+    {% endblock %}
+{% block main_content %}
+        <h1>Forum de discussion</h1>
+<section id="categories">
+    <div id="forum_pic">
+        <div id="forum_pic_left">
+
+        </div>
+
+        <div id="forum_pic_center">
+        </div>
+        <div id="forum_pic_right">
+
+        </div>
+    </div>
+
+    <br><br><br><br><br><br>
+
+    <div id="container_subject">
+        <h2>Sujets</h2>
+        <br>
+        <table id="subject">
+            <thead>
+            <tr>
+                <th>Sujets</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for subject in subjects %}
+            <tr>
+                <td>{{ subject.nom }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="categorie">
+        <h4>Ajouter un sujet sur le forum</h4>
+        <form method="POST" action="{{ url_for('add_subject_forum') }}">
+            {{ formsubjectforum.csrf_token }}
+            {{ formsubjectforum.nom.label }} {{ formsubjectforum.nom(size=20) }}
+            {{ formsubjectforum.submit() }}
+        </form>
+    </div>
+</section>
+
+    {% endblock %}
+    {% block footer_content %}
+    {% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'base.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Blog permettant de tout connaître sur l'univers manga.">
+    <title>{% block title %}Bienvenue sur mon blog de Manga{% endblock %}</title>
+
+{% endblock %}
+
+{% block main_content %}
+<br><br>
+<h1>
+    Je vous souhaite la bienvenue sur mon blog sur les mangas.
+</h1>
+<br><br>
+<div id="intro">
+    <div id="middle">
+        <h2>
+            Si vous voulez tout savoir et plus encore sur les mangas, c'est ici !!!
+        </h2>
+        <h2>
+            Faîtes-vous plaisir et voyez si les réponses à vos questions sont ici.
+        </h2>
+    </div>
+</div>
+<br>
+    <div id="end">
+        <h3>
+            Bonne navigation sur le blog. J'espère que vous apprécierez votre visite.
+        </h3>
+    </div>
+<br><br>
+<br><br>
+<div id="container">
+    <div id="space-before">
+    </div>
+    <div id="principle">
+        <section class="new-articles">
+            <h2>Articles récents</h2>
+            {% for article in articles %}
+            <div class="article">
+                <a href="{{ url_for('show_article', article_id=article.id) }}">{{ article.title }}</a>
+                <p>{{ article.resume }}</p>
+            </div>
+            {% endfor %}
+        </section>
+
+            <section class="other-articles">
+                <div class="article">
+                    <h3>Titre de l'article 3</h3>
+                    <p>Description de l'article 3...</p>
+                </div>
+            </section>
+            <section class="other-articles">
+                <div class="article">
+                    <h3>Titre de l'article 4</h3>
+                    <p>Description de l'article 4...</p>
+                </div>
+            </section>
+        </div>
+    <div id="space-after">
+        </div>
+    <aside id="aside">
+        <h2>Articles par mois</h2>
+        <ul>
+            <li>Janvier 2024</li>
+            <li>Février 2024</li>
+            <li>Mars 2024</li>
+            <!-- Ajoutez d'autres mois si nécessaire -->
+        </ul>
+    </aside>
+</div>
+<br>
+{% endblock %}

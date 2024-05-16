@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #2c3e50;
+		}
+		form {
+			border: 3px solid #f1f1f1;
+			background-color: #fff;
+			padding: 20px;
+			max-width: 400px;
+			margin: 50px auto;
+			text-align: center;
+		}
+		input[type=text], input[type=password] {
+			width: 100%;
+			padding: 12px 20px;
+			margin: 8px 0;
+			display: inline-block;
+			border: 1px solid #ccc;
+			box-sizing: border-box;
+			font-size: 15px;
+		}
+		button[type="submit"] {
+            background-color: #006400;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            font-size: 30px;
+        }
+
+        button[type="submit"]:hover {
+             opacity: 0.8;
+        }
+        .validatedbtn {
+            background-color: orange;
+            width: 100%;
+            color: white;
+        }
+		.cancelledbtn {
+			background-color: gold;
+			width: 100%;
+		}
+		.imgcontainer {
+			text-align: center;
+			margin: 24px 0 12px 0;
+		}
+		img.avatar {
+			width: 30%;
+			border-radius: 50%;
+		}
+		.container {
+			padding: 16px;
+		}
+		span.psw {
+			float: right;
+			padding-top: 16px;
+		}
+		@media screen and (max-width: 300px) {
+			span.psw {
+				display: block;
+				float: none;
+			}
+			.cancelledbtn {
+				width: 100%;
+			}
+		}
+		button {
+            font-size: 20px;
+        }
+        .error-message {
+            color: red;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+
+
+	</style>
+	{% block head_content %}
+	{% endblock %}
+</head>
+<body>
+    <header>
+{% if error_message %}
+    <div class="error-message">
+		{{ error_message }}
+	</div>
+{% endif %}
+    {% block header_content %}
+    {% endblock %}
+    {% block body_content %}
+    {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,384 @@
+/* Définition d'une police pour tous les éléments de la page */
+* {
+  font-family: 'Comic Sans MS', cursive;
+  box-sizing: border-box;
+}
+
+/* Header */
+header {
+  background-color: black; /* Couleur de fond noire */
+  position: relative;
+  width: 70%;
+  margin: 0 auto;
+  height: 150px;
+  background-image: url('../Images/images_banniere/banniere4.jpg');
+  background-position: center;
+  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+}
+
+/* Image en haut à gauche */
+header::before {
+  content: ""; /* Obligatoire pour afficher le pseudo-élément */
+  background-image: url('../Images/images_banniere/luffy2.jpg');
+  background-position: top left;
+  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  position: absolute;
+  top: 0; /* Aligner en haut */
+  left: -20%; /* Aligner à gauche */
+  width: 20%; /* Largeur de l'image */
+  height: 100%; /* Hauteur de l'image */
+  z-index: 1; /* Mettre en arrière-plan */
+}
+
+/* Image en haut à droite */
+header::after {
+  content: ""; /* Obligatoire pour afficher le pseudo-élément */
+  background-image: url('../Images/images_banniere/goku1.jpg');
+  background-position: top right;
+  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  position: absolute;
+  top: 0; /* Aligner en haut */
+  right: -20%; /* Aligner à droite */
+  width: 20%; /* Largeur de l'image */
+  height: 100%; /* Hauteur de l'image */
+  z-index: 1; /* Mettre en arrière-plan */
+}
+
+/* Option de la barre de navigation */
+#navbar {
+  background-color: black;
+}
+
+/* Options pour les éléments de la barre de navigation */
+#navbar ul {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 1%;
+  margin: auto;
+}
+
+/* Éléments de la barre de navigation */
+#navbar ul li {
+  color: white;
+  font-size: 20px;
+  border: 1px solid orange;
+  display: inline-block;
+}
+
+#navbar ul li a {
+  display: block;
+  padding: 10px 30px;
+  text-decoration: none;
+  border: orange;
+  color: gold;
+}
+
+/* Option de survol */
+nav a:hover {
+  color: orange;
+  border-bottom: 2px solid gold;
+}
+
+button a {
+  color: black;
+}
+
+#navbar2 nav ul {
+    list-style-type: none;
+    padding: 10px;
+    background-color: #444;
+}
+
+#navbar2 nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+#navbar2 nav ul li a {
+    color: black;
+    text-decoration: none;
+}
+
+#connection {
+  width: 15%;
+  background-color: gold;
+  border: 2px solid orange;
+  background-position: right;
+  position: absolute;
+  right: 5%;
+}
+
+#connection a:hover {
+  color: white;
+}
+/* Style pour le conteneur principal */
+
+h1 {
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+  }
+
+#intro {
+  width: 45%;
+  margin: 0 auto;
+  text-align: center; /* Aligner le texte au centre */
+}
+
+#middle {
+  font-size: 24px; /* Taille de police plus grande */
+  border-top: 2px solid black; /* Ajouter une bordure en haut */
+  border-bottom: 2px solid black; /* Ajouter une bordure en bas */
+  padding: 20px 0; /* Ajouter un espacement intérieur */
+}
+
+#end {
+    float: right; /* Placer la div à gauche */
+    margin-top: 20px; /* Marge en haut pour séparer des autres éléments */
+    margin-right: 5%;
+}
+
+#principle {
+    display: flex;
+}
+
+/* Style pour le forum */
+#forum_pic {
+  background-image: url('../Images/images_forum/background1.jpg');
+  height: 100%;
+}
+
+#forum_pic_center {
+  border-radius: 100%; /* Faire du conteneur un cercle */
+  background-image: url('../Images/images_forum/fairy_forum.jpg');
+  background-position: center;
+  margin: 0 auto;
+  background-size: cover; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  top: 15%;
+  width: 550px;
+  height: 350px;
+}
+
+#forum_pic_left {
+  background-image: url('../Images/images_forum/erza.jpg');
+  background-position: left;
+  position: absolute;
+  background-size: cover; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  left: 0%; /* Aligner à gauche */
+  top: 35%;
+  width: 20%;
+  height: 50%;
+  z-index: 1; /* Mettre en arrière-plan */
+  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+}
+
+#forum_pic_right {
+  background-image: url('../Images/images_forum/jojo.jpg');
+  background-position: right;
+  position: absolute;
+  margin: 0 auto;
+  background-size: cover; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  right: 0%; /* Aligner à droite */
+  top: 35%;
+  width: 20%;
+  height: 50%;
+  z-index: 1; /* Mettre en arrière-plan */
+  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+}
+
+#categories, #topics {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+}
+
+#categories ul {
+    list-style-type: none;
+}
+
+#categories ul li {
+    margin-bottom: 1%;
+}
+
+#categories ul li a {
+    color: black;
+}
+
+#categories ul li a:hover {
+    color: gold;
+}
+
+.topic {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: black;
+}
+
+#container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    border: 1px solid black;
+}
+
+#aside {
+    width: 30%;
+    background-color: grey;
+    padding: 20px;
+    color: white;
+    border: 3px solid gold; /* Première bordure */
+    padding: 20px; /* Ajoutez un remplissage pour donner de l'espace à l'intérieur de l'encadré */
+    position: relative; /* Utilisé pour empiler la deuxième bordure au-dessus de la première */
+    margin-right: 5%;
+}
+
+#aside::after {
+    content: ''; /* Obligatoire pour l'élément pseudo-élément ::after */
+    position: absolute; /* Positionnement absolu par rapport à l'élément parent */
+    top: -6px; /* Ajustez la position verticale pour superposer la deuxième bordure */
+    left: -6px; /* Ajustez la position horizontale pour superposer la deuxième bordure */
+    right: -6px; /* Ajustez la position horizontale pour superposer la deuxième bordure */
+    bottom: -6px; /* Ajustez la position verticale pour superposer la deuxième bordure */
+    border: 6px solid gold; /* Deuxième bordure avec une couleur différente et une largeur plus grande */
+}
+
+#aside h2 {
+    margin-bottom: 10px;
+}
+
+#aside ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#aside ul li {
+    margin-bottom: 5px;
+}
+
+#principle {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 5%;
+    margin-right: 20%;
+    padding-top: 3%;
+}
+
+#space-before {
+  border-left: 1px solid grey;
+  margin-left: 10%;
+  padding-top: 3%;
+}
+
+#space-after {
+  border-right: 1px solid grey;
+  margin-right: 5%;
+}
+
+section {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.article {
+    border: 2px solid red;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.article h3 {
+    margin-top: 0;
+}
+
+.article p {
+    margin-bottom: 0;
+}
+
+/* Style pour la page reading_article */
+
+#separation {
+  border-bottom: 1px solid black;
+  margin: 3%;
+}
+
+table th {
+  border: 2px solid black;
+}
+
+table td {
+  border: 1px solid black;
+}
+
+#subject {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+#subject th, #subject td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+#subject th {
+    background-color: #f2f2f2;
+    color: #333;
+}
+
+#subject tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#subject tr:hover {
+    background-color: #ddd;
+}
+
+/* Style général du footer */
+.footer {
+  background-color: #2c3e50;
+  padding: 20px 0;
+  color: white;
+}
+
+/* Style des sections du footer */
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-section {
+  flex-basis: 23%;
+  margin-bottom: 20px;
+}
+
+footer h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+footer ul li {
+  margin-bottom: 5px;
+}
+
+footer ul li a {
+  text-decoration: none;
+  color: white;
+}
+
+/* Style du bas du footer */
+.footer-bottom {
+  margin-top: 20px;
+  text-align: center;
+  color: #888888;
+}
+

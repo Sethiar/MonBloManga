@@ -1,0 +1,70 @@
+{% extends 'base.html.jinja2' %}
+
+
+{% block head_content %}
+    <meta name="description" content="Articles présents sur le blog.">
+    <title>{% block title %}Articles du blog{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='CSS/accueil.css') }}">
+{% endblock %}
+
+{% block main_content %}
+<div id="container_article">
+    <h3>Articles</h3>
+    <br>
+    <table id="Articles">
+        <thead>
+        <tr>
+            <th>Titres des articles</th>
+            <th>Pseudos des auteurs</th>
+            <th>Articles</th>
+            <th>dates d'édition</th>
+            <th>Nombre de likes</th>
+            <th>Nombre de dislikes</th>
+        </thead>
+        <tbody>
+        {% for article in articles %}
+        <tr>
+            <td>
+                <div id="article_title">
+                    <a href="{{ url_for('show_article', article_id=article.id) }}">{{ article.title }}</a>
+                </div>
+            </td>
+            <td>
+                <div id="article_pseudo">
+                    {{ article.author.pseudo }}
+                </div>
+            </td>
+            <td>
+                <div id="article_content">
+                    {{ article.resume }}
+                </div>
+            </td>
+            <td>
+                <div id="article_date">
+                    {{ article.date_edition }}
+                </div>
+            </td>
+            <td>
+                <div id="article_likes">
+                    {{ article.likes }}
+                </div>
+            </td>
+            <td>
+                <div id="article_dislikes">
+                    {{ article.dislikes }}
+                </div>
+            </td>
+
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div id="icon">
+        <i class="fi fi-sr-thumbs-up"></i>
+    </div>
+</div>
+<div id="separation">
+
+</div>
+<br><br>
+{% endblock %}
