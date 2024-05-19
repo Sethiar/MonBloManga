@@ -1,37 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Mentions légales</title>
-</head>
-<body>
-<p>
+{% extends 'base2.html.jinja2' %}
 
-1. Présentation
+{% block main_content %}
 
-Présente sur le marché depuis 2012, la SARL SHIN SEKAI a pour activité la vente de figurines, goodies, magazines, aliments, puzzles, tasses, peluches et autres articles dérivés des mangas et des jeux vidéo.
-La SARL SHIN SEKAI garantie que ses articles sont officiels.
+<h1>Mentions Légales</h1>
+<br>
+<p>Dernière mise à jour : [Date]</p>
+<div class="separation">
 
-2. Evènements
+</div>
+<br>
+<div id="container_politique">
+    <div id="politique">
+        <p class="intro">Conformément aux dispositions des Articles 6-III et 19 de la Loi n°2004-575 du 21 juin 2004 pour la Confiance dans l’économie numérique, dite L.C.E.N., il est porté à la connaissance des utilisateurs et visiteurs du site [Nom du Blog] les présentes mentions légales.</p>
+        <p>La connexion et la navigation sur le site ([URL du site]) par l’utilisateur implique acceptation intégrale et sans réserve des présentes mentions légales.</p>
+    </div>
+    <br>
+    <h2>1. Informations sur l’Éditeur</h2>
+    <br>
+    <p>Éditeur du site :</p>
+    <ul>
+        <li>Nom : Lefetey</li>
+        <li>E-mail : <a href="mailto:alefetey123@gmail.com">Adresse mail</a></li>
+        <li>N° SIRET : [Numéro SIRET]</li>
+    </ul>
+    <br>
+    <div>
+        <h2>2. Hébergement</h2>
+        <p>Hébergeur :</p>
+        <ul>
+            <li>Nom : [Nom de l'Hébergeur]</li>
+            <li>Adresse : [Adresse de l'Hébergeur]</li>
+            <li>Téléphone : [Numéro de Téléphone de l'Hébergeur]</li>
+            <li>E-mail : [Adresse E-mail de l'Hébergeur]</li>
+        </ul>
+    </div>
+    <br>
+    <div>
+        <h2>3. Propriété Intellectuelle</h2>
+        <p class="first">Le site, son contenu et tous les éléments qui le composent (textes, images, vidéos, logos, etc.) sont protégés par le droit de la propriété intellectuelle. Toute reproduction, représentation, modification, publication, adaptation de tout ou partie des éléments du site, quel que soit le moyen ou le procédé utilisé, est interdite, sauf autorisation écrite préalable de l'éditeur.
+    </div>
+    <br>
+    <div>
+        <h2>4. Responsabilité</h2>
+        <p>Responsabilité de l'Éditeur :</p>
+        <p class="first">L'éditeur s'efforce de fournir des informations aussi précises que possible sur le site. Cependant, il ne pourra être tenu responsable des omissions, des inexactitudes et des carences dans la mise à jour, qu'elles soient de son fait ou du fait des tiers partenaires qui lui fournissent ces informations.</p>
 
-La SARL SHIN SEKAI est présente à de nombreux salons qui se déroulent tout au long de l'année en France (Japan Expo, Paris Manga, TGS, Japan Touch, Japan Sud...) mais aussi en Belgique (MIA, Retro MIA, Japan Belgique...). Ces évènements permettent aux clients de rencontrer toute l'équipe SHIN SEKAI et surtout de pouvoir découvrir toutes les nouveautés en direct !
+        <p>Liens Hypertextes :</p>
+        <p class="first">Le site peut contenir des liens hypertextes vers d'autres sites. L'éditeur n'exerce aucun contrôle sur ces sites et décline toute responsabilité quant à leur contenu.
 
-3. Informations
+        <p>Disponibilité du Site :</p>
+        <p class="first">Le site est normalement accessible aux utilisateurs 24/24h, 7/7j, sauf interruption, programmée ou non, pour des besoins de maintenance ou en cas de force majeure. En cas d’impossibilité d’accès au service, l'éditeur s’engage à faire son maximum pour rétablir l’accès au service. Le site ne saurait être tenu pour responsable de tout dommage, quelle qu'en soit la nature, résultant de son indisponibilité.</p>
+        <br>
+    </div>
+    <div>
+        <h2>5. Données Personnelles</h2>
+        <p class="first">Les données personnelles collectées sur le site sont traitées conformément à la politique de confidentialité disponible [lien vers la politique de confidentialité]. Conformément à la loi « Informatique et Libertés » du 6 janvier 1978 modifiée et au Règlement Général sur la Protection des Données (RGPD), vous disposez de droits d’accès, de rectification, de suppression et d’opposition aux données personnelles vous concernant. Pour exercer ces droits, veuillez contacter : [Adresse E-mail de Contact].</p>
+    </div>
+    <br>
+    <div>
+        <h2>6. Cookies</h2>
+        <p class="first">Le site utilise des cookies pour améliorer l'expérience utilisateur, analyser le trafic et personnaliser le contenu. Vous pouvez gérer vos préférences en matière de cookies via les paramètres de votre navigateur.</p>
+    </div>
+    <br>
+    <div>
+        <h2>7. Droit Applicable et Attribution de Juridiction</h2>
+        <p class="first">Tout litige en relation avec l’utilisation du site [Nom du Blog] est soumis au droit français. Il est fait attribution exclusive de juridiction aux tribunaux compétents de [Ville].</p>
+    </div>
+    <br>
+    <div>
+        <h2>8. Contact</h2>
+        <p class="first">Pour toute question ou information concernant le site, veuillez contacter :</p>
+    <ul class="infoperso">
+        <li>Nom : Sethiar</li>
+        <li>E-mail : alefetey123@gmail.com</li>
+    </ul>
+    </div>
+</div>
 
-Siège social : Calvados (14)
-Entrepôt : Calvados (14)
-
-http://www.japaninfrance.fr
-
-contact@shin-sekai.fr / 07 66 29 09 27
-SIRET n°803 692 466 00029
-TVA : FR14 803 692 466
-Code APE : 4789Z / Autres commerces de détail sur éventaires et marchés
-Date de création : 01/09/2012
-Dénomination sociale : SARL SHIN SEKAI
-Dénomination du site internet : SHIN SEKAI
-Immatriculation au Registre du Commerce et des Sociétés 803 692 466 R.C.S. PONTOISE
-
-</p>
-</body>
-</html>
+{% endblock %}
+{% block footer_content %}
+{% endblock %}

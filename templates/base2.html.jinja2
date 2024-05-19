@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+     <meta charset="UTF-8">
+     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='CSS/politique.css') }}">
+
+    {% block head_content %}
+    {% endblock %}
+</head>
+<br>
+<body>
+    <header>
+    {% block header_content %}
+
+    {% endblock %}
+    </header>
+
+    <main>
+    {% block main_content %}
+    {% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h3>Informations</h3>
+                    <p><i><a href="mailto:alefetey123@gmail.com">Email : alefetey123@gmail.com</a></i></p>
+                    <p>Adresse, Caen, Calvados, France</p>
+                </div>
+                <div class="col-md-3">
+                    <h3>Liens Utiles</h3>
+                    <ul>
+                        <li><a href="">Services</a></li>
+                        <li><a href="">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3>Mentions Légales</h3>
+                    <ul>
+                        <li><a href="{{ url_for('politique') }}">Politique de confidentialité</a></li>
+                        <li><a href="{{ url_for('mentions') }}">Mentions légales</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3">
+                    <h3>Réseaux Sociaux</h3>
+                    <ul>
+                        <li><a href=""><i class="fab fa-twitter"></i> Youtube</a></li>
+                        <li><a href=""><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li><a href=""><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href=""><i class="fab fa-pinterest"></i> Pinterest</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SethiarWorks. Tous droits réservés.</p>
+            <a href="{{ url_for('admin_connection') }}">S'identifier en tant qu'administrateur</a>
+        </div>
+    </footer>
+
+  <!--Liens vers les fichiers Bootstrap-->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js">
+  </script>
+
+{% block footer_content %}
+{% endblock %}
+</body>
+</html>

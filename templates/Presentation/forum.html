@@ -3,12 +3,14 @@
 {% block head_content %}
     <meta name="description" content="Forum du blog permettant de discuter, interagir et donner son avis sur le blog.">
     <title>{% block title %}Bienvenue sur le forum du blog{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/forum.css') }}">
 
 {% endblock %}
 
     {% block header_content %}
     {% endblock %}
 {% block main_content %}
+<br>
         <h1>Forum de discussion</h1>
 <section id="categories">
     <div id="forum_pic">
@@ -51,6 +53,9 @@
             {{ formsubjectforum.submit() }}
         </form>
     </div>
+<div class="separation">
+
+</div>
 </section>
 
     {% endblock %}

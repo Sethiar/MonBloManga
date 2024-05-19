@@ -69,23 +69,6 @@
             <div>
                 <small>Le {{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
             </div>
-            <!--<div>
-
-            <div>
-                <form action="{{ url_for('comment_like', comment_id=comment_id) }}" method="post">
-                    {{ formlike.csrf_token }}
-                    {{ formlike.submit }}
-                </form>
-                <span id="comment_likes">{{ comment.likes }}</span>
-            </div>
-            <div>
-                <form action="{{ url_for('comment_dislike', comment_id=comment_id) }}" method="post">
-                    {{ formdislike.csrf_token }}
-                    {{ formdislike.submit }}
-                </form>
-                <span id="comment_dislikes">{{ comment.dislikes }}</span>
-            </div>
-            -->
         </div>
 
         </div>
