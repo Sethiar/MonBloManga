@@ -1,0 +1,99 @@
+/* Définition d'une police pour tous les éléments de la page */
+* {
+  font-family: 'Comic Sans MS', cursive;
+  font-size: 16px;
+  color: white;
+}
+
+/* Style pour le conteneur principal */
+
+main {
+  padding: 5%;
+  margin: 2%;
+  background-color: black;}
+
+h1 {
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 26px;
+  text-decoration: underline;
+  }
+
+h2 {
+  font-size: 22px;
+}
+
+#container_politique {
+  width: 70%;
+  margin: 0 auto;
+  padding-right: 5%;
+  padding-left: 5%;
+  padding-top: 2%;
+  border: 1px solid gold;
+  text-align: justify;
+}
+
+#politique {
+  font-style: italic;
+  text-indent: 4%;
+}
+.intro {
+  font-size: 20px;
+}
+
+.separation {
+  border-bottom: 1px solid black;
+  margin: 3%;
+}
+
+.first {
+  text-indent: 4%;
+}
+
+/* Style général du footer */
+.footer {
+  background-color: #2c3e50;
+  padding: 20px 0;
+  color: white;
+}
+
+/* Style des sections du footer */
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.footer-section {
+  flex-basis: 23%;
+  margin-bottom: 20px;
+}
+
+footer h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+footer ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+footer ul li {
+  margin-bottom: 5px;
+}
+
+footer ul li a {
+  text-decoration: none;
+  color: white;
+}
+
+/* Style du bas du footer */
+.footer-bottom {
+  margin-top: 20px;
+  text-align: center;
+  color: #888888;
+}
+

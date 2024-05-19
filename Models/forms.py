@@ -189,7 +189,7 @@ class CommentForm(FlaskForm):
 
 class LikeForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter un like à un article.
+    Formulaire permettant d'ajouter un like à un article ou à un commentaire.
     """
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
@@ -198,7 +198,7 @@ class LikeForm(FlaskForm):
 
 class DislikeForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter un like à un article.
+    Formulaire permettant d'ajouter un like à un article ou à un commentaire.
     """
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
