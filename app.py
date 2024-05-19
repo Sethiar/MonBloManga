@@ -267,10 +267,8 @@ def article_like(article_id):
         comments = Comment.query.filter_by(article_id=article_id).all()
         # Enregistrement dans la base de données.
         db.session.commit()
-    # Redirection vers la page de l'article.
-    return render_template('Presentation/article.html', article=article, article_id=article_id, comments=comments,
-                           formcomment=formcomment, formlike=formlike, formdislike=formdislike)
-
+        # Redirection vers la page de l'article.
+        return redirect(url_for('show_article', article_id=article_id))
 
 @app.route("/article/dislikes<int:article_id>", methods=['POST'])
 def article_dislike(article_id):
@@ -294,9 +292,7 @@ def article_dislike(article_id):
         # Enregistrement dans la base de données.
         db.session.commit()
     # Redirection vers la page de l'article.
-    return render_template('Presentation/article.html', article=article, article_id=article_id, comments=comments,
-                           formcomment=formcomment, formlike=formlike, formdislike=formdislike)
-
+    return redirect(url_for('show_article', article_id=article_id))
 
 @app.route("/mangaka")
 def mangaka():
