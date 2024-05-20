@@ -7,76 +7,77 @@
 {% endblock %}
 
 {% block main_content %}
-    <div id="container_article">
-        <h3>Article</h3>
-        <br>
-        <div>
-            {{ article.title }}
-        </div>
-        <div id="article_content">
-            {{ article.article_content | safe }}
-        </div>
-        <div id="article_pseudo">
-            {{ article.pseudo }}
-        </div>
-        <div id="article_date">
-             {{ article.date_edition.strftime('%d-%m-%Y à %H:%M') }}
-        </div>
-        <br>
-        <div>
-            <div>
-                <form action="{{ url_for('article_like', article_id=article_id) }}" method="post">
-                    {{ formlike.csrf_token }}
-                    {{ formlike.submit }}
-                </form>
-                <span id="articles_likes">{{ article.likes }}</span>
-            </div>
-            <div>
-                <form action="{{ url_for('article_dislike', article_id=article_id) }}" method="post">
-                    {{ formdislike.csrf_token }}
-                    {{ formdislike.submit }}
-                </form>
-                <span id="articles_dislikes">{{ article.dislikes }}</span>
-            </div>
-        </div>
+<div id="container_article">
+    <br><br><br>
+    <br><br><br>
+    <br><br><br>
+    <div id="article_title">
+        <h1>{{ article.title }}</h1>
     </div>
-        <br><br>
-        <!-- Formulaire pour laisser un commentaire -->
-        <form method="POST" action="{{ url_for('comment_article', user_pseudo=current_user.pseudo) }}">
-            {{ formcomment.csrf_token }}
-            <input type="hidden" name="article_id" value="{{ article.id }}">
-            <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
-            <textarea name="comment_content" placeholder="Votre commentaire" required></textarea>
-            <button type="submit">Poster le commentaire</button>
-        </form>
-
-        <div id="icon">
-            <i class="fi fi-sr-thumbs-up"></i>
-        </div>
-    </div>
-    <div id="separation"></div>
     <br><br>
-    <div id="container_comment">
-        {% set loop_index = 0 %}
-        {% for comment in comments %}
-        <div id="comment" class="{% if loop_index %2 ==0 %}even_comment{% endif %}">
-            <div>
-                <strong>{{ comment.user.pseudo }}</strong> a commenté :
-            </div>
-            <div>
-                {{ comment.comment_content }}
-            </div>
-            <div>
-                <small>Le {{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
-            </div>
-        </div>
-
-        </div>
-        <hr> <!-- Trait horizontal -->
-        <div style="height: 10px;"></div> <!-- Espace de 10 pixels -->
-        {% set loop_index = loop_index + 1 %}
-        {% endfor %}
+    <div id="article_content">
+        {{ article.article_content | safe }}
     </div>
+    <br>
+    <div class="separation"></div>
+    <br>
+    <div id="article_date">
+        <i>L'article a été publié le {{article.date_edition.strftime('%d-%m-%Y à %H:%M') }} par {{article.author.pseudo }}</i>
+    </div>
+</div>
+<br>
+<div id="form-comment">
+    <div>
+        <form action="{{ url_for('article_like', article_id=article_id) }}" method="post">
+            {{ formlike.csrf_token }}
+            {{ formlike.submit }}
+        </form>
+        <span id="articles_likes">{{ article.likes }}</span>
+    </div>
+    <div>
+        <form action="{{ url_for('article_dislike', article_id=article_id) }}" method="post">
+            {{ formdislike.csrf_token }}
+            {{ formdislike.submit }}
+        </form>
+        <span id="articles_dislikes">{{ article.dislikes }}</span>
+    </div>
+</div>
+<div>
+    <!-- Formulaire pour laisser un commentaire -->
+    <form method="POST" action="{{ url_for('comment_article', user_pseudo=current_user.pseudo) }}">
+        {{ formcomment.csrf_token }}
+        <input type="hidden" name="article_id" value="{{ article.id }}">
+        <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
+        <textarea name="comment_content" placeholder="Votre commentaire" required></textarea>
+        <button type="submit">Poster le commentaire</button>
+    </form>
+
+    <div id="icon">
+        <i class="fi fi-sr-thumbs-up"></i>
+    </div>
+</div>
+<div class="separation"></div>
+<div id="container_comment">
+    {% set loop_index = 0 %}
+    {% for comment in comments %}
+    <div id="comment" class="{% if loop_index %2 ==0 %}even_comment{% endif %}">
+        <div>
+            <strong>{{ comment.user.pseudo }}</strong> a commenté :
+        </div>
+        <div>
+            {{ comment.comment_content }}
+        </div>
+        <div>
+            <small>Le {{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
+        </div>
+    </div>
+</div>
+
+<hr> <!-- Trait horizontal -->
+<div style="height: 10px;"> <!-- Espace de 10 pixels -->
+{% set loop_index = loop_index + 1 %}
+{% endfor %}
+</div>
 <hr> <!-- Trait horizontal -->
 <div style="height: 10px;"></div> <!-- Espace de 10 pixels -->
 {% endblock %}

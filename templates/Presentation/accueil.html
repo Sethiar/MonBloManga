@@ -8,27 +8,32 @@
 
 {% block main_content %}
 <br><br>
-<h1>
-    Je vous souhaite la bienvenue sur mon blog sur les mangas.
-</h1>
-<br><br>
-<div id="intro">
-    <div id="middle">
-        <h2>
-            Si vous voulez tout savoir et plus encore sur les mangas, c'est ici !!!
-        </h2>
-        <h2>
-            Faîtes-vous plaisir et voyez si les réponses à vos questions sont ici.
-        </h2>
+<div id="principle_container">
+    <div id="pics_accueil">
+        <img src="../static/Images/images_accueil/city_hunter_massue.jpg">
+    </div>
+    <br>
+    <div id="container_intro">
+        <h1>Je vous souhaite la bienvenue sur mon blog sur les mangas.</h1>
+        <br><br>
+        <div id="middle">
+            <h2>Si vous voulez tout savoir et plus encore sur les mangas, c'est ici !!!</h2>
+            <br>
+            <h2>Faîtes-vous plaisir et voyez si les réponses à vos questions sont ici.</h2>
+        </div>
+        <div id="pics_accueil2">
+            <img src="../static/Images/images_accueil/hisoka.jpg">
+        </div>
+    </div>
+    <br>
+    <div id="end">
+        <h3>Bonne navigation sur le blog. J'espère que vous apprécierez votre visite.</h3>
     </div>
 </div>
-<br>
-    <div id="end">
-        <h3>
-            Bonne navigation sur le blog. J'espère que vous apprécierez votre visite.
-        </h3>
-    </div>
 <br><br>
+<div class="separation">
+
+</div>
 <br><br>
 <div id="container">
     <div id="space-before">
@@ -38,8 +43,14 @@
             <h2>Actualités du mois</h2>
             {% for article in articles %}
             <div class="article">
-                <a href="{{ url_for('show_article', article_id=article.id) }}">{{ article.title }}</a>
-                <p>{{ article.resume }}</p>
+                <div id="info_article">
+                    <img src="../static/Images/images_formulaire/vegM.jpg" alt="Image de {{ article.title }}">
+                    Par {{ article.author.pseudo }}
+                </div>
+                <div id="info_article2">
+                    <p><a href="{{ url_for('show_article', article_id=article.id) }}">{{ article.title }}</a></p>
+                    <p>{{ article.resume }}</p>
+                </div>
             </div>
             {% endfor %}
         </section>
@@ -56,42 +67,23 @@
                 <p>Description de l'article 4...</p>
             </div>
         </section>
-        <section class="other-articles">
-            <div class="article">
-                <h3>Titre de l'article 4</h3>
-                <p>Description de l'article 4...</p>
-            </div>
-        </section>
-        <section class="other-articles">
-            <div class="article">
-                <h3>Titre de l'article 4</h3>
-                <p>Description de l'article 4...</p>
-            </div>
-        </section>
-        <section class="other-articles">
-            <div class="article">
-                <h3>Titre de l'article 4</h3>
-                <p>Description de l'article 4...</p>
-            </div>
-        </section>
-        <section class="other-articles">
-            <div class="article">
-                <h3>Titre de l'article 4</h3>
-                <p>Description de l'article 4...</p>
-            </div>
-        </section>
     </div>
     <div id="space-after">
     </div>
     <aside id="aside">
         <h2>Articles par mois</h2>
+        <br>
         <ul>
-            <li>Janvier 2024</li>
-            <li>Février 2024</li>
-            <li>Mars 2024</li>
+            <li>Mai 2024</li>
+            <li>Juin 2024</li>
+            <li>Juillet 2024</li>
             <!-- Ajoutez d'autres mois si nécessaire -->
         </ul>
     </aside>
+</div>
+<br>
+<div class="separation">
+
 </div>
 <br>
 {% endblock %}

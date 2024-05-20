@@ -27,19 +27,18 @@
                 <li><a href="{{ url_for('forum') }}">Forum</a></li>
                 <li><a href="{{ url_for('mangaka') }}">Mangaka</a></li>
                 <li><a href="{{ url_for('user_recording') }}">Devenir membre</a></li>
-                <div id="connection">
-            {% if logged_in %}
-            <p>Bienvenue, {{ pseudo }} ! Vous êtes connecté.</p>
-            <p><button><a href="{{ url_for('user_logout') }}">Se déconnecter</a></button></p>
-<!-- Afficher d'autres contenus de la page pour les utilisateurs connectés -->
-            {% else %}
-            <p>Vous n'êtes pas connecté. Veuillez vous connecter pour accéder à cette page.</p>
-            <button><a href="{{ url_for('user_connection') }}">Se connecter en tant qu'utilisateur</a></button>
-<!-- Afficher un formulaire de connexion ou un lien vers la page de connexion -->
-            {% endif %}
-    </div>
             </ul>
-
+            <div id="connection">
+                {% if logged_in %}
+                <p>Bienvenue, {{ pseudo }} ! Vous êtes connecté.</p>
+                <p><button><a href="{{ url_for('user_logout') }}">Se déconnecter</a></button></p>
+<!-- Afficher d'autres contenus de la page pour les utilisateurs connectés -->
+                {% else %}
+                <p>Vous n'êtes pas connecté. Veuillez vous connecter pour accéder à cette page.</p>
+                <button><a href="{{ url_for('user_connection') }}">Se connecter en tant qu'utilisateur</a></button>
+<!-- Afficher un formulaire de connexion ou un lien vers la page de connexion -->
+                {% endif %}
+            </div>
         </nav>
     </div>
 
@@ -83,6 +82,10 @@
                 </div>
             </div>
         </div>
+        <div class="separation">
+
+        </div>
+
         <div class="footer-bottom">
             <p>&copy; 2024 SethiarWorks. Tous droits réservés.</p>
             <a href="{{ url_for('admin_connection') }}">S'identifier en tant qu'administrateur</a>

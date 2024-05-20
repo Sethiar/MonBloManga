@@ -6,7 +6,15 @@
     <title>{% block title %}Découvrez les Mangakas{% endblock %}</title>
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='CSS/accueil.css') }}">
 {% endblock %}
-{
-<div>
+
+{% block main_content %}
+<br><br>
+<div id="principle_container">
+    <div id="pics_mangaka">
+        <img src="../static/Images/images_mangaka/ryuk_moon.jpg">
+    </div>
+</div>
+<div class="separation">
 
 </div>
+{% endblock %}
