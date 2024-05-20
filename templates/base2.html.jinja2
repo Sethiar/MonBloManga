@@ -15,13 +15,22 @@
 <br>
 <body>
     <header>
+
     {% block header_content %}
 
     {% endblock %}
     </header>
 
     <main>
+    <a href="{{ url_for('landing_page') }}">Retour à l'accueil</a>
+    <br>
+    <img id="principle" src="../static/Images/images_mentions/marinex3.jpg">
+
+    <div class="separation">
+
+    </div>
     {% block main_content %}
+
     {% endblock %}
     </main>
 
