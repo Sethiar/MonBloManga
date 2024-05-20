@@ -2,6 +2,8 @@
 * {
   font-family: 'Comic Sans MS', cursive;
   box-sizing: border-box;
+  background-color: black;
+  color: white;
 }
 
 /* Header */
@@ -81,6 +83,7 @@ nav a:hover {
 }
 
 button a {
+  background-color: gold;
   color: black;
 }
 
@@ -88,6 +91,7 @@ button a {
     list-style-type: none;
     padding: 10px;
     background-color: #444;
+  background-color: gold;
 }
 
 #navbar2 nav ul li {
@@ -102,8 +106,8 @@ button a {
 
 #connection {
   width: 15%;
-  background-color: gold;
   border: 2px solid orange;
+  background-color: gold;
   background-position: right;
   position: absolute;
   right: 5%;

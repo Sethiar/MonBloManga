@@ -43,12 +43,27 @@ h2 {
 }
 
 .separation {
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid gold;
   margin: 3%;
 }
 
 .first {
   text-indent: 4%;
+}
+
+main a {
+  color: white;
+}
+
+main a:hover {
+  color: orange;
+}
+
+#principle {
+    display: block;
+    margin: 0 auto;
+    width: 500px; /* Ajustez la taille selon vos besoins */
+    height: 300px; /* Assurez-vous que la hauteur et la largeur sont égales pour obtenir un cercle parfait */
 }
 
 /* Style général du footer */
