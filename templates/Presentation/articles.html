@@ -4,20 +4,24 @@
 {% block head_content %}
     <meta name="description" content="Articles présents sur le blog.">
     <title>{% block title %}Articles du blog{% endblock %}</title>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='CSS/accueil.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='CSS/articles.css') }}">
 {% endblock %}
 
 {% block main_content %}
+<br><br>
+<div id="pics_articles">
+
+</div>
+<br><br>
 <div id="container_article">
-    <h3>Articles</h3>
     <br>
-    <table id="Articles">
+    <table id="articles">
         <thead>
         <tr>
             <th>Titres des articles</th>
             <th>Pseudos des auteurs</th>
-            <th>Articles</th>
-            <th>dates d'édition</th>
+            <th>Résumés</th>
+            <th>Dates d'édition</th>
             <th>Nombre de likes</th>
             <th>Nombre de dislikes</th>
         </thead>

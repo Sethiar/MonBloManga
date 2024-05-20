@@ -270,6 +270,7 @@ def article_like(article_id):
         # Redirection vers la page de l'article.
         return redirect(url_for('show_article', article_id=article_id))
 
+
 @app.route("/article/dislikes<int:article_id>", methods=['POST'])
 def article_dislike(article_id):
     """

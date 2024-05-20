@@ -35,7 +35,7 @@
     </div>
     <div id="principle">
         <section class="new-articles">
-            <h2>Articles récents</h2>
+            <h2>Actualités du mois</h2>
             {% for article in articles %}
             <div class="article">
                 <a href="{{ url_for('show_article', article_id=article.id) }}">{{ article.title }}</a>
@@ -44,21 +44,45 @@
             {% endfor %}
         </section>
 
-            <section class="other-articles">
-                <div class="article">
-                    <h3>Titre de l'article 3</h3>
-                    <p>Description de l'article 3...</p>
-                </div>
-            </section>
-            <section class="other-articles">
-                <div class="article">
-                    <h3>Titre de l'article 4</h3>
-                    <p>Description de l'article 4...</p>
-                </div>
-            </section>
-        </div>
+        <section class="other-articles">
+            <div class="article">
+                <h3>Titre de l'article 3</h3>
+                <p>Description de l'article 3...</p>
+            </div>
+        </section>
+        <section class="other-articles">
+            <div class="article">
+                <h3>Titre de l'article 4</h3>
+                <p>Description de l'article 4...</p>
+            </div>
+        </section>
+        <section class="other-articles">
+            <div class="article">
+                <h3>Titre de l'article 4</h3>
+                <p>Description de l'article 4...</p>
+            </div>
+        </section>
+        <section class="other-articles">
+            <div class="article">
+                <h3>Titre de l'article 4</h3>
+                <p>Description de l'article 4...</p>
+            </div>
+        </section>
+        <section class="other-articles">
+            <div class="article">
+                <h3>Titre de l'article 4</h3>
+                <p>Description de l'article 4...</p>
+            </div>
+        </section>
+        <section class="other-articles">
+            <div class="article">
+                <h3>Titre de l'article 4</h3>
+                <p>Description de l'article 4...</p>
+            </div>
+        </section>
+    </div>
     <div id="space-after">
-        </div>
+    </div>
     <aside id="aside">
         <h2>Articles par mois</h2>
         <ul>
