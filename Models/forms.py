@@ -203,3 +203,19 @@ class DislikeForm(FlaskForm):
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
     submit = SubmitField('👎')
+
+
+class ReplyForm(FlaskForm):
+    """
+    Formulaire permettant d'ajouter une réponse à un commentaire.
+    """
+    csrf_token = HiddenField()
+
+    # Le contenu de la réponse.
+    reply_content = TextAreaField("Réponse au commentaire", validators=[DataRequired()],
+                                render_kw={"placeholder": "Veuillez écrire votre commentaire."})
+
+    # La date du commentaire.
+    comment_date = DateField("Date du commentaire", validators=[DataRequired()])
+    # Action de soumettre le formulaire.
+    submit = SubmitField()

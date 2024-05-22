@@ -35,7 +35,6 @@ class Comment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref=db.backref('comments', lazy=True))
 
-
     def __repr__(self):
         """
         Représentation en chaîne de caractères de l'objet Comment.
@@ -43,5 +42,5 @@ class Comment(db.Model):
         Returns :
             str: Chaîne représentant l'objet Comment.
         """
-        return f"Comment(id={self.id}, article_id={self.article_id}, user_id={self.user_id}, date={self.comment_date}," \
-               f" like='{self.likes}', dislikes='{self.dislikes}'))"
+        return f"Comment(id={self.id}, article_id={self.article_id}, user_id={self.user_id}, " \
+               f"date={self.comment_date}, like={self.likes}, dislikes={self.dislikes})"
