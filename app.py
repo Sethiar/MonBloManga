@@ -18,10 +18,11 @@ from Models.author import Author
 from Models.categories_articles import Categorie
 from Models.subjects_forum import SubjectForum
 from Models.comment import Comment
+from Models.reply import Reply
 
 from Models.forms import AdminConnection
 from Models.forms import NewCategorieForm, NewSubjectForumForm, ArticleForm, \
-    UserSaving, CommentForm, NewAuthor, LikeForm, DislikeForm
+    UserSaving, CommentForm, NewAuthor, LikeForm, DislikeForm,ReplyForm
 from Models.forms import UserConnection
 
 from create_app import create_app, generate_unique_id
@@ -914,6 +915,72 @@ def comment_dislike(comment_id):
     db.session.commit()
 
     return redirect(url_for('show_article'))
+
+
+@app.route("/<string:user_pseudo>/comment<int:comment_id>/reply_form", methods=['GET'])
+@login_required
+def reply_form(comment_id, user_pseudo):
+    """
+    Affiche le formulaire pour répondre à un commentaire.
+    """
+
+    # Création d'une instance du formulaire.
+    formreply = ReplyForm()
+
+    comment = db.session.get(Comment, comment_id)
+
+    user = User.query.filter_by(pseudo=user_pseudo).first()
+
+    return render_template("User/reply_form.html", form=formreply, comment=comment, user=user)
+
+
+@app.route("/<string:user_pseudo>/comment<int:comment_id>/reply", methods=['GET', 'POST'])
+@login_required
+def comment_replies(comment_id, user_pseudo):
+    """
+    Permet à un utilisateur de laisser une réponse à un commentaire.
+
+    Args:
+        comment_id(int): l'identifiant du commentaire.
+        user_pseudo(str): le pseudo de l'utilisateur.
+
+    Returns:
+         Redirige vers la page de l'article après avoir laissé une réponse.
+    """
+    # Création de l'instance du formulaire.
+    formreply = ReplyForm()
+
+    # Récupérer le commentaire par son id.
+    comment = db.session.get(Comment, comment_id)
+    # Récupération de l'ID de l'article du commentaire.
+    article_id = comment.article_id
+
+    if request.method == 'POST':
+
+        if formreply.validate_on_submit():
+            # Obtention de l'utilisateur actuel à partir du pseudo.
+            user = User.query.filter_by(pseudo=user_pseudo).first()
+
+            # Vérification de l'existence de l'utilisateur et du commentaire.
+            if user and comment:
+                # Obtenir le contenu du commentaire à partir de la requête POST.
+                reply_content = formreply.reply_content.data
+
+                # Créer un nouvel objet de commentaire.
+                new_reply = Reply(reply_content=reply_content, user_id=user.id, comment_id=comment_id)
+
+                # Ajouter le nouveau commentaire à la table de données.
+                db.session.add(new_reply)
+                db.session.commit()
+                print('la réponse au commentaire à bien été enregistrée.')
+
+                # Redirection sur la page d'affichage des articles.
+                return redirect(url_for("show_article", article_id=article_id))
+            else:
+                # Redirection vers une autre page si l'utilisateur n'existe pas.
+                return redirect(url_for("connection_requise"))
+
+    return redirect(url_for('show_article', article_id=article_id))
 
 
 @app.route("/Politique_de_confidentialité")

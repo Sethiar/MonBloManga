@@ -19,30 +19,33 @@
         {{ article.article_content | safe }}
     </div>
     <br>
-    <div class="separation"></div>
     <br>
-    <div id="article_date">
-        <i>L'article a été publié le {{article.date_edition.strftime('%d-%m-%Y à %H:%M') }} par {{article.author.pseudo }}</i>
-    </div>
 </div>
 <br>
-<div id="form-comment">
-    <div>
-        <form action="{{ url_for('article_like', article_id=article_id) }}" method="post">
-            {{ formlike.csrf_token }}
-            {{ formlike.submit }}
-        </form>
-        <span id="articles_likes">{{ article.likes }}</span>
-    </div>
-    <div>
-        <form action="{{ url_for('article_dislike', article_id=article_id) }}" method="post">
-            {{ formdislike.csrf_token }}
-            {{ formdislike.submit }}
-        </form>
-        <span id="articles_dislikes">{{ article.dislikes }}</span>
+<div id="article_date">
+    <i>L'article a été publié le {{article.date_edition.strftime('%d-%m-%Y à %H:%M') }} par {{article.author.pseudo }}</i>
+</div>
+<div class="separation"></div>
+<div id="comment_avis">
+    <p>Vous pouvez laisser un commentaire : </p>
+    <div id="form-comment">
+        <div class="likes_dislikes">
+            <form action="{{ url_for('article_like', article_id=article_id) }}" method="post">
+                {{ formlike.csrf_token }}
+                {{ formlike.submit }}
+            </form>
+            <span id="articles_likes">{{ article.likes }}</span>
+        </div>
+        <div class="likes_dislikes">
+            <form action="{{ url_for('article_dislike', article_id=article_id) }}" method="post">
+                {{ formdislike.csrf_token }}
+                {{ formdislike.submit }}
+            </form>
+            <span id="articles_dislikes">{{ article.dislikes }}</span>
+        </div>
     </div>
 </div>
-<div>
+<div id="comment_content">
     <!-- Formulaire pour laisser un commentaire -->
     <form method="POST" action="{{ url_for('comment_article', user_pseudo=current_user.pseudo) }}">
         {{ formcomment.csrf_token }}
@@ -52,32 +55,51 @@
         <button type="submit">Poster le commentaire</button>
     </form>
 
-    <div id="icon">
-        <i class="fi fi-sr-thumbs-up"></i>
-    </div>
+
 </div>
 <div class="separation"></div>
 <div id="container_comment">
-    {% set loop_index = 0 %}
     {% for comment in comments %}
-    <div id="comment" class="{% if loop_index %2 ==0 %}even_comment{% endif %}">
-        <div>
+    <div id="comment">
+        <div class="pics_user">
+
+        </div>
+        <div class="comment">
             <strong>{{ comment.user.pseudo }}</strong> a commenté :
         </div>
-        <div>
-            {{ comment.comment_content }}
-        </div>
-        <div>
+        <div class="date_comment">
             <small>Le {{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
         </div>
+        <div class="content_comment">
+            {{ comment.comment_content | replace('\n', '<br>') | safe }}
+        </div>
     </div>
-</div>
-
-<hr> <!-- Trait horizontal -->
-<div style="height: 10px;"> <!-- Espace de 10 pixels -->
-{% set loop_index = loop_index + 1 %}
+    <div class="reply-button-container">
+        <a href="{{ url_for('reply_form', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
+    </div>
+    <div class="replies">
+        <!-- Ajoutez ici les réponses si elles existent -->
+        {% for reply in comment.replies %}
+        <div class="comment reply">
+            <div class="reply-header">
+                <img src="{{ reply.user.profile_picture_url }}" alt="Photo de {{ reply.user.pseudo }}" class="profile-picture">
+                <div class="reply-details">
+                    <strong>{{ reply.user.pseudo }}</strong> a répondu :
+                    <div class="reply-date">
+                        <small>Le {{ reply.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
+                    </div>
+                </div>
+            </div>
+            <div class="content-comment">
+                {{ reply.comment_content | replace('\n', '<br>') | safe }}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <hr>
 {% endfor %}
 </div>
-<hr> <!-- Trait horizontal -->
-<div style="height: 10px;"></div> <!-- Espace de 10 pixels -->
+<div style="height: 10px;"> <!-- Espace de 10 pixels -->
+</div>
+<br>
 {% endblock %}
