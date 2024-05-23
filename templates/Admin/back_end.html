@@ -18,8 +18,8 @@
 <header>
     <nav>
         <h2>Bienvenue sur la page administrateur du blog</h2>
-        <a class="retour_frontend" href="{{ url_for('landing_page') }}">Aller sur la page d'accueil du blog</a>
-        <button><a href="{{ url_for('admin_logout') }}"> Se déconnecter du back end</a></button>
+        <a class="retour_frontend" href="{{ url_for('frontend.landing_page') }}">Aller sur la page d'accueil du blog</a>
+        <button><a href="{{ url_for('auth.admin_logout') }}"> Se déconnecter du back end</a></button>
     </nav>
 </header>
 
@@ -29,7 +29,7 @@
     <!-- Pour ajouter une catégorie d'articles-->
     <div class="categorie">
         <h4>Ajouter une catégorie d'articles</h4>
-        <form method="POST" action="{{ url_for('add_new_categorie') }}">
+        <form method="POST" action="{{ url_for('admin.add_new_categorie') }}">
             {{ formcategories.csrf_token }}
             {{ formcategories.nom.label }} {{ formcategories.nom(size=20) }}
             {{ formcategories.submit() }}
@@ -42,7 +42,7 @@
                 {% for categorie in categories %}
                 <li>
                     {{ categorie.nom }}
-                    <form method="POST" action="{{ url_for('suppress_categorie', id=categorie.id) }}" class="btn_suppression">
+                    <form method="POST" action="{{ url_for('admin.suppress_categorie', id=categorie.id) }}" class="btn_suppression">
                     {{ formcategories.csrf_token }}
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                     </form>
@@ -54,7 +54,7 @@
     <div class="categorie">
         <!-- Pour ajouter un nouvel auteur. -->
         <h4>Ajouter un auteur</h4>
-        <form method="POST" action="{{ url_for('add_new_author') }}">
+        <form method="POST" action="{{ url_for('admin.add_new_author') }}">
             {{ formauthor.csrf_token }}
             {{ formauthor.nom.label }} {{ formauthor.nom(size=30) }}<br>
             {{ formauthor.prenom.label }} {{ formauthor.prenom(size=30) }}<br>
@@ -69,7 +69,7 @@
                 {% for author in authors %}
                 <li>
                     {{ author.pseudo }}
-                    <form method="POST" action="{{ url_for('suppress_author', id=author.id) }}" class="btn_suppression">
+                    <form method="POST" action="{{ url_for('admin.suppress_author', id=author.id) }}" class="btn_suppression">
                     {{ formauthor.csrf_token }}
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                     </form>
@@ -82,7 +82,7 @@
     <!-- Pour Ajouter les nouveaux articles -->
     <div class="article">
         <h4>Ajouter un article</h4>
-        <form method="post" action="{{ url_for('add_new_article') }}" enctype="multipart/form-data">
+        <form method="post" action="{{ url_for('admin.add_new_article') }}" enctype="multipart/form-data">
         {{ formarticles.csrf_token }}
             <label for="title">Titre de l'article :</label>
             <input type="text" id="title" class="title" name="title" value="{{ title }}" required><br><br>
@@ -142,7 +142,7 @@
                 <td>{{ article.author }}</td>
                 <td>{{ article.date_edition }}</td>
                 <td>
-                    <form action="{{ url_for('suppress_article', id=article.id) }}" method="POST" class="btn_suppression">
+                    <form action="{{ url_for('admin.suppress_article', id=article.id) }}" method="POST" class="btn_suppression">
                         {{ formarticles.csrf_token }}
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                     </form>
@@ -158,7 +158,7 @@
     <!-- Pour ajouter un sujet au forum-->
     <div class="categorie">
         <h4>Ajouter un sujet au forum</h4>
-        <form method="POST" action="{{ url_for('add_subject_forum_back') }}">
+        <form method="POST" action="{{ url_for('admin.add_subject_forum_back') }}">
             {{ formsubjectforum.csrf_token }}
             {{ formsubjectforum.nom.label }} {{ formsubjectforum.nom(size=20) }}
             {{ formsubjectforum.submit() }}
@@ -180,7 +180,7 @@
                 <!--<td>{{ subject.comm_number }}</td>
                 <td>{{ subject.date_edition }}</td> n-->
                 <td>
-                    <form action="{{ url_for('suppress_subject', id=subject.id) }}" method="POST" class="btn_suppression">
+                    <form action="{{ url_for('admin.suppress_subject', id=subject.id) }}" method="POST" class="btn_suppression">
                         {{ formsubjectforum.csrf_token }}
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                     </form>
@@ -212,7 +212,7 @@
                <td>{{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</td> <!-- Affichage de la date du commentaire-->
                <td>{{ comment.user.pseudo }}</td>
                <td>
-                   <form action="{{ url_for('suppress_comment', id=comment.id) }}" method="POST" class="btn_suppression">
+                   <form action="{{ url_for('admin.suppress_comment', id=comment.id) }}" method="POST" class="btn_suppression">
                        {{ formcomment.csrf_token }}
                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                    </form>

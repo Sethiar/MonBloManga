@@ -48,7 +48,7 @@
                     Par {{ article.author.pseudo }}
                 </div>
                 <div id="info_article2">
-                    <p><a href="{{ url_for('show_article', article_id=article.id) }}">{{ article.title }}</a></p>
+                    <p><a href="{{ url_for('frontend.show_article', article_id=article.id) }}">{{ article.title }}</a></p>
                     <p>{{ article.resume }}</p>
                 </div>
             </div>

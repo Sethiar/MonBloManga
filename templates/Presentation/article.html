@@ -30,14 +30,14 @@
     <p>Vous pouvez laisser un commentaire : </p>
     <div id="form-comment">
         <div class="likes_dislikes">
-            <form action="{{ url_for('article_like', article_id=article_id) }}" method="post">
+            <form action="{{ url_for('user.article_like', article_id=article_id) }}" method="post">
                 {{ formlike.csrf_token }}
                 {{ formlike.submit }}
             </form>
             <span id="articles_likes">{{ article.likes }}</span>
         </div>
         <div class="likes_dislikes">
-            <form action="{{ url_for('article_dislike', article_id=article_id) }}" method="post">
+            <form action="{{ url_for('user.article_dislike', article_id=article_id) }}" method="post">
                 {{ formdislike.csrf_token }}
                 {{ formdislike.submit }}
             </form>
@@ -47,7 +47,7 @@
 </div>
 <div id="comment_content">
     <!-- Formulaire pour laisser un commentaire -->
-    <form method="POST" action="{{ url_for('comment_article', user_pseudo=current_user.pseudo) }}">
+    <form method="POST" action="{{ url_for('user.comment_article', user_pseudo=current_user.pseudo) }}">
         {{ formcomment.csrf_token }}
         <input type="hidden" name="article_id" value="{{ article.id }}">
         <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
@@ -75,7 +75,7 @@
         </div>
     </div>
     <div class="reply-button-container">
-        <a href="{{ url_for('reply_form', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
+        <a href="{{ url_for('user.reply_form', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
     </div>
     <div class="replies">
         <!-- Ajoutez ici les réponses si elles existent -->

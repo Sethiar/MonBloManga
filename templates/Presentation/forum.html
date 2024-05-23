@@ -47,7 +47,7 @@
     </div>
     <div class="categorie">
         <h4>Ajouter un sujet sur le forum</h4>
-        <form method="POST" action="{{ url_for('add_subject_forum') }}">
+        <form method="POST" action="{{ url_for('user.add_subject_forum') }}">
             {{ formsubjectforum.csrf_token }}
             {{ formsubjectforum.nom.label }} {{ formsubjectforum.nom(size=20) }}
             {{ formsubjectforum.submit() }}

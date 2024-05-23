@@ -9,7 +9,7 @@
 
 {% endblock %}
 {% block body_content %}
-<form method="POST" action="{{ url_for('login_admin') }}">
+<form method="POST" action="{{ url_for('auth.login_admin') }}">
 	<div class="imgcontainer">
 		<img src="{{ url_for('static', filename='Images/images_formulaire/vegM.jpg') }}" alt="Avatar" class="avatar">
 	</div>
@@ -24,7 +24,7 @@
 
 		<div class="container" style="background-color:#f1f1f1">
 			<button type="submit" class="validatedbtn">Validation</button>
-			<button type="button" class="cancelledbtn"><a href="{{ url_for('landing_page') }}">Annulation de l'authentification administrateur</a></button>
+			<button type="button" class="cancelledbtn"><a href="{{ url_for('frontend.landing_page') }}">Annulation de l'authentification administrateur</a></button>
 		</div>
 	</div>
 </form>

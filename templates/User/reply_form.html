@@ -11,7 +11,7 @@
 
 {% block body_content %}
 <p>Voici le formulaire pour écrire une réponse aux commentaires postés.</p>
-<form method="POST" action="{{ url_for('comment_replies', comment_id=comment.id, user_pseudo=current_user.pseudo) }}">
+<form method="POST" action="{{ url_for('user.comment_replies', comment_id=comment.id, user_pseudo=current_user.pseudo) }}">
     <div class="imgcontainer">
         <img src="{{ url_for('static', filename='Images/images_articles/city_hunter1.jpeg') }}" alt="Avatar" class="avatar">
     </div>

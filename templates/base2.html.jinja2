@@ -22,7 +22,7 @@
     </header>
 
     <main>
-    <a href="{{ url_for('landing_page') }}">Retour à l'accueil</a>
+    <a href="{{ url_for('frontend.landing_page') }}">Retour à l'accueil</a>
     <br>
     <img id="principle" src="../static/Images/images_mentions/marinex3.jpg">
 
@@ -52,8 +52,8 @@
                 <div class="col-md-3">
                     <h3>Mentions Légales</h3>
                     <ul>
-                        <li><a href="{{ url_for('politique') }}">Politique de confidentialité</a></li>
-                        <li><a href="{{ url_for('mentions') }}">Mentions légales</a></li>
+                        <li><a href="{{ url_for('functional.politique') }}">Politique de confidentialité</a></li>
+                        <li><a href="{{ url_for('functional.mentions') }}">Mentions légales</a></li>
                     </ul>
                 </div>
 
@@ -70,7 +70,7 @@
         </div>
         <div class="footer-bottom">
             <p>&copy; 2024 SethiarWorks. Tous droits réservés.</p>
-            <a href="{{ url_for('admin_connection') }}">S'identifier en tant qu'administrateur</a>
+            <a href="{{ url_for('auth.admin_connection') }}">S'identifier en tant qu'administrateur</a>
         </div>
     </footer>
 
