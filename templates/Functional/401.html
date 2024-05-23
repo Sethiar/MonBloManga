@@ -1,11 +1,19 @@
 {% extends 'baseerror.html.jinja2' %}
 
 {% block head_content %}
-    <meta name="descritpion" content="Page renvoyant l'erreur 401.">
+    <meta name="description" content="Page renvoyant l'erreur 401.">
     <title>{% block title %}Erreur 401{% endblock %}</title>
-{%endblock %}
+{% endblock %}
 
 {% block body_content %}
-    {% block header_content %}
-    {% endblock %}
+    <div class="error-401">
+        <div class="error-message401">
+            <h1>Erreur 401</h1>
+            <p>Oups ! Il semble que vous n'ayez pas l'autorisation d'accéder à cette page.</p>
+            <p>Mais ne vous inquiétez pas, même les meilleurs se trompent parfois !</p>
+        </div>
+        <div class="error-image401">
+            <img src="../Images/images_erreur/401.jpg" alt="Image illustrative">
+        </div>
+    </div>
 {% endblock %}

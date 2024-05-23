@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='CSS/errortype.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/errortype.css') }}">
+    {% block head_content %}
+    {% endblock %}
 </head>
-
 <body>
     <header>
-    {% block header_content %}
-    {% endblock %}
+        {% block header_content %}
+        {% endblock %}
     </header>
-
+    <main>
+        {% block body_content %}
+        {% endblock %}
+    </main>
 </body>
 </html>
+
