@@ -1,4 +1,4 @@
-/* Définition d'une police pour tous les éléments de la page */
+/* Définition d'un style pour tous les éléments de la page */
 * {
   font-family: 'Comic Sans MS', cursive;
   box-sizing: border-box;
@@ -75,6 +75,7 @@ button a {
   color: black;
 }
 
+/* Style pour la connexion utilisateur */
 #connection {
   display: flex;
   flex-direction: column;
@@ -121,6 +122,7 @@ h1 {
   margin: 0 auto;
   text-align: center;
 }
+
 #pics_accueil {
   border-radius: 50%;
   margin: 0 auto;
@@ -130,15 +132,16 @@ h1 {
 
 #pics_accueil img {
   border-radius: 75%;
-  max-width: 50%; /* Pour que l'image s'adapte à la largeur du conteneur */
-  height: auto; /* Pour maintenir les proportions de l'image */
+  max-width: 50%;
+  height: auto;
 }
 
 #container_intro {
-  width: 90%; /* Élargir la largeur pour permettre à l'image et au texte de coexister */
+  width: 90%;
   margin: 0 auto;
   text-align: center;
-  overflow: hidden; /* Pour contenir les éléments flottants */
+  /* Pour contenir les éléments flottants */
+  overflow: hidden;
 }
 
 #middle {
@@ -147,27 +150,30 @@ h1 {
   border-bottom: 2px solid white;
   padding: 20px 0;
   width: 50%;
-  float: left; /* Faire flotter le texte à gauche */
-  box-sizing: border-box; /* Pour inclure le padding et la bordure dans la largeur */
+  float: left;
+  /* Pour inclure le padding et la bordure dans la largeur */
+  box-sizing: border-box;
 }
 
 #pics_accueil2 {
-  float: right; /* Faire flotter l'image à droite */
-  box-sizing: border-box; /* Pour inclure le padding et la bordure dans la largeur */
+  float: right;
+  /* Pour inclure le padding et la bordure dans la largeur */
+  box-sizing: border-box;
   text-align: center;
 }
 
 #pics_accueil2 img {
   border-radius: 75%;
-  max-width: 50%; /* Pour que l'image s'adapte à la largeur du conteneur */
-  height: auto; /* Pour maintenir les proportions de l'image */
+  max-width: 50%;
+  height: auto;
 }
 
 #end {
   float: right;
   margin-top: 20px;
   margin-right: 5%;
-  clear: both; /* Pour empêcher les éléments suivants de flotter autour de l'image */
+  /* Pour empêcher les éléments suivants de flotter autour de l'image */
+  clear: both;
 }
 
 #container {
@@ -194,21 +200,21 @@ h1 {
   margin: 1%;
   flex: 1 1 calc(25% - 2%);
 
-  align-items: center; /* Center items vertically */
+  align-items: center;
 }
 
 #info_article {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center image and text horizontally */
-  margin-right: 10px; /* Space between image section and text section */
+  align-items: center;
+  margin-right: 10px;
 }
 
 #info_article img {
   width: 100px;
   height: auto;
   border-radius: 10px;
-  margin-bottom: 5px; /* Space between image and author name */
+  margin-bottom: 5px;
 }
 
 #info_article2 {
@@ -217,13 +223,14 @@ h1 {
 }
 
 #info_article2 p {
-  margin-left: 30%; /* Remove default margins for consistent spacing */
+  margin-left: 30%;
 }
 
 .article h3, .article p {
-  text-align: left; /* Align text to the left */
+  text-align: left;
 }
 
+/* Styles pour l'aside */
 #aside {
   width: 30%;
   background-color: orange;
@@ -263,6 +270,7 @@ h1 {
   color: black;
 }
 
+/* Style pour la mise en page */
 #space-before {
   border-left: 1px solid grey;
   margin-left: 10%;
@@ -292,6 +300,7 @@ section {
   margin-bottom: 3%;
 }
 
+/* Style pour le footer */
 .footer {
   background-color: #2c3e50;
   padding: 20px 0;
@@ -318,6 +327,7 @@ footer h3 {
   font-weight: bold;
   margin-bottom: 10px;
   background-color: #2c3e50;
+  text-decoration: underline;
 }
 
 footer ul {
@@ -336,13 +346,23 @@ footer ul li a {
   color: white;
 }
 
+footer ul li a:hover {
+  color: gold;
+  text-decoration: underline;
+}
+
 footer p {
   background-color: #2c3e50;
 }
 
 footer p a {
   background-color: #2c3e50;
-  color: orange;
+  color: gold;
+}
+
+footer p a:hover {
+  color: gold;
+  text-decoration: underline;
 }
 
 .footer-bottom {
@@ -356,5 +376,776 @@ footer p a {
 }
 
 .footer-bottom a {
-  color: orange;
+  color: gold;
+}
+
+/* Code ajustant les styles pour les tablettes */
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  /* Définition d'un style pour tous les éléments de la page */
+  * {
+    font-family: 'Comic Sans MS', cursive;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+  }
+  /* Header */
+  header {
+    background-color: black;
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    height: 120px;
+    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-position: center;
+    background-size: cover;
+  }
+
+  header::before, header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 15%;
+    height: 100%;
+    background-size: cover;
+  }
+
+  header::before {
+    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-position: top left;
+    left: -15%;
+  }
+
+  header::after {
+    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-position: top right;
+    right: -15%;
+  }
+
+  /* Navigation */
+  #navbar ul {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 1%;
+    margin: 0;
+  }
+
+  #navbar ul li {
+    color: white;
+    font-size: 18px;
+    border: 1px solid orange;
+  }
+
+  #navbar ul li a {
+    display: block;
+    padding: 8px 20px;
+    text-decoration: none;
+    color: gold;
+  }
+
+  nav a:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+  }
+
+  button a {
+    background-color: gold;
+    color: black;
+  }
+
+  /* Style pour la connexion utilisateur */
+  #connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+    border: 2px solid purple;
+    background-color: orange;
+    position: absolute;
+    right: 5%;
+  }
+
+  #connection p {
+    color: black;
+    background-color: orange;
+    text-indent: 5%;
+    padding-right: 5%;
+    text-align: justify;
+  }
+
+  #connection button {
+    color: black;
+    background-color: gold;
+    border: 1px solid black;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+    cursor: pointer;
+  }
+
+  #connection a {
+    color: black;
+    background-color: gold;
+  }
+
+  #connection a:hover {
+    color: white;
+  }
+
+  /* Styles pour la mise en forme conteneur principal */
+  h1 {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  #pics_accueil {
+    border-radius: 50%;
+    margin: 0 auto;
+    text-align: center;
+    background-size: cover;
+  }
+
+  #pics_accueil img {
+    border-radius: 75%;
+    max-width: 70%;
+    height: auto;
+  }
+
+  #container_intro {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  #middle {
+    font-size: 20px;
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    padding: 15px 0;
+    width: 100%;
+    float: none;
+    box-sizing: border-box;
+  }
+
+  #pics_accueil2 {
+    float: none;
+    box-sizing: border-box;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  #pics_accueil2 img {
+    border-radius: 75%;
+    max-width: 70%;
+    height: auto;
+  }
+
+  #end {
+    float: none;
+    margin-top: 20px;
+    margin-right: 0;
+    clear: both;
+  }
+
+  #container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  #principle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 3%;
+  }
+
+  /* Style pour la présentation des articles */
+  .article {
+    display: flex;
+    border: 2px solid red;
+    padding: 1%;
+    margin: 1%;
+    flex: 1 1 calc(45% - 2%);
+    align-items: center;
+  }
+
+  #info_article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  #info_article img {
+    width: 80px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+
+  #info_article2 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #info_article2 p {
+    margin-left: 0;
+  }
+
+  .article h3, .article p {
+    text-align: left;
+  }
+
+  /* Style pour l'aside */
+  #aside {
+    width: 90%;
+    background-color: orange;
+    padding: 20px;
+    color: white;
+    position: relative;
+    margin: 20px auto;
+  }
+
+  #aside::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 6px solid white;
+  }
+
+  #aside h2 {
+    margin-bottom: 10px;
+    background-color: orange;
+    text-decoration: underline;
+    color: black;
+  }
+
+  #aside ul {
+    list-style: none;
+    padding: 0;
+    background-color: orange;
+  }
+
+  #aside ul li {
+    margin-bottom: 5px;
+    background-color: orange;
+    color: black;
+  }
+
+  /* Style pour la mise en page */
+  #space-before {
+    border-left: none;
+    margin-left: 0;
+    padding-top: 3%;
+  }
+
+  #space-after {
+    border-right: none;
+    margin-right: 0;
+  }
+
+  section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .separation {
+    border-bottom: 1px solid orange;
+    margin: 3%;
+  }
+
+  .separation2 {
+    border-bottom: 1px solid orange;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 3%;
+    margin-bottom: 3%;
+  }
+
+  /*Style pour le footer */
+  .footer {
+    background-color: #2c3e50;
+    padding: 20px 0;
+    color: white;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #2c3e50;
+  }
+
+  .footer-section {
+    flex-basis: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  footer h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background-color: #2c3e50;
+    text-decoration: underline;
+  }
+
+  footer ul {
+    list-style: none;
+    background-color: #2c3e50;
+    padding: 0;
+  }
+
+  footer ul li {
+    margin-bottom: 5px;
+    background-color: #2c3e50;
+  }
+
+  footer ul li a {
+    text-decoration: none;
+    color: white;
+  }
+
+  footer ul li a:hover {
+    color: gold;
+    text-decoration: underline;
+  }
+
+  footer p {
+    background-color: #2c3e50;
+  }
+
+  footer p a {
+    background-color: #2c3e50;
+    color: gold;
+  }
+
+  footer p a:hover {
+    color: gold;
+    text-decoration: underline;
+  }
+
+  .footer-bottom {
+    margin-top: 20px;
+    text-align: center;
+    background-color: #2c3e50;
+  }
+
+  .footer-bottom p {
+    color: orange;
+  }
+
+  .footer-bottom a {
+    color: gold;
+  }
+}
+
+/* Code ajustant les styles pour les téléphones portables. */
+@media screen and (max-width: 600px) {
+  /* Définition d'un style pour tous les éléments de la page */
+  * {
+    font-family: 'Comic Sans MS', cursive;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+  }
+  /* header */
+  header {
+    background-color: black;
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    height: 100px;
+    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-position: center;
+    background-size: cover;
+  }
+
+  header::before, header::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 10%;
+    height: 100%;
+    background-size: cover;
+  }
+
+  header::before {
+    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-position: top left;
+    left: -10%;
+  }
+
+  header::after {
+    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-position: top right;
+    right: -10%;
+  }
+
+  /* Navigation */
+  #navbar {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    background-color: black;
+  }
+
+  #navbar ul {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #navbar ul li {
+    color: white;
+    font-size: 18px;
+    border: 1px solid orange;
+  }
+
+  #navbar ul li a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: gold;
+  }
+
+  nav a:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+  }
+
+  /* Style pour le menu hamburger */
+  .menu-icon {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+  }
+
+  .menu-icon div {
+    width: 100%;
+    height: 4px;
+    background-color: white;
+    margin: 6px 0;
+  }
+
+  button a {
+    background-color: gold;
+    color: black;
+  }
+
+  /* Style pour la connexion utilisateur */
+  #connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    border: 2px solid purple;
+    background-color: orange;
+    position: relative;
+    margin: 20px auto;
+  }
+
+  #connection p {
+    color: black;
+    background-color: orange;
+    text-indent: 5%;
+    padding-right: 5%;
+    text-align: justify;
+  }
+
+  #connection button {
+    color: black;
+    background-color: gold;
+    border: 1px solid black;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+    cursor: pointer;
+  }
+
+  #connection a {
+    color: black;
+    background-color: gold;
+  }
+
+  #connection a:hover {
+    color: white;
+  }
+
+  /* Style conteneur principal */
+  h1 {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  #pics_accueil {
+    border-radius: 50%;
+    margin: 0 auto;
+    text-align: center;
+    background-size: cover;
+  }
+
+  #pics_accueil img {
+    border-radius: 75%;
+    max-width: 80%;
+    height: auto;
+  }
+
+  #container_intro {
+    width: 90%;
+    margin: 0 auto;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  #middle {
+    font-size: 18px;
+    border-top: 2px solid white;
+    border-bottom: 2px solid white;
+    padding: 10px 0;
+    width: 100%;
+    float: none;
+    box-sizing: border-box;
+  }
+
+  #pics_accueil2 {
+    float: none;
+    box-sizing: border-box;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  #pics_accueil2 img {
+    border-radius: 75%;
+    max-width: 80%;
+    height: auto;
+  }
+
+  #end {
+    float: none;
+    margin-top: 20px;
+    margin-right: 0;
+    clear: both;
+  }
+
+  #container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  #principle {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    margin: 0 auto;
+    padding-top: 3%;
+  }
+
+  /* Style pour la présentation des articles */
+  .article {
+    display: flex;
+    border: 2px solid red;
+    padding: 1%;
+    margin: 1%;
+    flex: 1 1 calc(100% - 2%);
+    align-items: center;
+  }
+
+  #info_article {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  #info_article img {
+    width: 70px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 5px;
+  }
+
+  #info_article2 {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #info_article2 p {
+    margin-left: 0;
+  }
+
+  .article h3, .article p {
+    text-align: left;
+  }
+
+  /* Style pour l'aside */
+  #aside {
+    width: 90%;
+    background-color: orange;
+    padding: 20px;
+    color: white;
+    position: relative;
+    margin: 20px auto;
+  }
+
+  #aside::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    border: 6px solid white;
+  }
+
+  #aside h2 {
+    margin-bottom: 10px;
+    background-color: orange;
+    text-decoration: underline;
+    color: black;
+  }
+
+  #aside ul {
+    list-style: none;
+    padding: 0;
+    background-color: orange;
+  }
+
+  #aside ul li {
+    margin-bottom: 5px;
+    background-color: orange;
+    color: black;
+  }
+
+  /* Style pour la mise en page */
+  #space-before {
+    border-left: none;
+    margin-left: 0;
+    padding-top: 3%;
+  }
+
+  #space-after {
+    border-right: none;
+    margin-right: 0;
+  }
+
+  section {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .separation {
+    border-bottom: 1px solid orange;
+    margin: 3%;
+  }
+
+  .separation2 {
+    border-bottom: 1px solid orange;
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 3%;
+    margin-bottom: 3%;
+  }
+
+  /* Style pour le footer */
+  .footer {
+    background-color: #2c3e50;
+    padding: 20px 0;
+    color: white;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #2c3e50;
+  }
+
+  .footer-section {
+    flex-basis: 100%;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  footer h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    background-color: #2c3e50;
+    text-decoration: underline;
+  }
+
+  footer ul {
+    list-style: none;
+    background-color: #2c3e50;
+    padding: 0;
+  }
+
+  footer ul li {
+    margin-bottom: 5px;
+    background-color: #2c3e50;
+  }
+
+  footer ul li a {
+    text-decoration: none;
+    color: white;
+  }
+
+  footer ul li a:hover {
+    color: gold;
+    text-decoration: underline;
+  }
+
+  footer p {
+    background-color: #2c3e50;
+  }
+
+  footer p a {
+    background-color: #2c3e50;
+    color: gold;
+  }
+
+  footer p a:hover {
+    color: gold;
+    text-decoration: underline;
+  }
+
+  .footer-bottom {
+    margin-top: 20px;
+    text-align: center;
+    background-color: #2c3e50;
+  }
+
+  .footer-bottom p {
+    color: orange;
+  }
+
+  .footer-bottom a {
+    color: gold;
+  }
 }

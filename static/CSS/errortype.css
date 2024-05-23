@@ -1,0 +1,37 @@
+/* Styles relatifs au erreur 401 et 404.*/
+
+.error-401 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.error-message401 {
+    text-align: center;
+}
+
+.error-image401 img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+}
+
+.error-404 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.error-message404 {
+    text-align: center;
+}
+
+.error-image404 img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 20px;
+}

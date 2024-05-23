@@ -1,4 +1,4 @@
-/* Définition d'une police pour tous les éléments de la page */
+/* Définition d'un style pour tous les éléments de la page */
 * {
   font-family: 'Comic Sans MS', cursive;
   box-sizing: border-box;
@@ -8,42 +8,42 @@
 
 /* Header */
 header {
-  background-color: black; /* Couleur de fond noire */
+  background-color: black;
   position: relative;
   width: 70%;
   margin: 0 auto;
   height: 150px;
   background-image: url('../Images/images_banniere/banniere4.jpg');
   background-position: center;
-  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  background-size: 100% 100%;
 }
 
 /* Image en haut à gauche */
 header::before {
-  content: ""; /* Obligatoire pour afficher le pseudo-élément */
+  content: "";
   background-image: url('../Images/images_banniere/luffy2.jpg');
   background-position: top left;
-  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  background-size: 100% 100%;
   position: absolute;
-  top: 0; /* Aligner en haut */
-  left: -20%; /* Aligner à gauche */
-  width: 20%; /* Largeur de l'image */
-  height: 100%; /* Hauteur de l'image */
-  z-index: 1; /* Mettre en arrière-plan */
+  top: 0;
+  left: -20%;
+  width: 20%;
+  height: 100%;
+  z-index: 1;
 }
 
 /* Image en haut à droite */
 header::after {
-  content: ""; /* Obligatoire pour afficher le pseudo-élément */
+  content: "";
   background-image: url('../Images/images_banniere/goku1.jpg');
   background-position: top right;
-  background-size: 100% 100%; /* Ajuste la taille de l'image pour couvrir complètement l'élément */
+  background-size: 100% 100%;
   position: absolute;
-  top: 0; /* Aligner en haut */
-  right: -20%; /* Aligner à droite */
-  width: 20%; /* Largeur de l'image */
-  height: 100%; /* Hauteur de l'image */
-  z-index: 1; /* Mettre en arrière-plan */
+  top: 0;
+  right: -20%;
+  width: 20%;
+  height: 100%;
+  z-index: 1;
 }
 
 /* Option de la barre de navigation */
@@ -86,7 +86,7 @@ button a {
   color: black;
 }
 
-
+/* Style pour la connexion utilisateur */
 #connection {
   display: flex;
   flex-direction: column;
@@ -110,9 +110,9 @@ button a {
   border: 1px solid black;
   text-align: center;
   margin: 10px 0;
-  border-radius: 5px; /* Ajoute des coins arrondis */
-  box-shadow: 0 4px 6px rgba(0, 0, 30, 1); /* Ajoute un ombrage */
-  cursor: pointer; /* Change le curseur pour indiquer que c'est un bouton cliquable */
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+  cursor: pointer;
 }
 
 #connection a {
@@ -143,3 +143,301 @@ h1 {
   background-size: 100% 100%;
   margin: 0 auto;
 }
+
+/* Code ajustant les styles pour les tablettes */
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  /* Définition d'un style pour tous les éléments de la page */
+  * {
+    font-family: 'Comic Sans MS', cursive;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+  }
+
+  /* Header */
+  header {
+    background-color: black;
+    position: relative;
+    width: 70%;
+    margin: 0 auto;
+    height: 150px;
+    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-position: center;
+    background-size: 100% 100%;
+  }
+
+  /* Image en haut à gauche */
+  header::before {
+    content: "";
+    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-position: top left;
+    ackground-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    left: -20%;
+    width: 20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Image en haut à droite */
+  header::after {
+    content: "";
+    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-position: top right;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    right: -20%;
+    width: 20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Option de la barre de navigation */
+  #navbar {
+    background-color: black;
+  }
+
+  /* Options pour les éléments de la barre de navigation */
+  #navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 1%;
+    margin: auto;
+  }
+
+  /* Éléments de la barre de navigation */
+  #navbar ul li {
+    color: white;
+    font-size: 20px;
+    border: 1px solid orange;
+    display: inline-block;
+  }
+
+  #navbar ul li a {
+    display: block;
+    padding: 10px 30px;
+    text-decoration: none;
+    border: orange;
+    color: gold;
+  }
+
+  /* Option de survol */
+  nav a:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+  }
+
+  button a {
+    color: black;
+  }
+
+  /* Style pour la connexion utilisateur */
+  #connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    border: 2px solid purple;
+    background-color: orange;
+    position: absolute;
+    right: 5%;
+  }
+
+  #connection p {
+    color: black;
+    background-color:orange;
+  }
+
+  #connection button {
+    color: black;
+    background-color: gold;
+    border: 1px solid black;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+    cursor: pointer;
+  }
+
+  #connection a {
+    color: black;
+    background-color:gold;
+  }
+
+  #connection a:hover {
+    color: white;
+  }
+
+  /* Style pour le conteneur principal */
+  h1 {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .separation {
+    border-bottom: 1px solid orange;
+    margin: 3%;
+  }
+
+  #pics_mangaka {
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    margin: 0 auto;
+  }
+}
+
+
+/*Code ajustant les styles pour les téléphones portables */
+@media screen and (max-width: 600px) {
+  /* Définition d'un style pour tous les éléments de la page */
+  * {
+    font-family: 'Comic Sans MS', cursive;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+  }
+
+  /* Header */
+  header {
+    background-color: black;
+    position: relative;
+    width: 70%;
+    margin: 0 auto;
+    height: 150px;
+    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-position: center;
+    background-size: 100% 100%;
+  }
+
+  /* Image en haut à gauche */
+  header::before {
+    content: "";
+    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-position: top left;
+    ackground-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    left: -20%;
+    width: 20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Image en haut à droite */
+  header::after {
+    content: "";
+    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-position: top right;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    right: -20%;
+    width: 20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Option de la barre de navigation */
+  #navbar {
+    background-color: black;
+  }
+
+  /* Options pour les éléments de la barre de navigation */
+  #navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 1%;
+    margin: auto;
+  }
+
+  /* Éléments de la barre de navigation */
+  #navbar ul li {
+    color: white;
+    font-size: 20px;
+    border: 1px solid orange;
+    display: inline-block;
+  }
+
+  #navbar ul li a {
+    display: block;
+    padding: 10px 30px;
+    text-decoration: none;
+    border: orange;
+    color: gold;
+  }
+
+  /* Option de survol */
+  nav a:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+  }
+
+  button a {
+    color: black;
+  }
+
+  /* Style pour la connexion utilisateur */
+  #connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    border: 2px solid purple;
+    background-color: orange;
+    position: absolute;
+    right: 5%;
+  }
+
+  #connection p {
+    color: black;
+    background-color:orange;
+  }
+
+  #connection button {
+    color: black;
+    background-color: gold;
+    border: 1px solid black;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+    cursor: pointer;
+  }
+
+  #connection a {
+    color: black;
+    background-color:gold;
+  }
+
+  #connection a:hover {
+    color: white;
+  }
+
+  /* Style pour le conteneur principal */
+  h1 {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .separation {
+    border-bottom: 1px solid orange;
+    margin: 3%;
+  }
+
+  #pics_mangaka {
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    margin: 0 auto;
+  }
+}
+
