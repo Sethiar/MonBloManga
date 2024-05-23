@@ -1,0 +1,18 @@
+{% extends 'baseerror.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="descritpion" content="Page permettant de renseigner et de conseiller sur l'état de connexion et qui renvoie une solution.">
+    <title>{% block title %}Connexion requise{% endblock %}</title>
+{%endblock %}
+
+{% block body_content %}
+    {% block header_content %}
+<div id="container">
+    <div id="Typeerror">
+        <p>Vous n'avez pas la connexion requise afin d'accéder à ses fonctionnalités.</p>
+        <p>Veuillez vous inscrire ou contacter l'administrateur réseau.</p>
+    </div>
+</div>
+<button><a href="{{ url_for('auth.user_connection') }}">Se connecter</a></button>
+    {% endblock %}
+{% endblock %}
