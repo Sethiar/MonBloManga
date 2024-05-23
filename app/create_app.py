@@ -55,6 +55,9 @@ def create_app():
     app.register_blueprint(functional_bp, url_prefix='/functional')
     app.register_blueprint(frontend_bp, url_prefix='/frontend')
 
+    # Propagation des erreurs aux gestionnaires d'erreurs des Blueprints.
+    app.config['PROPAGATE_EXCEPTIONS'] = True
+
     @login_manager.user_loader
     def load_user(user_id):
         """
