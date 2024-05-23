@@ -11,6 +11,7 @@ from login_manager import login_manager
 
 from app.functional import functional_bp
 
+
 def generate_unique_id():
     """Génère un identifiant unique pour les utilisateurs anonymes.
     Returns:
@@ -18,6 +19,8 @@ def generate_unique_id():
         """
     return str(uuid.uuid4())
 
+
+# Route renvoyant l'erreur 401.
 @functional_bp.errorhandler(401)
 def acces_no_autorise(error):
     """
@@ -29,9 +32,10 @@ def acces_no_autorise(error):
     Returns :
         La page d'erreur 401.
     """
-    return render_template("functional/401.html")
+    return render_template("Functional/401.html"), 401
 
 
+# Route renvoyant l'erreur 404.
 @functional_bp.errorhandler(404)
 def page_not_found(error):
     """
@@ -43,7 +47,7 @@ def page_not_found(error):
     Returns :
         La page d'erreur 404.
     """
-    return render_template("functional/404.html")
+    return render_template("Functional/404.html"), 404
 
 
 @login_manager.unauthorized_handler
@@ -99,7 +103,7 @@ def politique():
     Returns :
         Redirige vers la page de politique de confidentialité du blog.
     """
-    return render_template("functional/politique.html")
+    return render_template("Functional/politique.html")
 
 
 @functional_bp.route("/mentions_légales")
@@ -109,5 +113,5 @@ def mentions():
     Returns :
         Redirige vers la page de politique de confidentialité du blog.
     """
-    return render_template("functional/mentions.html")
+    return render_template("Functional/mentions.html")
 

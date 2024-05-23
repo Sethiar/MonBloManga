@@ -65,7 +65,7 @@ def admin_logout():
     logout_user()
 
     # Redirige vers la page d'accueil après la déconnexion.
-    return redirect(url_for('frontend.landing_page'))
+    return redirect(url_for('landing_page'))
 
 
 @auth_bp.route("/connexion_admin", methods=['GET', 'POST'])
@@ -171,7 +171,7 @@ def user_logout():
     logout_user()
 
     # Redirige vers la page d'accueil après la déconnexion.
-    return redirect(url_for('frontend.landing_page'))
+    return redirect(url_for('landing_page'))
 
 
 @auth_bp.route("/connexion_utilisateur", methods=['GET', 'POST'])
@@ -208,7 +208,7 @@ def login():
             if next_url:
                 return redirect(next_url)
             else:
-                return redirect(url_for('frontend.landing_page'))
+                return redirect(url_for('landing_page'))
 
         else:
             current_app.logger.warning(

@@ -16,29 +16,6 @@ from Models.subjects_forum import SubjectForum
 from app.frontend import frontend_bp
 
 
-# Route permettant d'accéder à l'accueil du blog.
-@frontend_bp.route("/")
-def landing_page():
-    """
-    Page d'accueil de mon blog.
-
-    Cette fonction renvoie la page d'accueil du blog. La page d'accueil est la première page
-    que les utilisateurs voient lorsqu'ils accèdent au blog. Elle peut contenir des informations
-    telles que des articles récents, des liens vers d'autres sections du blog, des catégories
-    d'articles, etc.
-
-    Returns :
-        La page d'accueil du blog.
-    """
-    # Récupération de la date du jour.
-    current_date = datetime.now().strftime("%d-%m-%Y")
-
-    # Récupération de tous les articles et des auteurs depuis la base de données.
-    articles = Article.query.all()
-    authors = Author.query.all()
-    return render_template("Presentation/accueil.html", articles=articles, authors=authors, current_date=current_date)
-
-
 # Route permettant d'accéder à la page article du blog.
 @frontend_bp.route("/articles", methods=['GET', 'POST'])
 def reading_articles():
