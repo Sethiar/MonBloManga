@@ -1,4 +1,5 @@
 """Fichier app.py de lancement de mon blog"""
+
 from datetime import datetime
 
 from app.create_app import create_app
@@ -32,6 +33,7 @@ def landing_page():
     articles = Article.query.all()
     authors = Author.query.all()
     return render_template("Presentation/accueil.html", articles=articles, authors=authors, current_date=current_date)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

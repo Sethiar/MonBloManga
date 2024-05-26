@@ -14,9 +14,11 @@ class Config:
     DEBUG = False
     TESTING = True
     WTF_CSRF_ENABLED = True
+
     # Configuration de la base de données.
     SQLALCHEMY_DATABASE_URI = "postgresql://postgres:Monolithe8@localhost:5432/db_monblogmanga"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
     # Configuration des fichiers uploadés.
     UPLOADS_FOLDER = "static/downloads"
     ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
@@ -67,4 +69,3 @@ class TestingConfig(Config):
     """
     TESTING = True
     WTF_CRSF_ENABLED = False
-
