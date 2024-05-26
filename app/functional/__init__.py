@@ -1,5 +1,5 @@
 """
-
+Code permettant de définir les routes concernant les fonctions cachées du blog.
 """
 
 from flask import Blueprint

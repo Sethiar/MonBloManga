@@ -1,8 +1,9 @@
 """
-
+Code permettant de définir les routes concernant le frontend du blog.
 """
 
-from datetime import datetime
+
+from app.frontend import frontend_bp
 
 from flask import render_template, url_for, redirect, request, abort
 
@@ -12,8 +13,6 @@ from Models.author import Author
 from Models.articles import Article
 from Models.comment import Comment
 from Models.subjects_forum import SubjectForum
-
-from app.frontend import frontend_bp
 
 
 # Route permettant d'accéder à la page article du blog.

@@ -1,6 +1,9 @@
 """
-
+Code permettant de définir les routes concernant les fonctions cachées, erreurs, logging, mentions légales ou
+politique du blog.
 """
+
+from app.functional import functional_bp
 
 import uuid
 
@@ -8,8 +11,6 @@ from flask import render_template, redirect, url_for, session
 from flask_login import current_user
 
 from login_manager import login_manager
-
-from app.functional import functional_bp
 
 
 def generate_unique_id():
@@ -50,6 +51,7 @@ def page_not_found(error):
     return render_template("Functional/404.html"), 404
 
 
+# Route permettant de renvoyant l'utilisateur vers les bons moyens d'authentification.
 @login_manager.unauthorized_handler
 def unauthorized():
     """
@@ -66,6 +68,7 @@ def unauthorized():
     return redirect(url_for('functional.connexion_requise'))
 
 
+# Route permettant à l'utilisateur de bien se connecter au blog.
 @functional_bp.route("/connexion_requise")
 def connexion_requise():
     """
@@ -83,6 +86,7 @@ def connexion_requise():
     return render_template("functional/connexion_requise.html")
 
 
+# Route permettant de valider une connexion ou d'en infirmer l'authenticité.
 @functional_bp.before_request
 def before_request():
     """
@@ -95,6 +99,7 @@ def before_request():
         session['anon_id'] = generate_unique_id()
 
 
+#  Route permettant d'accéder à la politique de confidentialité.
 @functional_bp.route("/Politique_de_confidentialité")
 def politique():
     """
@@ -106,6 +111,7 @@ def politique():
     return render_template("Functional/politique.html")
 
 
+#  Route permettant d'accéder aux mentions légales.
 @functional_bp.route("/mentions_légales")
 def mentions():
     """

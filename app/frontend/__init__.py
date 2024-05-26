@@ -1,4 +1,5 @@
 """
+Code permettant de définir les routes concernant le frontend du blog.
 
 """
 

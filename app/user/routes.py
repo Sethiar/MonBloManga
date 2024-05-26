@@ -1,19 +1,18 @@
 """
-
+Code permettant à l'utilisateur d'utiliser le blog.
 """
+
+from app.user import user_bp
 
 import bcrypt
 
 from datetime import datetime
 
 from flask_login import login_required
-
 from flask import redirect, url_for, render_template, flash, request
-
 from markupsafe import escape
 
 from Models import db
-
 from Models.forms import LikeForm, DislikeForm, CommentForm, UserSaving, ReplyForm, NewSubjectForumForm
 
 from Models.articles import Article
@@ -21,8 +20,6 @@ from Models.comment import Comment
 from Models.user import User
 from Models.subjects_forum import SubjectForum
 from Models.reply import Reply
-
-from app.user import user_bp
 
 
 # Route permettant à un nouvel utilisateur de s'inscrire.
@@ -49,7 +46,9 @@ def user_recording():
         db.session.commit()
 
         flash("Inscription réussie! Vous pouvez maintenant vous connecter.")
-        return redirect(url_for("frontend.landing_page"))
+
+        # Redirection vers la route pour envoyer l'e-mail de confirmation
+        return redirect(url_for("mail.send_confirmation_email", email=email))
 
     return render_template("User/form_user.html", form=form)
 

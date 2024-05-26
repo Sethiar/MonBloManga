@@ -6,9 +6,11 @@ import os
 import secrets
 import config
 
-
 from flask import Flask, session
 from flask_wtf.csrf import CSRFProtect
+from flask_mail import Mail
+
+
 from datetime import timedelta
 
 from Models.user import User
@@ -21,8 +23,11 @@ from app.admin import admin_bp
 from app.user import user_bp
 from app.functional import functional_bp
 from app.frontend import frontend_bp
+from app.mail import mail_bp
 
 from login_manager import login_manager
+from config import Config
+from app.extensions import mail
 
 
 def create_app():
@@ -31,8 +36,20 @@ def create_app():
 
     :return: L'application Flask créée.
     """
+
     # Création de l'instance Flask.
     app = Flask("MonBlogManga")
+
+    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_PORT'] = 587
+
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    app.config['MAIL_USERNAME'] = 'alefetey123@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'zrjo ahkg vwid hfap'
+    app.config['MAIL_DEFAULT_SENDER'] = 'alefetey123@gmail.com'
+
+    mail.init_app(app)
 
     # Charger la configuration de l'environnement.
     if os.environ.get("FLASK_ENV") == "development":
@@ -43,7 +60,8 @@ def create_app():
         app.config.from_object(config.ProductConfig)
 
     # Configuration de l'environnement de l'application.
-    app.config.from_envvar("FLASK_APP_SETTINGS")
+    app.config.from_object(Config)
+
     app.config["SESSION_COOKIE_SECURE"] = True
 
     # Définition de la clé secrète pour les cookies.
@@ -54,6 +72,7 @@ def create_app():
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(functional_bp, url_prefix='/functional')
     app.register_blueprint(frontend_bp, url_prefix='/frontend')
+    app.register_blueprint(mail_bp, url_prefix='/mail')
 
     # Propagation des erreurs aux gestionnaires d'erreurs des Blueprints.
     app.config['PROPAGATE_EXCEPTIONS'] = True

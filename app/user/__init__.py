@@ -1,5 +1,5 @@
 """
-
+Code permettant de définir les routes utilisées par les utilisateurs du blog.
 """
 
 from flask import Blueprint

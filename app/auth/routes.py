@@ -1,6 +1,8 @@
 """
-
+Code permettant de définir les routes concernant les mécanismes d'authentification du blog.
 """
+
+from app.auth import auth_bp
 
 import bcrypt
 
@@ -12,7 +14,6 @@ from Models.forms import AdminConnection
 
 from Models.user import User
 from Models.admin import Admin
-from app.auth import auth_bp
 
 
 @auth_bp.route("/connexion_admin_form", methods=['GET', 'POST'])
@@ -44,19 +45,21 @@ def admin_logout():
     """
     Déconnecte l'administrateur actuellement authentifié et l'admin du système.
 
-    Cette fonction gère la déconnexion des administrateurs en supprimant les informations d'identification stockées dans la session Flask.
+    Cette fonction gère la déconnexion des administrateurs en supprimant les informations d'identification stockées
+    dans la session Flask.
 
-     Les sessions Flask sont un mécanisme permettant de stocker des données spécifiques à un utilisateur entre différentes requêtes HTTP.
-     Dans ce cas, les informations d'identification telles que l'état de connexion, l'identifiant de l'utilisateur et l'identifiant de
-     session sont stockées dans la session Flask lorsqu'un utilisateur se connecte avec succès. Cette fonction supprime ces informations de
-     la session lorsqu'un utilisateur se déconnecte.
+     Les sessions Flask sont un mécanisme permettant de stocker des données spécifiques à un utilisateur entre
+     différentes requêtes HTTP. Dans ce cas, les informations d'identification telles que l'état de connexion,
+     l'identifiant de l'utilisateur et l'identifiant de session sont stockées dans la session Flask lorsqu'un
+     utilisateur se connecte avec succès. Cette fonction supprime ces informations de la session lorsqu'un
+     utilisateur se déconnecte.
 
     Returns :
         redirige l'administrateur vers la page accueil.html après la déconnexion.
 
-    Notes :
-        La déconnexion est effectuée en supprimant les clés de session "logged_in", "identifiant" et "admin_id".
-        Si aucun utilisateur n'est connecté, cette fonction n'a aucun effet et redirige simplement vers la page accueil.html.
+    Notes : La déconnexion est effectuée en supprimant les clés de session "logged_in", "identifiant" et "admin_id".
+    Si aucun utilisateur n'est connecté, cette fonction n'a aucun effet et redirige simplement vers la page
+    accueil.html.
     """
     # Supprime les informations d'identification de l'utilisateur de la session.
     session.pop("logged_in", None)
@@ -120,10 +123,12 @@ def login_admin():
                     return redirect(url_for("admin.back_end"))
                 else:
                     current_app.logger.warning(
-                        f"L'administrateur {admin.identifiant} n'a pas le rôle de SuperAdmin, ses possibilités sont restreintes.")
+                        f"L'administrateur {admin.identifiant} n'a pas le rôle de SuperAdmin, ses possibilités sont "
+                        f"restreintes.")
             else:
                 current_app.logger.warning(
-                    f"Tentative de connexion échouée avec l'identifiant {identifiant}. Veuillez réessayer avec un autre identifiant.")
+                    f"Tentative de connexion échouée avec l'identifiant {identifiant}. Veuillez réessayer avec un "
+                    f"autre identifiant.")
                 return redirect(url_for("auth.admin_connection"))
 
     return render_template("Admin/admin_connection.html", form=form)
@@ -150,19 +155,21 @@ def user_logout():
     """
     Déconnecte l'utilisateur actuellement authentifié et l'admin du système.
 
-    Cette fonction gère la déconnexion des utilisateurs en supprimant les informations d'identification stockées dans la session Flask.
+    Cette fonction gère la déconnexion des utilisateurs en supprimant les informations d'identification stockées dans
+    la session Flask.
 
-     Les sessions Flask sont un mécanisme permettant de stocker des données spécifiques à un utilisateur entre différentes requêtes HTTP.
-     Dans ce cas, les informations d'identification telles que l'état de connexion, l'identifiant de l'utilisateur et l'identifiant de
-     session sont stockées dans la session Flask lorsqu'un utilisateur se connecte avec succès. Cette fonction supprime ces informations de
-     la session lorsqu'un utilisateur se déconnecte.
+     Les sessions Flask sont un mécanisme permettant de stocker des données spécifiques à un utilisateur entre
+     différentes requêtes HTTP. Dans ce cas, les informations d'identification telles que l'état de connexion,
+     l'identifiant de l'utilisateur et l'identifiant de session sont stockées dans la session Flask lorsqu'un
+     utilisateur se connecte avec succès. Cette fonction supprime ces informations de la session lorsqu'un
+     utilisateur se déconnecte.
 
     Returns :
         redirige l'utilisateur vers la page accueil.html après la déconnexion.
 
-    Notes :
-        La déconnexion est effectuée en supprimant les clés de session "logged_in", "identifiant" et "user_id".
-        Si aucun utilisateur n'est connecté, cette fonction n'a aucun effet et redirige simplement vers la page accueil.html.
+    Notes : La déconnexion est effectuée en supprimant les clés de session "logged_in", "identifiant" et "user_id".
+    Si aucun utilisateur n'est connecté, cette fonction n'a aucun effet et redirige simplement vers la page
+    accueil.html.
     """
     # Supprime les informations d'identification de l'utilisateur de la session.
     session.pop("logged_in", None)

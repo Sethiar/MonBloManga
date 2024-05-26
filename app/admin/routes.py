@@ -1,6 +1,7 @@
 """
-
+Code permettant de définir les routes concernant l'administration du blog.
 """
+
 from app.admin import admin_bp
 
 from datetime import datetime
@@ -55,7 +56,8 @@ def back_end():
         formauthor = NewAuthor()
         formcomment = CommentForm()
 
-        # Permet l'affichage des catégories, des articles de la liste des auteurs ainsi que les sujets du forum dans le back_end.
+        # Permet l'affichage des catégories, des articles de la liste des auteurs ainsi que les sujets du forum dans
+        # le back_end.
         categories = Categorie.query.all()
         articles = Article.query.all()
         authors = Author.query.all()
