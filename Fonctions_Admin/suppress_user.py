@@ -30,7 +30,7 @@ from database_config.db_monblogmanga import conn
 cur = conn.cursor()
 
 # Exécution d'une requête de suppression
-cur.execute("DELETE FROM user")
+cur.execute('DELETE FROM "user"')
 
 # Validation de la transaction
 conn.commit()
