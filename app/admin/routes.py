@@ -1,21 +1,22 @@
 """
 Code permettant de définir les routes concernant l'administration du blog.
 """
+from sqlalchemy import func
 
 from app.admin import admin_bp
 
 from datetime import datetime
 from flask import flash, redirect, url_for, session, render_template, request
-
 from markupsafe import escape
 
 from Models import db
 from Models.comment import Comment
 
-from Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, CommentForm
+from Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, CommentForm, UserSaving
 from Models.categories_articles import Categorie
 from Models.author import Author
 from Models.articles import Article
+from Models.user import User
 from Models.subjects_forum import SubjectForum
 
 
@@ -55,21 +56,24 @@ def back_end():
         formsubjectforum = NewSubjectForumForm()
         formauthor = NewAuthor()
         formcomment = CommentForm()
+        formuser = UserSaving()
 
         # Permet l'affichage des catégories, des articles de la liste des auteurs ainsi que les sujets du forum dans
         # le back_end.
         categories = Categorie.query.all()
         articles = Article.query.all()
         authors = Author.query.all()
+        users = User.query.all()
         pseudos = [author.pseudo for author in authors]
         subjects = SubjectForum.query.all()
         comments = Comment.query.all()
 
-        return render_template("Admin/back_end.html", categories=categories, articles=articles, authors=authors,
-                               pseudos=pseudos, subjects=subjects, comments=comments,
+        return render_template("Admin/back_end.html", categories=categories,
+                               articles=articles, authors=authors, pseudos=pseudos, subjects=subjects,
+                               comments=comments, users=users,
                                formcategories=formcategories, formarticles=formarticles,
                                formsubjectforum=formsubjectforum, formauthor=formauthor,
-                               formcomment=formcomment)
+                               formcomment=formcomment, formuser=formuser)
     else:
         # L'utilisateur n'est pas connecté en tant qu'administrateur, redirige vers la page de connexion admin.
         return redirect(url_for("auth.admin_connection"))
@@ -84,10 +88,64 @@ def articles_list():
     Returns :
         La liste de tous les articles.
     """
+    formarticles = ArticleForm()
     # Récupération de tous les articles depuis la base de données.
     articles = Article.query.all()
 
-    return render_template("Admin/articles_list.html", articles=articles)
+    return render_template("Admin/articles_list.html", articles=articles,
+                           formarticles=formarticles)
+
+
+# Route permettant d'accéder à la liste des articles présents sur le blog.
+@admin_bp.route("/back_end_blog/liste_utilisateur")
+def users_list():
+    """
+
+    :return:
+    """
+    formuser = UserSaving()
+    users = db.session.query(
+        User.id,
+        User.pseudo,
+        func.count(Comment.id).label('comment_count')
+    ).outerjoin(Comment, User.id == Comment.user_id) \
+     .group_by(User.id) \
+     .all()
+
+    user_data = []
+    for user_id, pseudo, comment_count in users:
+        user_info = {
+            'id': user_id,
+            'pseudo': pseudo,
+            'comment_count': comment_count,
+            'comments': User.comments
+        }
+        user_data.append(user_info)
+
+    return render_template("Admin/users_list.html", users=users, formuser=formuser)
+
+
+# Route permettant de supprimer d'un utilisateur.
+@admin_bp.route("/back_end_blog/supprimer_utilisateur/<int:id>", methods=["POST"])
+def suppress_user(id):
+    """
+    Supprime un utilisateur.
+
+    Args :
+        id: L'identifiant de l'utilisateur à supprimer.
+
+    Returns :
+        Redirige vers le back_end après la suppression de l'utilisateur.
+    """
+    user = User.query.get(id)
+    if user:
+        # Suppression de l'utilisateur.
+        db.session.delete(user)
+        # Validation de l'action.
+        db.session.commit()
+        flash("L'utilisateur a été supprimé avec succès." + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
+
+        return redirect(url_for("admin.users_list"))
 
 
 # route permettant de créer une nouvelle catégorie.

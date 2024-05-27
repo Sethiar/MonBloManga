@@ -33,7 +33,7 @@ def acces_no_autorise(error):
     Returns :
         La page d'erreur 401.
     """
-    return render_template("Functional/401.html"), 401
+    return render_template("Error/401.html"), 401
 
 
 # Route renvoyant l'erreur 404.
@@ -48,7 +48,7 @@ def page_not_found(error):
     Returns :
         La page d'erreur 404.
     """
-    return render_template("Functional/404.html"), 404
+    return render_template("Error/404.html"), 404
 
 
 # Route permettant de renvoyant l'utilisateur vers les bons moyens d'authentification.
@@ -83,7 +83,7 @@ def connexion_requise():
     Returns:
         Le template HTML de la page "connexion_requise".
     """
-    return render_template("functional/connexion_requise.html")
+    return render_template("Error/connexion_requise.html")
 
 
 # Route permettant de valider une connexion ou d'en infirmer l'authenticité.

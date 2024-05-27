@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Page administrateur du blog</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel='stylesheet' href="{{ url_for('static',filename='CSS/back_end.css') }}">
+    <script src="{{ url_for('static', filename='CSS/javascript/script_back.js') }}"></script>
+</head>
+
+{% block body_content %}
+<body>
+<header>
+    <nav>
+        <h2>Bienvenue sur la page administrateur du blog</h2>
+        <a class="retour_frontend" href="{{ url_for('landing_page') }}">Aller sur la page d'accueil du blog</a>
+        <button><a href="{{ url_for('auth.admin_logout') }}"> Se déconnecter du back end</a></button>
+    </nav>
+</header>
+
+
+
+<div class="container">
+    <!-- Pour ajouter une catégorie d'articles-->
+    <div class="categorie">
+        <h4>Ajouter une catégorie d'articles</h4>
+        <form method="POST" action="{{ url_for('admin.add_new_categorie') }}">
+            {{ formcategories.csrf_token }}
+            {{ formcategories.nom.label }} {{ formcategories.nom(size=20) }}
+            {{ formcategories.submit() }}
+        </form>
+
+        <!-- Pour afficher la liste des catégories -->
+        <div class="liste_categories">
+            <h5>Liste des catégories</h5>
+            <ul>
+                {% for categorie in categories %}
+                <li>
+                    {{ categorie.nom }}
+                    <form method="POST" action="{{ url_for('admin.suppress_categorie', id=categorie.id) }}" class="btn_suppression">
+                    {{ formcategories.csrf_token }}
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="categorie">
+        <!-- Pour ajouter un nouvel auteur. -->
+        <h4>Ajouter un auteur</h4>
+        <form method="POST" action="{{ url_for('admin.add_new_author') }}">
+            {{ formauthor.csrf_token }}
+            {{ formauthor.nom.label }} {{ formauthor.nom(size=30) }}<br>
+            {{ formauthor.prenom.label }} {{ formauthor.prenom(size=30) }}<br>
+            {{ formauthor.pseudo.label }} {{ formauthor.pseudo(size=30) }}<br>
+            {{ formauthor.submit() }}
+        </form>
+
+        <!-- Pour afficher la liste des auteurs -->
+        <div class="liste_categories">
+            <h5>Liste des auteurs</h5>
+            <ul>
+                {% for author in authors %}
+                <li>
+                    {{ author.pseudo }}
+                    <form method="POST" action="{{ url_for('admin.suppress_author', id=author.id) }}" class="btn_suppression">
+                    {{ formauthor.csrf_token }}
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Pour Ajouter les nouveaux articles -->
+    <div class="article">
+        <h4>Ajouter un article</h4>
+        <form method="post" action="{{ url_for('admin.add_new_article') }}" enctype="multipart/form-data">
+        {{ formarticles.csrf_token }}
+            <label for="title">Titre de l'article :</label>
+            <input type="text" id="title" class="title" name="title" value="{{ title }}" required><br><br>
+
+            <label for="article_content">Contenu de l'article :</label>
+            <textarea id="article_content" class="article_content" name="article_content" rows="20" cols="50" required></textarea>
+            <br><br>
+
+            <label for="resume">Résumé de l'article :</label>
+            <textarea id="resume" class="resume" name="resume" rows="3" cols="50" required></textarea>
+            <br><br>
+
+            <label for="author_id">Pseudo :</label>
+            <select id="author_id" name="author_id">
+                <option class="bouton_article_categorie" value="author_id" disabled selected hidden>Sélectionnez un auteur</option>
+
+                {% for author in authors %}
+                    <option value="{{ author.id }}">{{ author.pseudo }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <label for="date">Date d'édition :</label>
+            <input type="date" id="date" class="date" name="date_edition" value="{{ date_edition }}" required><br><br>
+
+            <label for="categorie_id">Catégorie :</label>
+            <select id="categorie_id" name="categorie_id">
+                <option class="bouton_article_categorie" value="categorie_id" disabled selected hidden>Sélectionnez une catégorie</option>
+
+                {% for categorie in categories %}
+                    <option value="{{ categorie.id }}">{{ categorie.nom }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <input type="submit" value="Ajouter l'article">
+        </form>
+    </div>
+</div>
+<br><br>
+
+<br><br>
+
+<div class="container">
+    <br><br>
+    <h5>Liste des Articles</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Pseudo de l'auteur</th>
+                <th>Date d'édition</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article.title }}</td>
+                <td>{{ article.author }}</td>
+                <td>{{ article.date_edition }}</td>
+                <td>
+                    <form action="{{ url_for('admin.suppress_article', id=article.id) }}" method="POST" class="btn_suppression">
+                        {{ formarticles.csrf_token }}
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<br><br>
+<div class="container">
+    <br><br>
+    <h5>Liste des Utilisateurs</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pseudo de l'utilisateur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.pseudo }}</td>
+                <td>
+                    <form action="{{ url_for('admin.suppress_user', id=user.id) }}" method="POST" class="btn_suppression">
+                        {{ formuser.csrf_token }}
+                        <button type="submit" class="btn_suppression" data-pseudo="l'utilisateur {{ user.pseudo }}"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<br><br>
+<div class="container">
+    <!-- Pour ajouter un sujet au forum-->
+    <div class="categorie">
+        <h4>Ajouter un sujet au forum</h4>
+        <form method="POST" action="{{ url_for('admin.add_subject_forum_back') }}">
+            {{ formsubjectforum.csrf_token }}
+            {{ formsubjectforum.nom.label }} {{ formsubjectforum.nom(size=20) }}
+            {{ formsubjectforum.submit() }}
+        </form>
+        <br><br>
+        <h5>Liste des sujets sur le forum</h5>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Sujets</th>
+                <th>Nombre de commentaires</th>
+               <th>Date d'édition du sujet</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for subject in subjects %}
+            <tr>
+                <td>{{ subject.nom}}</td>
+                <!--<td>{{ subject.comm_number }}</td>
+                <td>{{ subject.date_edition }}</td> n-->
+                <td>
+                    <form action="{{ url_for('admin.suppress_subject', id=subject.id) }}" method="POST" class="btn_suppression">
+                        {{ formsubjectforum.csrf_token }}
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+<br><br>
+<div>
+    <h5>Liste des commentaires en fonction des articles</h5>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Commentaires</th>
+                <th>Titre de l'article</th>
+                <th>Date d'édition du commentaire</th>
+                <th>Pseudo de l'utilisateur</th>
+                <th>Action</th> <!-- Ajout de la colonne pour l'action de suppression -->
+            </tr>
+            </thead>
+            <tbody>
+            {% for comment in comments %}
+           <tr>
+               <td>{{ comment.comment_content }}</td> <!-- Utilisation de la propriété correcte -->
+               <td>{{ comment.article.title }}</td> <!-- Affichage du titre de l'article associé -->
+               <td>{{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</td> <!-- Affichage de la date du commentaire-->
+               <td>{{ comment.user.pseudo }}</td>
+               <td>
+                   <form action="{{ url_for('admin.suppress_comment', id=comment.id) }}" method="POST" class="btn_suppression">
+                       {{ formcomment.csrf_token }}
+                       <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                   </form>
+               </td>
+           </tr>
+           {% endfor %}
+           </tbody>
+        </table>
+</div>
+<br><br>
+<div>
+    <form action="/back_end_blog" method="GET">
+        <select name="categorie">
+            <option value="">Toutes les catégories</option>
+                {% for categorie in categories %}
+            <option value="{{ categorie }}"> {{ categorie }}</option>
+                {% endfor %}
+        </select>
+        <input type="submit" value="Filtrer">
+    </form>
+</div>
+
+
+<br><br>
+
+<div class="message_flash">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    {% for message in messages %}
+    <p>{{ message }}</p>
+    {% endfor %}
+    <button id="btn_supprimer">Supprimer</button>
+    {% endif %}
+    {% endwith %}
+</div>
+
+
+<br><br>
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', () => {
+  const dismissButton = document.querySelector('#btn_supprimer');
+
+  dismissButton.addEventListener('click', () => {
+    const messageFlash = document.querySelector('.message_flash');
+    // Suppression des messages flash du DOM
+    messageFlash.remove();
+  });
+});
+</script>
+
+</body>
+</html>

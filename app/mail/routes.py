@@ -3,7 +3,7 @@ Code permettant de définir les routes concernant le mailing du blog.
 """
 
 from app.mail import mail_bp
-from flask import current_app as app, redirect, url_for
+from flask import current_app as app, redirect, url_for, flash
 from flask_mail import Message
 from Models.user import User
 from Models import db, user
@@ -40,6 +40,11 @@ def send_confirmation_email(email):
     :param email: L'adresse e-mail du nouvel utilisateur.
     :return: Une redirection vers la page d'accueil après envoi de l'e-mail de confirmation.
     """
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        flash("Utilisateur non trouvé.", "Attention")
+        return redirect(url_for('landing_page'))
+
     mail = app.extensions['mail']
     msg = Message("Confirmation d'inscription", sender='alefetey123@gmail.com', recipients=[email])
     msg.body = "Merci de vous être inscrit sur notre site. Votre inscription a été confirmée avec succès.\n" \

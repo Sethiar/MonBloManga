@@ -8,7 +8,7 @@ import bcrypt
 
 from datetime import datetime
 
-from flask_login import login_required
+from flask_login import login_required, current_user
 from flask import redirect, url_for, render_template, flash, request
 from markupsafe import escape
 
@@ -20,6 +20,7 @@ from Models.comment import Comment
 from Models.user import User
 from Models.subjects_forum import SubjectForum
 from Models.reply import Reply
+from Models.likes import Likes, Dislikes
 
 
 # Route permettant à un nouvel utilisateur de s'inscrire.
@@ -55,6 +56,7 @@ def user_recording():
 
 # Route permettant de liker un article.
 @user_bp.route("/article/likes<int:article_id>", methods=['POST'])
+@login_required
 def article_like(article_id):
     """
 
@@ -63,24 +65,42 @@ def article_like(article_id):
     """
     # Instanciation des formulaires.
     formlike = LikeForm()
-    formdislike = DislikeForm()
-    formcomment = CommentForm()
 
     if formlike.validate_on_submit():
-        # Récupération des articles ou de l'error 404 si aucun article.
+        # Récupération de l'article ou de l'error 404 si aucun article.
         article = Article.query.get_or_404(article_id)
-        # Ajout d'un like.
-        article.likes += 1
-        # Récupération des commentaires de l'article.
-        comments = Comment.query.filter_by(article_id=article_id).all()
-        # Enregistrement dans la base de données.
-        db.session.commit()
+
+        # Vérifiez si l'utilisateur a déjà liké ou disliké cet article
+        existing_like = Likes.query.filter_by(user_id=current_user.id, article_id=article_id).first()
+        existing_dislike = Dislikes.query.filter_by(user_id=current_user.id, article_id=article_id).first()
+
+        if existing_like:
+            flash("Vous avez déjà liké cet article.", "info")
+        else:
+            if existing_dislike:
+                db.session.delete(existing_dislike)
+                article.dislikes -= 1
+
+            # Ajout d'un like.
+            new_like = Likes(user_id=current_user.id, article_id=article_id)
+            db.session.add(new_like)
+            article.likes += 1
+
+            # Enregistrement dans la base de données.
+            db.session.commit()
+            flash("Merci pour votre like!", "success")
+
         # Redirection vers la page de l'article.
         return redirect(url_for('frontend.show_article', article_id=article_id))
+
+        # En cas de non-validation du formulaire, redirection avec message d'erreur.
+    flash("Erreur lors de la soumission du formulaire.", "danger")
+    return redirect(url_for('frontend.show_article', article_id=article_id))
 
 
 # Route permettant de disliker un article.
 @user_bp.route("/article/dislikes<int:article_id>", methods=['POST'])
+@login_required
 def article_dislike(article_id):
     """
 
@@ -89,21 +109,37 @@ def article_dislike(article_id):
     """
     # Instanciation des formulaires.
     formdislike = DislikeForm()
-    formlike = LikeForm()
-    formcomment = CommentForm()
 
     if formdislike.validate_on_submit():
-        # Récupération des articles ou de l'error 404 si aucun article.
+        # Récupération de l'article ou de l'error 404 si aucun article.
         article = Article.query.get_or_404(article_id)
-        # Ajout d'un dislike.
-        article.dislikes += 1
-        # Récupération des commentaires de l'article.
-        comments = Comment.query.filter_by(article_id=article_id).all()
-        # Enregistrement dans la base de données.
-        db.session.commit()
-    # Redirection vers la page de l'article.
-    return redirect(url_for('frontend.show_article', article_id=article_id))
 
+        # Vérifiez si l'utilisateur a déjà liké ou disliké cet article
+        existing_like = Likes.query.filter_by(user_id=current_user.id, article_id=article_id).first()
+        existing_dislike = Dislikes.query.filter_by(user_id=current_user.id, article_id=article_id).first()
+
+        if existing_dislike:
+            flash("Vous avez déjà disliké cet article.", "info")
+        else:
+            if existing_like:
+                db.session.delete(existing_like)
+                article.likes -= 1
+
+            # Ajout d'un dislike.
+            new_dislike = Dislikes(user_id=current_user.id, article_id=article_id)
+            db.session.add(new_dislike)
+            article.dislikes += 1
+
+            # Enregistrement dans la base de données.
+            db.session.commit()
+            flash("Merci pour votre dislike!", "success")
+
+        # Redirection vers la page de l'article.
+        return redirect(url_for('frontend.show_article', article_id=article_id))
+
+        # En cas de non-validation du formulaire, redirection avec message d'erreur.
+    flash("Erreur lors de la soumission du formulaire.", "danger")
+    return redirect(url_for('frontend.show_article', article_id=article_id))
 
 # Route permettant d'ajouter un sujet au forum une fois connecté.
 @user_bp.route("/forum/ajouter_sujet", methods=['POST'])
