@@ -1,4 +1,4 @@
-// Code JavaScript pour affichage de l'image du produit
+// Code JavaScript pour l'apparition d'une fenêtre de dialogue afin d'affirmer la suppression.
 document.addEventListener("DOMContentLoaded", () => {
   const inputImage = document.querySelector("#image");
   const previewImage = document.querySelector("#preview");
