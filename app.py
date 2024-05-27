@@ -9,7 +9,7 @@ from flask import render_template
 from Models.author import Author
 from Models.articles import Article
 
-app, login_manager, db = create_app()
+app = create_app()
 
 
 # Route permettant d'accéder à l'accueil du blog.

@@ -1,8 +1,10 @@
 from Models import db
 from flask_login import UserMixin
-from app import app
+from app.create_app import create_app
 
 from datetime import datetime
+
+app = create_app()
 
 """
 Ce fichier définit les modèles de données SQLAlchemy pour l'application, y compris les tables pour enregistrer les informations des utilisateurs, des administrateurs, des articles et des catégories.
@@ -199,6 +201,35 @@ with app.app_context():
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
         user = db.relationship('User', backref=db.backref('comments', lazy=True))
 
+    class Likes(db.Model):
+        """
+        Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils aiment.
+
+        Attributes:
+            user_id (int) : Identifiant de l'utilisateur.
+            article_id (int) : Identifiant de l'article.
+        """
+
+        __tablename__ = "likes"
+        __table_args__ = {"extend_existing": True}
+
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+        article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
+
+    # Table de liaison pour les dislikes
+    class Dislikes(db.Model):
+        """
+            Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
+
+            Attributes:
+                user_id (int) : Identifiant de l'utilisateur.
+                article_id (int) : Identifiant de l'article.
+            """
+        __tablename__ = "dislikes"
+        __table_args__ = {"extend_existing": True}
+
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+        article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
 
     class Reply(db.Model):
         """
