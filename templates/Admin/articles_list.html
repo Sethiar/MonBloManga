@@ -1,0 +1,42 @@
+{% extends 'baseback.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page du backend afin d'afficher la liste des articles.">
+    <title>{% block title %}Page administrateur - Liste articles{% endblock %}</title>
+
+{% endblock %}
+
+{% block body_content %}
+<br><br>
+<br><br>
+
+<div class="container">
+    <br><br>
+    <h5>Liste des Articles</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Titre de l'article</th>
+                <th>Pseudo de l'auteur</th>
+                <th>Date d'édition</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for article in articles %}
+            <tr>
+                <td>{{ article.title }}</td>
+                <td>{{ article.author }}</td>
+                <td>{{ article.date_edition }}</td>
+                <td>
+                    <form action="{{ url_for('admin.suppress_article', id=article.id) }}" method="POST" class="btn_suppression">
+                        {{ formarticles.csrf_token }}
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

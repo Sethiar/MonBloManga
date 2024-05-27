@@ -3,38 +3,76 @@
 {% block head_content %}
     <meta name="description" content="Formulaire d'adhésion aux conditions générales du blog.">
     <title>{% block title %}Formulaire d'adhésion pour s'inscrire faire parti de la communauté.{% endblock %}</title>
-{% endblock %}
+    {% endblock %}
 
 {% block body_content %}
     <header>
-        <p>Bienvenue aux nouveaux membres, veuillez remplir ce formulaire afin de renseigner vos informations.</p>
-        <p>Pour tout renseignement supplémentaire, vous pouvez consulter notre <b>FAQ</b> ou les <b>conditions générales d'utilisation.</b></p>
+        <div id="introduction">
+            <p>Bienvenue aux nouveaux membres, veuillez remplir ce formulaire afin de vous inscrire.</p>
+            <p>Voius pourrez alors en toute liberté accéder au forum, choisir un sujet et débattre avec les autres utilisateurs, vous pourrez aussi laisser des commentaires sur les articles publiés.</p>
+            <p>Pour tout renseignement supplémentaire, vous pouvez consulter nos <b><a href="{{url_for('functional.politique')}}">conditions générales d'utilisation.</a></b> ou nos <b><a href="{{url_for('functional.mentions')}}">mentions légales</a></b></p>
+        </div>
     </header>
 
     <form method="POST" action="{{ url_for('user.user_recording') }}">
-        <div class="imgcontainer">
-            <img src="{{ url_for('static', filename='Images/images_formulaire/greetings.jpg') }}" alt="Avatar" class="avatar">
-        </div>
+    <div class="imgcontainer">
+        <img src="{{ url_for('static', filename='Images/images_formulaire/greetings.jpg') }}" alt="Avatar" class="avatar">
+    </div>
 
-        <h3>Enregistrement Membre</h3>
-        {{ form.csrf_token }}
-        <div class="container">
-            {{ form.pseudo.label }} {{ form.pseudo() }}
-            <br><br>
-            {{ form.email.label }} {{ form.email() }}
-            <br><br>
-            {{ form.password.label }} {{ form.password() }}
-            <br><br>
-            {{ form.password2.label }} {{ form.password2() }}
-            <br><br>
-            {{ form.date_naissance.label }} {{ form.date_naissance() }}
-            <br><br>
-        </div>
+    <h3>Enregistrement Membre</h3>
+    {{ form.csrf_token }}
+    <div class="container">
+        {{ form.pseudo.label }} {{ form.pseudo() }}
+        {% if form.pseudo.errors %}
+            <ul>
+                {% for error in form.pseudo.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        {{ form.email.label }} {{ form.email() }}
+        {% if form.email.errors %}
+            <ul>
+                {% for error in form.email.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        {{ form.password.label }} {{ form.password() }}
+        {% if form.password.errors %}
+            <ul>
+                {% for error in form.password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        {{ form.password2.label }} {{ form.password2() }}
+        {% if form.password2.errors %}
+            <ul>
+                {% for error in form.password2.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        {{ form.date_naissance.label }} {{ form.date_naissance() }}
+        {% if form.date_naissance.errors %}
+            <ul>
+                {% for error in form.date_naissance.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+    </div>
 
-        <div class="container" style="background-color:#f1f1f1">
-            <button type="submit" class="validatedbtn">Validation de la souscription</button>
-            <button type="button" class="cancelledbtn"><a href="{{ url_for('landing_page') }}">Annulation de la souscription et retourner à l'accueil</a></button>
-            <a href="{{ url_for('functional.mentions') }}" class="bouton_renvoi"><b>Accéder aux mentions légales du blog</b></a>
-        </div>
-    </form>
+    <div class="container" style="background-color:#f1f1f1">
+        <button type="submit" class="validatedbtn">Validation de la souscription</button>
+        <button type="button" class="cancelledbtn"><a href="{{ url_for('landing_page') }}">Annulation de la souscription et retour à l'accueil</a></button>
+    </div>
+</form>
+
 {% endblock %}

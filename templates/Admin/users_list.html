@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'baseback.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page du backend afin d'afficher la liste des utilisateurs.">
+    <title>{% block title %}Page administrateur - Liste utilisateurs{% endblock %}</title>
+
+{% endblock %}
+
+{% block body_content %}
+<br><br>
+<br><br>
+<div class="container">
+
+    <h5>Liste des Utilisateurs</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pseudo de l'utilisateur</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.pseudo }}</td>
+                <td>
+                    <form action="{{ url_for('admin.suppress_user', id=user.id) }}" method="POST" class="btn_suppression">
+                        {{ formuser.csrf_token }}
+                        <button type="submit" class="btn_suppression" data-pseudo="l'utilisateur {{ user.pseudo }}"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+

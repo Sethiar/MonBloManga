@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'baseback.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page du backend afin d'afficher la liste des commentaires.">
+    <title>{% block title %}Page administrateur - Liste commentaires{% endblock %}</title>
+
+{% endblock %}
+
+{% block body_content %}
+<br><br>
+<br><br>
+<div class=container>
+    <h5>Liste des commentaires en fonction des articles</h5>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Commentaires</th>
+                <th>Titre de l'article</th>
+                <th>Date d'édition du commentaire</th>
+                <th>Pseudo de l'utilisateur</th>
+                <th>Action</th> <!-- Ajout de la colonne pour l'action de suppression -->
+            </tr>
+            </thead>
+            <tbody>
+            {% for comment in comments %}
+           <tr>
+               <td>{{ comment.comment_content }}</td> <!-- Utilisation de la propriété correcte -->
+               <td>{{ comment.article.title }}</td> <!-- Affichage du titre de l'article associé -->
+               <td>{{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</td> <!-- Affichage de la date du commentaire-->
+               <td>{{ comment.user.pseudo }}</td>
+               <td>
+                   <form action="{{ url_for('admin.suppress_comment', id=comment.id) }}" method="POST" class="btn_suppression">
+                       {{ formcomment.csrf_token }}
+                       <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                   </form>
+               </td>
+           </tr>
+           {% endfor %}
+           </tbody>
+        </table>
+</div>
+{% endblock %}
