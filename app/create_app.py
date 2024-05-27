@@ -42,7 +42,6 @@ def create_app():
 
     app.config['MAIL_SERVER'] = 'smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
-
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
     app.config['MAIL_USERNAME'] = 'alefetey123@gmail.com'
@@ -98,8 +97,7 @@ def create_app():
     @app.context_processor
     def inject_logged_in():
         """
-
-        :return:
+        Injecte le statut de connexion et le pseudo de l'utilisateur dans le contexte global de l'application.
         """
         logged_in = session.get("logged_in", False)
         pseudo = session.get("pseudo", None)
@@ -126,8 +124,6 @@ def create_app():
     csrf = CSRFProtect(app)
 
     # Initialisation de la base de données.
-    with app.app_context():
-        db.init_app(app)
+    db.init_app(app)
 
-    return app, login_manager, db
-
+    return app
