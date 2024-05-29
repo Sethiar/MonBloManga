@@ -1,11 +1,3 @@
-from Models import db
-from flask_login import UserMixin
-from app.create_app import create_app
-
-from datetime import datetime
-
-app = create_app()
-
 """
 Ce fichier définit les modèles de données SQLAlchemy pour l'application, y compris les tables pour enregistrer les informations des utilisateurs, des administrateurs, des articles et des catégories.
 
@@ -18,19 +10,13 @@ Classes de modèles de données :
 
 Les tables sont créées dans ce contexte d'application Flask pour garantir leur installation correcte.
 """
+from Models import db
+from flask_login import UserMixin
+from app.create_app import create_app
 
-"""
-Exemple d'utilisation :
-    # Création d'un nouvel administrateur
-    new_admin = Admin(role='admin', identifiant='admin', password_hash='hashed_password', salt='salt')
-    db.session.add(new_admin)
-    db.session.commit()
+from datetime import datetime
 
-    # Création d'un nouvel utilisateur
-    new_user = User(nom='John', prenom='Doe', email='john@example.com', date_naissance='1990-01-01', genre='Masculin')
-    db.session.add(new_user)
-    db.session.commit()
-"""
+app = create_app()
 
 # L'installation des tables doit se faire dans ce contexte.
 with app.app_context():
@@ -64,7 +50,7 @@ with app.app_context():
             id (int): Identifiant unique de l'utilisateur.
             pseudo (str): Pseudo unique de l'utilisateur.
             password_hash (int): Password hashé par bcrypt.
-            salt: Processus de salage du mot de passe.
+            salt (str): Processus de salage du mot de passe.
             email (str): Adresse e-mail de l'utilisateur.
             date_naissance (date): Date de naissance de l'utilisateur.
             banned (bool): renseigne sur l'état de bannissement de l'utilisateur.
@@ -114,8 +100,8 @@ with app.app_context():
             author (Author): Relation avec la classe Author.
             categorie_id (int): Identifiant de la catégorie de l'article.
             categorie (Categorie): Relation avec la classe Categorie.
-            likes (int) : Nombre de likes.
-            dislikes (int) : Nombre de dislikes.
+            likes (int): Nombre de likes.
+            dislikes (int): Nombre de dislikes.
         """
         __tablename__ = "article"
         __table_args__ = {"extend_existing": True}
@@ -170,8 +156,8 @@ with app.app_context():
         id = db.Column(db.Integer, primary_key=True)
         nom = db.Column(db.String(50), nullable=False)
 
-    # Modèle de la classe Comment.
-    class Comment(db.Model):
+    # Modèle de la classe Comment pour les articles.
+    class CommentArticle(db.Model):
         """
         Représente un commentaire sur un article.
 
@@ -182,7 +168,7 @@ with app.app_context():
             article_id (int): Identifiant de l'article associé au commentaire.
             user_id (int): Identifiant de l'utilisateur enregistré.
         """
-        __tablename__ = "comment"
+        __tablename__ = "comment_article"
         __table_args__ = {"extend_existing": True}
 
         id = db.Column(db.Integer, primary_key=True)
@@ -199,7 +185,38 @@ with app.app_context():
 
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        user = db.relationship('User', backref=db.backref('comments', lazy=True))
+        user = db.relationship('User', backref=db.backref('article_comments', lazy=True))
+
+    # Modèle de la classe Comment pour les sujets du forum.
+    class CommentSubject(db.Model):
+        """
+        Représente un commentaire pour un sujet du forum.
+
+        Attributes:
+            id (int): Identifiant unique du commentaire.
+            comment_content (str): Contenu du commentaire.
+            comment_date (date): Date du commentaire.
+            subject_id (int): Identifiant de l'article associé au commentaire.
+            user_id (int): Identifiant de l'utilisateur enregistré.
+        """
+        __tablename__ = "comment_subject"
+        __table_args__ = {"extend_existing": True}
+
+        id = db.Column(db.Integer, primary_key=True)
+        comment_content = db.Column(db.Text(), nullable=False)
+        comment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+        # Comptage des likes et dislikes.
+        likes = db.Column(db.Integer, nullable=False, default=0)
+        dislikes = db.Column(db.Integer, nullable=False, default=0)
+
+        # Relation avec la classe SubjectForum.
+        subject_id = db.Column(db.Integer, db.ForeignKey('subject_forum.id'), nullable=False)
+        subject = db.relationship('SubjectForum', backref=db.backref('comments', lazy=True))
+
+        # Relation avec la classe User.
+        user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        user = db.relationship('User', backref=db.backref('subject_comments', lazy=True))
 
     class Likes(db.Model):
         """
@@ -209,7 +226,6 @@ with app.app_context():
             user_id (int) : Identifiant de l'utilisateur.
             article_id (int) : Identifiant de l'article.
         """
-
         __tablename__ = "likes"
         __table_args__ = {"extend_existing": True}
 
@@ -219,31 +235,31 @@ with app.app_context():
     # Table de liaison pour les dislikes
     class Dislikes(db.Model):
         """
-            Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
+        Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
 
-            Attributes:
-                user_id (int) : Identifiant de l'utilisateur.
-                article_id (int) : Identifiant de l'article.
-            """
+        Attributes:
+            user_id (int) : Identifiant de l'utilisateur.
+            article_id (int) : Identifiant de l'article.
+        """
         __tablename__ = "dislikes"
         __table_args__ = {"extend_existing": True}
 
         user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
         article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
 
-    class Reply(db.Model):
+
+    class ReplyArticle(db.Model):
         """
-        Représente une réponse à un commentaire.
+        Représente une réponse à un commentaire sur un article.
 
         Attributes:
-            id (int): Identifiant de la réponse.
-            contenu (str): Contenu de la réponse au commentaire.
-            date (date): Date de la réponse.
-            commentaire_id (int): Identifiant du commentaire associé à la réponse.
-            likes (int): Nombre de likes.
-            dislikes (int): Nombre de  dislikes.
+            id (int): Identifiant unique de la réponse.
+            reply_content (str): Contenu de la réponse.
+            reply_date (date): Date de la réponse.
+            comment_id (int): Identifiant du commentaire associé à la réponse.
+            user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
         """
-        __tablename__ = "reply"
+        __tablename__ = "reply_article"
         __table_args__ = {"extend_existing": True}
 
         id = db.Column(db.Integer, primary_key=True)
@@ -254,14 +270,44 @@ with app.app_context():
         reply_likes = db.Column(db.Integer, nullable=False, default=0)
         reply_dislikes = db.Column(db.Integer, nullable=False, default=0)
 
-        # Relation avec la classe Comment.
-        comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'), nullable=False)
-        comment = db.relationship('Comment', backref=db.backref('replies', lazy=True))
+        # Relation avec la classe CommentArticle.
+        comment_id = db.Column(db.Integer, db.ForeignKey('comment_article.id'), nullable=False)
+        comment = db.relationship('CommentArticle', backref=db.backref('replies', lazy=True))
 
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        user = db.relationship('User', backref=db.backref('replies', lazy=True))
+        user = db.relationship('User', backref=db.backref('article_replies', lazy=True))
 
+
+    class ReplySubject(db.Model):
+        """
+        Représente une réponse à un commentaire sur un sujet du forum.
+
+        Attributes:
+            id (int): Identifiant unique de la réponse.
+            reply_content (str): Contenu de la réponse.
+            reply_date (date): Date de la réponse.
+            comment_id (int): Identifiant du commentaire associé à la réponse.
+            user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
+        """
+        __tablename__ = "reply_subject"
+        __table_args__ = {"extend_existing": True}
+
+        id = db.Column(db.Integer, primary_key=True)
+        reply_content = db.Column(db.Text(), nullable=False)
+        reply_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+        # Comptage des likes.
+        reply_likes = db.Column(db.Integer, nullable=False, default=0)
+        reply_dislikes = db.Column(db.Integer, nullable=False, default=0)
+
+        # Relation avec la classe CommentSubject.
+        comment_id = db.Column(db.Integer, db.ForeignKey('comment_subject.id'), nullable=False)
+        comment = db.relationship('CommentSubject', backref=db.backref('replies', lazy=True))
+
+        # Relation avec la classe User.
+        user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        user = db.relationship('User', backref=db.backref('subject_replies', lazy=True))
 
     # Création de toutes les tables à partir de leur classe.
     db.create_all()
