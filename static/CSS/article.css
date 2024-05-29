@@ -189,6 +189,16 @@ button a {
   font-size: 15px;
 }
 
+/* Photo des utilisateur ayant posté */
+.comment-header {
+  background-color: grey;
+  color: black;
+}
+.comment-header img {
+  background-color: grey;
+  color: black;
+}
+
 #comment_content {
   width: 50%;
   margin: 0 auto;
@@ -226,7 +236,6 @@ textarea {
   flex-direction: column;
   padding: 10px;
   background-color: grey;
-  margin-bottom: 1%;
 }
 
 .comment {
@@ -246,11 +255,11 @@ textarea {
 }
 
 .content_comment {
-  margin-top: 1%;
   text-indent: 5%;
-  font-size: 13px;
+  font-size: 17px;
   text-align: justify;
   background-color: grey;
+  color: black;
 }
 
 .date_comment {
@@ -272,11 +281,50 @@ textarea {
   height: 5%;
 }
 
-.content-reply {
-  text-align: center;
-  color: white;
-  padding-right: 4%;
+.comment-reply {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
   font-size: 12px;
+}
+
+.reply-header {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
+}
+.reply-header img {
+  background-color: lightgrey;
+  color: black;
+}
+
+.reply-details {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
+}
+.reply-details strong i {
+  background-color: lightgrey;
+  color: black;
+}
+.reply-date {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
+}
+.reply-date small {
+  background-color: lightgrey;
+  color: black;
+  border-top: 1px solid black;
+}
+
+.content-reply {
+  text-indent: 7%;
+  text-align: center;
+  background-color: lightgrey;
+  color: black;
+  padding-right: 4%;
+  font-size: 15px;
 }
 
 .reply-button {
@@ -291,16 +339,6 @@ textarea {
   font-size: 12px;
   cursor: pointer;
   border-radius: 3px;
-}
-
-.comment-reply hr {
-  border: 1px solid darkgrey;
-  width: 50%;
-}
-
-hr {
-  border: 1px solid darkgrey;
-  width: 70%;
 }
 
 /* Code ajustant les styles pour les tablettes */

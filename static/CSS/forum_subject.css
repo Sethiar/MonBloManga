@@ -242,7 +242,6 @@ textarea {
   flex-direction: column;
   padding: 10px;
   background-color: grey;
-  margin-bottom: 1%;
 }
 
 .comment {
@@ -252,8 +251,13 @@ textarea {
 }
 
 /* Photo des utilisateur ayant posté */
-.pics_user {
-
+.comment-header {
+  background-color: grey;
+  color: black;
+}
+.comment-header img {
+  background-color: grey;
+  color: black;
 }
 
 .comment strong {
@@ -262,11 +266,11 @@ textarea {
 }
 
 .content_comment {
-  margin-top: 1%;
   text-indent: 5%;
-  font-size: 13px;
+  font-size: 17px;
   text-align: justify;
   background-color: grey;
+  color: black;
 }
 
 .date_comment {
@@ -288,11 +292,53 @@ textarea {
   height: 5%;
 }
 
+.comment-reply {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
+  font-size: 12px;
+}
+
+.reply-header {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
+}
+.reply-header img {
+  background-color: lightgrey;
+  color: black;
+}
+
+.reply-details {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
+}
+.reply-details strong i {
+  background-color: lightgrey;
+  color: black;
+}
+.reply-date {
+  text-indent: 7%;
+  background-color: lightgrey;
+  color: black;
+}
+.reply-date small {
+  background-color: lightgrey;
+  color: black;
+  border-top: 1px solid black;
+}
+
 .content-reply {
+  text-indent: 7%;
   text-align: center;
-  color: white;
+  background-color: lightgrey;
+  color: black;
   padding-right: 4%;
-  font-size: 14px;
+  font-size: 15px;
+  margin-left: 7%;
+  margin-right: 7%;
+  border-bottom: 1px solid black;
 }
 
 .reply-button {
@@ -308,23 +354,41 @@ textarea {
   cursor: pointer;
   border-radius: 3px;
 }
+.back {
+  background-color: orange;
+  border: gold;
+  box-shadow: 2px 2px 10px rgba(255, 165, 0, 0.5);
+  color: black;
+  padding: 2px 7px;
+  text-align: center;
+  text-style: italic;
+  display: inline-block;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.back a {
+  background-color: orange;
+}
+.back a:hover {
+  text-decoration: underline;
+  color: black;
+}
 
-.comment-reply hr {
-  border: 1px solid darkgrey;
+#comment_avis {
   width: 50%;
+  margin: 0 auto;
+  font-style: italic;
+  text-align: center;
+}
+#comment_avis h2 {
+  border-bottom: 1px solid white;
+}
+#comment_avis button {
+  color: orange;
+  font-size: 14px;
 }
 
-hr {
-  border: 1px solid darkgrey;
-  width: 70%;
-}
-
-/* Style général du footer */
-.footer {
-  background-color: #2c3e50;
-  padding: 20px 0;
-  color: white;
-}
 
 /* Code ajustant les styles pour les tablettes */
 @media screen and (min-width: 600px) and (max-width: 900px) {
