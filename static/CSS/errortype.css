@@ -1,37 +1,171 @@
-/* Styles relatifs au erreur 401 et 404.*/
+/* Styles relatifs aux erreurs 401, 404 et connexion requise.*/
+* {
+  background-color: black;
+  color: white;
+  font-family: Calibri, sans-serif;
+}
 
 .error-401 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
 }
 
 .error-message401 {
-    text-align: center;
+  text-align: center;
 }
 
 .error-image401 img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 20px;
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
 }
 
+/* Code gérant la page 404 */
 .error-404 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25%;
+  flex-direction: column;
+}
+
+h1 {
+  text-decoration: underline;
+  margin-top: 5%;
+  text-align: center;
+  font-size: 22px;
 }
 
 .error-message404 {
-    text-align: center;
+  text-align: center;
+  border: 1px solid orange;
+  font-size: 18px;
 }
 
-.error-image404 img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 20px;
+.error-message404 p {
+  padding-right: 2%;
+  padding-left: 2%;
+  font-style: justify;
+}
+
+#error-image404 img {
+  max-width: 60%;
+  border-radius: 45%;
+  box-shadow: 0px 0px 20px orange;
+  display: block;
+  margin: 0 auto;
+  margin-top: 5%;
+}
+
+.separation {
+  padding:5%;
+  width: 75%;
+  margin: 0 auto;
+  border-bottom: 1px solid orange;
+}
+
+/*Code gérant l'erreur connexion requise */
+* {
+  background-color: black;
+}
+
+#container {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    font-size: 18px;
+}
+
+#connexion-image img {
+  max-width: 60%;
+  border-radius: 45%;
+  box-shadow: 0px 0px 20px orange;
+  display: block;
+  margin: 0 auto;
+  margin-top: 5%;
+}
+
+#explication {
+  width: 60%;
+  border: 1px solid orange;
+  display: block;
+  margin: 0 auto;
+  text-indent: 3%;
+  font-style: justify;
+  padding-right: 2%;
+  padding-left: 2%
+}
+
+#explication p {
+  text-align: left;
+  padding-left: 5%;
+}
+h3 {
+  text-decoration: underline;
+  text-align: center;
+}
+
+/* Style pour le deuxième conteneur */
+#Typeerror {
+  width: 60%;
+  display: block;
+  margin: 0 auto;
+  text-indent: 3%;
+  font-style: justify;
+  padding-right: 2%;
+  padding-left: 2%
+}
+#Typeerror p {
+  text-align: left;
+  padding-left: 5%;
+}
+
+div a:hover {
+  color: orange;
+}
+
+/* Style pour les liens de redirection */
+#redirection {
+  text-align: center;
+  margin-top: 2%;
+  margin: 0 auto;
+  font-size: 18px;
+}
+
+#button {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+button {
+  background-color: orange;
+  border: black;
+  box-shadow: 2px 2px 10px rgba(255, 165, 0, 0.5);
+  color: orange;
+  padding: 2px 7px;
+  text-align: center;
+  text-style: italic;
+  display: inline-block;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+button a {
+  background-color: orange;
+  color: black;
+}
+
+button:hover {
+  background-color: gold;
+  color: black;
+}
+
+button a:hover {
+  background-color: gold;
+  color: black;
 }

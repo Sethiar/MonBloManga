@@ -11,6 +11,9 @@
   text-align: justify;
   padding: 2%;
 }
+header a {
+  color: orange;
+}
 
 body {
   font-family: Calibri, sans-serif;
@@ -20,6 +23,7 @@ body {
 
 h3 {
   text-decoration: underline;
+  color: orange;
 }
 
 form {
@@ -45,6 +49,7 @@ input[type=text], input[type=password], input[type=email], input[type=date] {
   border: 1px solid #ccc;
   box-sizing: border-box;
   font-size: 15px;
+  background-color: lightgrey;
 }
 
 button[type="submit"], .cancelledbtn {
@@ -60,6 +65,10 @@ button[type="submit"], .cancelledbtn {
 
 button[type="submit"]:hover, .cancelledbtn:hover {
   opacity: 0.8;
+}
+
+button a {
+  color: black;
 }
 
 .validatedbtn {
@@ -83,6 +92,11 @@ img.avatar {
   border-radius: 50%;
 }
 
+.separation {
+  width: 50%;
+  margin: 0 auto;
+  border-bottom: 1px solid orange;
+}
 
 .container {
   padding: 8%;
@@ -93,23 +107,3 @@ span.psw {
   padding-top: 16px;
 }
 
-@media screen and (max-width: 300px) {
-  span.psw {
-    display: block;
-    float: none;
-  }
-
-  .cancelledbtn {
-    width: 100%;
-  }
-}
-
-button {
-  font-size: 20px;
-}
-
-.error-message {
-  color: red;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
