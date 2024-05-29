@@ -7,10 +7,31 @@
 
 {% block body_content %}
 <div id="container">
+    <div id="connexion-image">
+        <img src="{{ url_for('static', filename='Images/images_connexion/connexion1.jpg') }}" alt="Image illustrative">
+    </div>
+    <h1>Bonjour</h1>
+    <div id="explication">
+        <h3>Si vous êtes sur cette page, cela signifie que :</h3>
+        <p>Soit, vous n'avez pas rentré les bons identifiants de connexion</p>
+        <p>Soit vous n'êtes pas encore inscrit-e</p>
+    </div>
     <div id="Typeerror">
-        <p>Vous n'avez pas la connexion requise afin d'accéder à ses fonctionnalités.</p>
-        <p>Veuillez vous inscrire ou contacter l'administrateur réseau.</p>
+            <h3>En conséquence : </h3>
+            <p>Vous n'avez pas la permission requise afin d'accéder aux fonctionnalités du blog.</p>
+            <p>Si vous voulez vous inscrire afin de pouvoir parler de votre passion des mangas, cliquez sur le bouton : inscription.</p>
+            <p>Sinon vous pouvez réinscrire vos identifiants afin de vous identifier.</p>
+
+            <p>Pour toute autre demande, vous pouvez contacter l'administrateur réseau : <a href="mailto:alefetey123@gmail.com">Contacter Sethiar</a></p>
     </div>
 </div>
-<button><a href="{{ url_for('auth.user_connection_error') }}">Se connecter</a></button>
+<div class="separation"></div>
+<div id="redirection">
+    <p>Pour s'inscrire, c'est par ici.</p>
+</div>
+<div id="button">
+    <button><a href="{{ url_for('auth.user_connection_error') }}">Se connecter</a></button>
+    <button><a href="{{ url_for('user.user_recording') }}">Inscription</a></button>
+</div>
+<br><br>
 {% endblock %}

@@ -6,14 +6,17 @@
 {% endblock %}
 
 {% block body_content %}
+<div id="container-error">
+    <h1>Erreur 404--Trop de BUU ??</h1>
     <div class="error-404">
         <div class="error-message404">
-            <h1>Erreur 404</h1>
             <p>Oups ! La page que vous cherchez semble avoir été emportée par des licornes.</p>
-            <p>Mais ne vous inquiétez pas, nous avons envoyé une quête à la guilde Blue Pegasus, tout devrait revenir à la normale !</p>
-        </div>
-        <div class="error-image404">
-            <img src="../Images/images_erreur/404.jpg" alt="Image illustrative">
+            <p>Mais ne vous inquiétez pas, nous avons envoyé une quête à la guilde <b>Blue Pegasus</b>, tout devrait revenir à la normale !</p>
         </div>
     </div>
+    <div id="error-image404">
+        <img src="{{ url_for('static', filename='Images/images_erreur/404.jpg') }}" alt="Image illustrative">
+    </div>
+    <div class="separation"></div>
+</div>
 {% endblock %}

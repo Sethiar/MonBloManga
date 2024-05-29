@@ -10,7 +10,7 @@
         <div id="introduction">
             <p>Bienvenue aux nouveaux membres, veuillez remplir ce formulaire afin de vous inscrire.</p>
             <p>Voius pourrez alors en toute liberté accéder au forum, choisir un sujet et débattre avec les autres utilisateurs, vous pourrez aussi laisser des commentaires sur les articles publiés.</p>
-            <p>Pour tout renseignement supplémentaire, vous pouvez consulter nos <b><a href="{{url_for('functional.politique')}}">conditions générales d'utilisation.</a></b> ou nos <b><a href="{{url_for('functional.mentions')}}">mentions légales</a></b></p>
+            <p>Pour tout renseignement supplémentaire, vous pouvez consulter nos <b><a href="{{url_for('functional.politique')}}">conditions générales d'utilisation</a></b> ou nos <b><a href="{{url_for('functional.mentions')}}">mentions légales</a></b>.</p>
         </div>
     </header>
 
@@ -68,8 +68,8 @@
         {% endif %}
         <br><br>
     </div>
-
-    <div class="container" style="background-color:#f1f1f1">
+        <div class="separation"></div>
+    <div class="container" style="background-color:black">
         <button type="submit" class="validatedbtn">Validation de la souscription</button>
         <button type="button" class="cancelledbtn"><a href="{{ url_for('landing_page') }}">Annulation de la souscription et retour à l'accueil</a></button>
     </div>
