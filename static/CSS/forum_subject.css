@@ -1,0 +1,759 @@
+/* Définition d'une police pour tous les éléments de la page */
+* {
+  font-family: 'Comic Sans MS', cursive;
+  box-sizing: border-box;
+  background-color: black;
+  color: white;
+}
+
+/* Header */
+header {
+  background-color: black;
+  position: relative;
+  width: 70%;
+  margin: 0 auto;
+  height: 150px;
+  background-image: url('../Images/images_banniere/banniere4.jpg');
+  background-position: center;
+  background-size: 100% 100%;
+}
+
+/* Image en haut à gauche */
+header::before {
+  content: ""; /* Obligatoire pour afficher le pseudo-élément */
+  background-image: url('../Images/images_banniere/luffy2.jpg');
+  background-position: top left;
+  background-size: 100% 100%;
+  position: absolute;
+  top: 0;
+  left: -20%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Image en haut à droite */
+header::after {
+  content: ""; /* Obligatoire pour afficher le pseudo-élément */
+  background-image: url('../Images/images_banniere/goku1.jpg');
+  background-position: top right;
+  background-size: 100% 100%;
+  position: absolute;
+  top: 0;
+  right: -20%;
+  width: 20%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Option de la barre de navigation */
+#navbar {
+  background-color: black;
+}
+
+/* Options pour les éléments de la barre de navigation */
+#navbar ul {
+  display: flex;
+  justify-content: center;
+  list-style-type: none;
+  padding: 1%;
+  margin: auto;
+}
+
+/* Éléments de la barre de navigation */
+#navbar ul li {
+  color: white;
+  font-size: 20px;
+  border: 1px solid orange;
+  display: inline-block;
+}
+
+#navbar ul li a {
+  display: block;
+  padding: 10px 30px;
+  text-decoration: none;
+  border: orange;
+  color: gold;
+}
+
+/* Option de survol */
+nav a:hover {
+  color: orange;
+  border-bottom: 2px solid gold;
+}
+
+button a {
+  color: black;
+}
+
+#connection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 15%;
+  border: 2px solid purple;
+  background-color: orange;
+  position: absolute;
+  right: 5%;
+}
+
+#connection p {
+  color: black;
+  background-color:orange;
+}
+
+#connection button {
+  color: black;
+  background-color: gold;
+  border: 1px solid black;
+  text-align: center;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+}
+
+#connection a {
+  color: black;
+  background-color:gold;
+}
+
+#connection a:hover {
+  color: white;
+}
+
+/* Style pour le conteneur principal */
+h1 {
+  width: 60%;
+  margin: 0 auto;
+  text-align: center;
+  }
+
+/* Style pour le forum */
+#forum_pic {
+  background-image: url('../Images/images_forum/background1.jpg');
+  height: 100%;
+}
+
+#forum_pic_center {
+  border-radius: 100%;
+  background-image: url('../Images/images_forum/fairy_forum.jpg');
+  background-position: center;
+  margin: 0 auto;
+  background-size: cover;
+  top: 15%;
+  width: 550px;
+  height: 350px;
+}
+
+#forum_pic_left {
+  background-image: url('../Images/images_forum/erza.jpg');
+  background-position: left;
+  position: absolute;
+  background-size: cover;
+  left: 0%;
+  top: 35%;
+  width: 20%;
+  height: 50%;
+  z-index: 1;
+  background-size: 100% 100%;
+}
+
+#forum_pic_right {
+  background-image: url('../Images/images_forum/jojo.jpg');
+  background-position: right;
+  position: absolute;
+  margin: 0 auto;
+  background-size: cover;
+  right: 0%;
+  top: 35%;
+  width: 20%;
+  height: 50%;
+  z-index: 1;
+  background-size: 100% 100%;
+}
+
+.separation {
+  border-bottom: 1px solid black;
+  margin: 3%;
+}
+
+/* Styles de la section commentaire */
+#comment_avis {
+  font-size: 20px;
+  display: flex;
+  text-align: center;
+  text-indent: 5%;
+}
+
+#form-comment {
+  display: flex;
+  padding-left: 5%;
+}
+
+
+#comment_avis {
+  width: 50%;
+  margin: 0 auto;
+  font-style: italic;
+  text-align: center;
+}
+
+#comment_avis button {
+  color: orange;
+}
+
+.separation {
+  border-bottom: 1px solid orange;
+  margin: 3%;
+}
+
+/* Style pour la zone de texte de la réponse aux commentaires */
+textarea {
+    width: 100%;
+    max-width: 800px;
+    height: 150px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#container_subject_forum h2 {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid purple;
+  color: black;
+  background-color: orange;
+  text-align: left;
+}
+
+#container_comment {
+  border: 1px solid orange;
+  margin: 5%;
+  text-align: left;
+  font-size: 16px;
+  background-color: grey;
+}
+
+#container_comment #comment {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: grey;
+  margin-bottom: 1%;
+}
+
+.comment {
+  font-style: italic;
+  color: black;
+  background-color: grey;
+}
+
+/* Photo des utilisateur ayant posté */
+.pics_user {
+
+}
+
+.comment strong {
+  color: black;
+  background-color: grey;
+}
+
+.content_comment {
+  margin-top: 1%;
+  text-indent: 5%;
+  font-size: 13px;
+  text-align: justify;
+  background-color: grey;
+}
+
+.date_comment {
+  font-size: 14px;
+  color: white;
+  background-color: grey;
+}
+
+.date_comment small {
+  border-top: 1px solid white;
+  background-color: grey;
+}
+
+/* Style des réponses aux commentaires */
+.reply-button-container {
+  text-align: right;
+  background-color: grey;
+  padding-right: 5%;
+  height: 5%;
+}
+
+.content-reply {
+  text-align: center;
+  color: white;
+  padding-right: 4%;
+  font-size: 14px;
+}
+
+.reply-button {
+  background-color: black;
+  border: black;
+  box-shadow: 2px 2px 10px rgba(255, 165, 0, 0.5);
+  color: orange;
+  padding: 2px 7px;
+  text-align: center;
+  text-style: italic;
+  display: inline-block;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.comment-reply hr {
+  border: 1px solid darkgrey;
+  width: 50%;
+}
+
+hr {
+  border: 1px solid darkgrey;
+  width: 70%;
+}
+
+/* Style général du footer */
+.footer {
+  background-color: #2c3e50;
+  padding: 20px 0;
+  color: white;
+}
+
+/* Code ajustant les styles pour les tablettes */
+@media screen and (min-width: 600px) and (max-width: 900px) {
+  /* Définition d'une police pour tous les éléments de la page */
+  * {
+    font-family: 'Comic Sans MS', cursive;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+  }
+
+  /* Header */
+  header {
+    background-color: black;
+    position: relative;
+    width: 70%;
+    margin: 0 auto;
+    height: 150px;
+    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-position: center;
+    background-size: 100% 100%;
+  }
+
+  /* Image en haut à gauche */
+  header::before {
+    content: ""; /* Obligatoire pour afficher le pseudo-élément */
+    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-position: top left;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    left: -20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Image en haut à droite */
+  header::after {
+    content: ""; /* Obligatoire pour afficher le pseudo-élément */
+    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-position: top right;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    right: -20%;
+    width: 20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Option de la barre de navigation */
+  #navbar {
+    background-color: black;
+  }
+
+  /* Options pour les éléments de la barre de navigation */
+  #navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 1%;
+    margin: auto;
+  }
+
+  /* Éléments de la barre de navigation */
+  #navbar ul li {
+    color: white;
+    font-size: 20px;
+    border: 1px solid orange;
+    display: inline-block;
+  }
+
+  #navbar ul li a {
+    display: block;
+    padding: 10px 30px;
+    text-decoration: none;
+    border: orange;
+    color: gold;
+  }
+
+  /* Option de survol */
+  nav a:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+  }
+
+  button a {
+    color: black;
+
+
+  /* Style pour la connexion utilisateur */
+  #connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    border: 2px solid purple;
+    background-color: orange;
+    position: absolute;
+    right: 5%;
+  }
+
+  #connection p {
+    color: black;
+    background-color:orange;
+  }
+
+  #connection button {
+    color: black;
+    background-color: gold;
+    border: 1px solid black;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+  }
+
+  #connection a {
+    color: black;
+    background-color:gold;
+  }
+
+  #connection a:hover {
+    color: white;
+  }
+
+  /* Style pour le conteneur principal */
+  h1 {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    }
+
+  /* Style pour le forum */
+  #forum_pic {
+   background-image: url('../Images/images_forum/background1.jpg');
+    height: 100%;
+  }
+
+  #forum_pic_center {
+    border-radius: 100%;
+    background-image: url('../Images/images_forum/fairy_forum.jpg');
+    background-position: center;
+    margin: 0 auto;
+    background-size: cover;
+    top: 15%;
+    width: 550px;
+    height: 350px;
+  }
+
+  #forum_pic_left {
+    background-image: url('../Images/images_forum/erza.jpg');
+    background-position: left;
+    position: absolute;
+    background-size: cover;
+    left: 0%;
+    top: 35%;
+    width: 20%;
+    height: 50%;
+    z-index: 1;
+    background-size: 100% 100%;
+  }
+
+  #forum_pic_right {
+    background-image: url('../Images/images_forum/jojo.jpg');
+    background-position: right;
+    position: absolute;
+    margin: 0 auto;
+    background-size: cover;
+    right: 0%;
+    top: 35%;
+    width: 20%;
+    height: 50%;
+    z-index: 1;
+    background-size: 100% 100%;
+  }
+
+  .separation {
+    border-bottom: 1px solid black;
+    margin: 3%;
+  }
+
+  #subject {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  #subject th, #subject td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  #subject th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+
+  #subject tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  #subject tr:hover {
+    background-color: #ddd;
+  }
+
+  /* Style général du footer */
+  .footer {
+    background-color: #2c3e50;
+    padding: 20px 0;
+    color: white;
+  }
+}
+
+
+/*Code ajustant les styles pour les téléphones portables */
+@media screen and (max-width: 600px) {
+  /* Définition d'une police pour tous les éléments de la page */
+  * {
+    font-family: 'Comic Sans MS', cursive;
+    box-sizing: border-box;
+    background-color: black;
+    color: white;
+  }
+
+  /* Header */
+  header {
+    background-color: black;
+    position: relative;
+    width: 70%;
+    margin: 0 auto;
+    height: 150px;
+    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-position: center;
+    background-size: 100% 100%;
+  }
+
+  /* Image en haut à gauche */
+  header::before {
+    content: ""; /* Obligatoire pour afficher le pseudo-élément */
+    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-position: top left;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    left: -20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Image en haut à droite */
+  header::after {
+    content: ""; /* Obligatoire pour afficher le pseudo-élément */
+    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-position: top right;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 0;
+    right: -20%;
+    width: 20%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  /* Option de la barre de navigation */
+  #navbar {
+    background-color: black;
+  }
+
+  /* Options pour les éléments de la barre de navigation */
+  #navbar ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    padding: 1%;
+    margin: auto;
+  }
+
+  /* Éléments de la barre de navigation */
+  #navbar ul li {
+    color: white;
+    font-size: 20px;
+    border: 1px solid orange;
+    display: inline-block;
+  }
+
+  #navbar ul li a {
+    display: block;
+    padding: 10px 30px;
+    text-decoration: none;
+    border: orange;
+    color: gold;
+  }
+
+  /* Option de survol */
+  nav a:hover {
+    color: orange;
+    border-bottom: 2px solid gold;
+  }
+
+  button a {
+    color: black;
+
+
+  /* Style pour la connexion utilisateur */
+  #connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 15%;
+    border: 2px solid purple;
+    background-color: orange;
+    position: absolute;
+    right: 5%;
+  }
+
+  #connection p {
+    color: black;
+    background-color:orange;
+  }
+
+  #connection button {
+    color: black;
+    background-color: gold;
+    border: 1px solid black;
+    text-align: center;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 30, 1);
+  }
+
+  #connection a {
+    color: black;
+    background-color:gold;
+  }
+
+  #connection a:hover {
+    color: white;
+  }
+
+  /* Style pour le conteneur principal */
+  h1 {
+    width: 60%;
+    margin: 0 auto;
+    text-align: center;
+    }
+
+  /* Style pour le forum */
+  #forum_pic {
+   background-image: url('../Images/images_forum/background1.jpg');
+    height: 100%;
+  }
+
+  #forum_pic_center {
+    border-radius: 100%;
+    background-image: url('../Images/images_forum/fairy_forum.jpg');
+    background-position: center;
+    margin: 0 auto;
+    background-size: cover;
+    top: 15%;
+    width: 550px;
+    height: 350px;
+  }
+
+  #forum_pic_left {
+    background-image: url('../Images/images_forum/erza.jpg');
+    background-position: left;
+    position: absolute;
+    background-size: cover;
+    left: 0%;
+    top: 35%;
+    width: 20%;
+    height: 50%;
+    z-index: 1;
+    background-size: 100% 100%;
+  }
+
+  #forum_pic_right {
+    background-image: url('../Images/images_forum/jojo.jpg');
+    background-position: right;
+    position: absolute;
+    margin: 0 auto;
+    background-size: cover;
+    right: 0%;
+    top: 35%;
+    width: 20%;
+    height: 50%;
+    z-index: 1;
+    background-size: 100% 100%;
+  }
+
+  .separation {
+    border-bottom: 1px solid black;
+    margin: 3%;
+  }
+
+  #subject {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  #subject th, #subject td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  #subject th {
+    background-color: #f2f2f2;
+    color: #333;
+  }
+
+  #subject tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+  #subject tr:hover {
+    background-color: #ddd;
+  }
+
+  /* Style général du footer */
+  .footer {
+    background-color: #2c3e50;
+    padding: 20px 0;
+    color: white;
+  }
+}
+

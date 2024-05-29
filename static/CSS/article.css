@@ -264,12 +264,19 @@ textarea {
   background-color: grey;
 }
 
-/* Style des réponse aux commentaires */
+/* Style des réponses aux commentaires */
 .reply-button-container {
   text-align: right;
   background-color: grey;
   padding-right: 5%;
   height: 5%;
+}
+
+.content-reply {
+  text-align: center;
+  color: white;
+  padding-right: 4%;
+  font-size: 12px;
 }
 
 .reply-button {
@@ -284,6 +291,11 @@ textarea {
   font-size: 12px;
   cursor: pointer;
   border-radius: 3px;
+}
+
+.comment-reply hr {
+  border: 1px solid darkgrey;
+  width: 50%;
 }
 
 hr {
