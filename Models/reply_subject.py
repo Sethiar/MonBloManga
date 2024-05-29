@@ -1,0 +1,47 @@
+"""
+Représente la classe des réponses aux commentaires des sujets du forum.
+"""
+
+from . import db
+from datetime import datetime
+
+
+class ReplySubject(db.Model):
+    """
+    Représente une réponse à un commentaire sur un sujet du forum.
+
+    Attributes:
+        id (int): Identifiant unique de la réponse.
+        reply_content (str): Contenu de la réponse.
+        reply_date (date): Date de la réponse.
+        comment_id (int): Identifiant du commentaire associé à la réponse.
+        user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
+    """
+    __tablename__ = "reply_subject"
+    __table_args__ = {"extend_existing": True}
+
+    id = db.Column(db.Integer, primary_key=True)
+    reply_content = db.Column(db.Text(), nullable=False)
+    reply_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    # Comptage des likes.
+    reply_likes = db.Column(db.Integer, nullable=False, default=0)
+    reply_dislikes = db.Column(db.Integer, nullable=False, default=0)
+
+    # Relation avec la classe CommentSubject.
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment_subject.id'), nullable=False)
+    comment = db.relationship('CommentSubject', backref=db.backref('replies', lazy=True))
+
+    # Relation avec la classe User.
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('subject_replies', lazy=True))
+
+    def __repr__(self):
+        """
+        Représentation en chaîne de caractères de l'objet Reply.
+
+        Returns :
+            str: Chaîne représentant l'objet Reply.
+        """
+        return f"ReplySubject(id={self.id}, comment_id={self.comment_id}, user_id={self.user_id}, " \
+               f"date={self.reply_date}, like={self.reply_likes}, dislikes={self.reply_dislikes})"

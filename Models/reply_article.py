@@ -6,19 +6,18 @@ from . import db
 from datetime import datetime
 
 
-class Reply(db.Model):
+class ReplyArticle(db.Model):
     """
-    Représente une réponse à un commentaire.
+    Représente une réponse à un commentaire sur un article.
 
     Attributes:
-        id (int): Identifiant de la réponse.
-        contenu (str): Contenu de la réponse au commentaire.
-        date (date): Date de la réponse.
-        commentaire_id (int): Identifiant du commentaire associé à la réponse.
-        likes (int): Nombre de likes.
-        dislikes (int): Nombre de  dislikes.
+        id (int): Identifiant unique de la réponse.
+        reply_content (str): Contenu de la réponse.
+        reply_date (date): Date de la réponse.
+        comment_id (int): Identifiant du commentaire associé à la réponse.
+        user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
     """
-    __tablename__ = "reply"
+    __tablename__ = "reply_article"
     __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
@@ -29,13 +28,13 @@ class Reply(db.Model):
     reply_likes = db.Column(db.Integer, nullable=False, default=0)
     reply_dislikes = db.Column(db.Integer, nullable=False, default=0)
 
-    # Relation avec la classe Comment.
-    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
-    comment = db.relationship('Comment', backref=db.backref('replies', lazy=True))
+    # Relation avec la classe CommentArticle.
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment_article.id'), nullable=False)
+    comment = db.relationship('CommentArticle', backref=db.backref('replies', lazy=True))
 
     # Relation avec la classe User.
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', backref=db.backref('replies', lazy=True))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('article_replies', lazy=True))
 
     def __repr__(self):
         """
@@ -44,5 +43,5 @@ class Reply(db.Model):
         Returns :
             str: Chaîne représentant l'objet Reply.
         """
-        return f"Reply(id={self.id}, comment_id={self.comment_id}, user_id={self.user_id}, " \
+        return f"ReplyArticle(id={self.id}, comment_id={self.comment_id}, user_id={self.user_id}, " \
                f"date={self.reply_date}, like={self.reply_likes}, dislikes={self.reply_dislikes})"

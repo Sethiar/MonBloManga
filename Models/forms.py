@@ -209,7 +209,7 @@ class ArticleForm(FlaskForm):
     submit = SubmitField("Ajouter l'article")
 
 
-class CommentForm(FlaskForm):
+class CommentArticleForm(FlaskForm):
     """
     Formulaire pour ajouter un commentaire à un article.
     """
@@ -222,11 +222,27 @@ class CommentForm(FlaskForm):
     user_pseudo = StringField("Pseudo de l'utilisateur", validators=[DataRequired()],
                               render_kw={"placeholder": "Veuillez renseigner votre pseudo."})
 
-    # La date du commentaire.
-    comment_date = StringField("Date du commentaire", validators=[DataRequired()])
+    # Action de soumettre le formulaire.
+    submit = SubmitField("Soumettre le commentaire")
+
+    csrf_token = HiddenField()
+
+
+class CommentSubjectForm(FlaskForm):
+    """
+    Formulaire pour ajouter un commentaire à un article.
+    """
+
+    # Le contenu du commentaire.
+    comment_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                    render_kw={"placeholder": "Veuillez entrer votre commentaire."})
+
+    # Le pseudo de l'utilisateur.
+    user_pseudo = StringField("Pseudo de l'utilisateur", validators=[DataRequired()],
+                              render_kw={"placeholder": "Veuillez renseigner votre pseudo."})
 
     # Action de soumettre le formulaire.
-    submit = SubmitField()
+    submit = SubmitField("Soumettre le commentaire")
 
     csrf_token = HiddenField()
 
@@ -249,7 +265,7 @@ class DislikeForm(FlaskForm):
     submit = SubmitField('👎')
 
 
-class ReplyForm(FlaskForm):
+class ReplyArticleForm(FlaskForm):
     """
     Formulaire permettant d'ajouter une réponse à un commentaire.
     """
@@ -259,7 +275,19 @@ class ReplyForm(FlaskForm):
     reply_content = TextAreaField("Réponse au commentaire", validators=[DataRequired()],
                                   render_kw={"placeholder": "Veuillez écrire votre commentaire."})
 
-    # La date du commentaire.
-    comment_date = DateField("Date du commentaire", validators=[DataRequired()])
+    # Action de soumettre le formulaire.
+    submit = SubmitField()
+
+
+class ReplySubjectForm(FlaskForm):
+    """
+    Formulaire permettant d'ajouter une réponse à un commentaire dans la section du forum.
+    """
+    csrf_token = HiddenField()
+    # Le contenu de la réponse.
+    reply_content = TextAreaField("Réponse au sujet du forum", validators=[DataRequired()],
+                                  render_kw={"placeholder": "Veuillez écrire votre commentaire."})
+    # Champ pour stocker l'id du commentaire parent.
+    comment_id = HiddenField('ID du commentaire')
     # Action de soumettre le formulaire.
     submit = SubmitField()
