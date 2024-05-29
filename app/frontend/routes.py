@@ -1,17 +1,19 @@
 """
 Code permettant de définir les routes concernant le frontend du blog.
 """
-
-
 from app.frontend import frontend_bp
 
-from flask import render_template, url_for, redirect, request, abort
+from flask import render_template, url_for, redirect, request, abort, flash
+from flask_login import  login_required
 
-from Models.forms import CommentForm, LikeForm, DislikeForm, NewSubjectForumForm
+
+from Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
+    NewSubjectForumForm
 
 from Models.author import Author
 from Models.articles import Article
-from Models.comment import Comment
+from Models.comment_article import CommentArticle
+from Models.comment_subject import CommentSubject
 from Models.subjects_forum import SubjectForum
 
 
@@ -44,7 +46,7 @@ def reading_articles():
             La fonction valide le formulaire, traite les données et redirige l'utilisateur vers une autre page.
 
     """
-    form = CommentForm()
+    form = CommentArticleForm()
 
     if request.method == 'POST':
         # Validation du formulaire du commentaire.
@@ -91,7 +93,7 @@ def show_article(article_id):
     """
 
     # Création de l'instance du formulaire.
-    formcomment = CommentForm()
+    formcomment = CommentArticleForm()
     formlike = LikeForm()
     formdislike = DislikeForm()
 
@@ -104,7 +106,7 @@ def show_article(article_id):
         abort(404)
 
     # Récupération des commentaires associés à cet article.
-    comments = Comment.query.filter_by(article_id=article_id).all()
+    comments = CommentArticle.query.filter_by(article_id=article_id).all()
 
     return render_template("Presentation/article.html", article=article, article_id=article_id, comments=comments,
                            formcomment=formcomment, formlike=formlike, formdislike=formdislike)
@@ -139,3 +141,33 @@ def forum():
 
     return render_template("Presentation/forum.html", formsubjectforum=formsubjectforum, subjects=subjects)
 
+
+@frontend_bp.route("/forum/<int:subject_id>", methods=['GET', 'POST'])
+@login_required
+def forum_subject(subject_id):
+    """
+    Page permettant d'échanger sur un sujet émis par la communauté.
+
+    Args:
+        subject_id (int): L'identifiant du sujet à afficher.
+
+    Returns:
+        La page de discussion sur le sujet spécifié.
+    """
+
+    # Création de l'instance de formulaire.
+    formcomment = CommentSubjectForm()
+
+    # Récupération du sujet spécifié par subject_id depuis la base de données.
+    subject = SubjectForum.query.get_or_404(subject_id)
+
+    # Vérifier si l'article existe.
+    if not subject:
+        # Si l'article n'existe pas, renvoyer une erreur 404.
+        abort(404)
+
+    # Récupération des commentaires associés à cet article.
+    comment_subject = CommentSubject.query.filter_by(subject_id=subject_id).all()
+
+    return render_template("Presentation/subject_forum.html", subject=subject, subject_id=subject_id,
+                           comment_subject=comment_subject, formcomment=formcomment)

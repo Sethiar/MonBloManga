@@ -8,7 +8,6 @@ import config
 
 from flask import Flask, session
 from flask_wtf.csrf import CSRFProtect
-from flask_mail import Mail
 
 
 from datetime import timedelta

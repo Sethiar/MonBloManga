@@ -10,9 +10,10 @@ from flask import flash, redirect, url_for, session, render_template, request
 from markupsafe import escape
 
 from Models import db
-from Models.comment import Comment
+from Models.comment_article import CommentArticle
 
-from Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, CommentForm, UserSaving
+from Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, UserSaving, \
+    CommentArticleForm, CommentSubjectForm
 from Models.categories_articles import Categorie
 from Models.author import Author
 from Models.articles import Article
@@ -55,7 +56,7 @@ def back_end():
         formarticles = ArticleForm()
         formsubjectforum = NewSubjectForumForm()
         formauthor = NewAuthor()
-        formcomment = CommentForm()
+        formcomment = CommentArticleForm()
         formuser = UserSaving()
 
         # Permet l'affichage des catégories, des articles de la liste des auteurs ainsi que les sujets du forum dans
@@ -66,7 +67,7 @@ def back_end():
         users = User.query.all()
         pseudos = [author.pseudo for author in authors]
         subjects = SubjectForum.query.all()
-        comments = Comment.query.all()
+        comments = CommentArticle.query.all()
 
         return render_template("Admin/back_end.html", categories=categories,
                                articles=articles, authors=authors, pseudos=pseudos, subjects=subjects,
@@ -96,7 +97,7 @@ def articles_list():
                            formarticles=formarticles)
 
 
-# Route permettant d'accéder à la liste des articles présents sur le blog.
+# Route permettant d'accéder à la liste des utilisateurs enregistrés sur le blog.
 @admin_bp.route("/back_end_blog/liste_utilisateur")
 def users_list():
     """
@@ -107,8 +108,8 @@ def users_list():
     users = db.session.query(
         User.id,
         User.pseudo,
-        func.count(Comment.id).label('comment_count')
-    ).outerjoin(Comment, User.id == Comment.user_id) \
+        func.count(CommentArticle.id).label('comment_count')
+    ).outerjoin(CommentArticle, User.id == CommentArticle.user_id) \
      .group_by(User.id) \
      .all()
 
@@ -343,7 +344,7 @@ def suppress_comment(id):
 
     """
 
-    comment = Comment.query.get(id)
+    comment = CommentArticle.query.get(id)
     if comment:
         # Suppression du sujet.
         db.session.delete(comment)

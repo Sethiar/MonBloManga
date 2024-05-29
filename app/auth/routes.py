@@ -16,6 +16,7 @@ from Models.user import User
 from Models.admin import Admin
 
 
+# Route permettant à l'administrateur de joindre le formulaire de connexion.
 @auth_bp.route("/connexion_admin_form", methods=['GET', 'POST'])
 def admin_connection():
     """
@@ -40,6 +41,7 @@ def admin_connection():
     return render_template("Admin/admin_connection.html", form=form)
 
 
+# Route permettant à l'admin de se déconnecter.
 @auth_bp.route("/back_end_blog/admin_deconnexion", methods=['GET'])
 def admin_logout():
     """
@@ -71,6 +73,7 @@ def admin_logout():
     return redirect(url_for('landing_page'))
 
 
+# Route permettant à l'administrateur de se connecter.
 @auth_bp.route("/connexion_admin", methods=['GET', 'POST'])
 def login_admin():
     """
@@ -134,6 +137,7 @@ def login_admin():
     return render_template("Admin/admin_connection.html", form=form)
 
 
+# Route permettant à l'utilisateur de joindre le formulaire de connexion.
 @auth_bp.route("/connexion_utilisateur_formulaire", methods=['GET', 'POST'])
 def user_connection():
     """
@@ -149,6 +153,20 @@ def user_connection():
     return render_template("User/user_connection.html", form=form, next_url=next_url)
 
 
+# Route permettant à l'utilisateur de joindre le formulaire de connexion suite à une déconnexion.
+@auth_bp.route("/connexion_utilisateur_formulaire_erreur", methods=['GET', 'POST'])
+def user_connection_error():
+    """
+    Permet à l'utilisateur d'accéder au formulaire de connexion afin de s'identifier.
+
+    Return :
+        Redirige vers le formulaire d'authentification utilisateur.
+    """
+    form = UserConnection()
+    return render_template("User/user_connection.html", form=form)
+
+
+# Route permettant à l'utilisateur de se déconnecter.
 @auth_bp.route("/deconnexion", methods=["GET"])
 @login_required
 def user_logout():
