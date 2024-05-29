@@ -60,8 +60,8 @@
 <div id="container_comment">
     {% for comment in comments %}
     <div id="comment">
-        <div class="pics_user">
-
+        <div class="comment-header">
+            <img src="{{ comment.user.profile_picture_url }}" alt="Photo de {{ comment.user.pseudo }}" class="profile-picture">
         </div>
         <div class="comment">
             <strong>{{ comment.user.pseudo }}</strong> a commenté :
@@ -82,7 +82,7 @@
             <div class="reply-header">
                 <img src="{{ reply.user.profile_picture_url }}" alt="Photo de {{ reply.user.pseudo }}" class="profile-picture">
                 <div class="reply-details">
-                    <strong>{{ reply.user.pseudo }}</strong> a répondu :
+                    <strong><i>{{ reply.user.pseudo }}</i></strong> a répondu :
                 </div>
                 <div class="reply-date">
                     <small>Le {{ reply.reply_date.strftime('%d-%m-%Y à %H:%M') }}</small>
@@ -91,11 +91,10 @@
             <div class="content-reply">
                 {{ reply.reply_content | replace('\n', '<br>') | safe }}
             </div>
-            <hr>
+            <br>
         </div>
         {% endfor %}
     </div>
-    <hr>
     {% endfor %}
 </div>
 <div style="height: 10px;"> <!-- Espace de 10 pixels -->
