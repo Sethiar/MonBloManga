@@ -18,11 +18,11 @@
         <img src="{{ url_for('static', filename='Images/images_articles/city_hunter1.jpeg') }}" alt="Avatar" class="avatar">
     </div>
     <h3>Réponse au commentaire</h3>
-    {{ form.csrf_token }}
+    {{ formsubjectreply.csrf_token }}
     <div class="container">
-        {{ form.reply_content.label }} {{ form.reply_content() }}
-        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+        {{ formsubjectreply.reply_content.label }} {{ formsubjectreply.reply_content() }}
         <input type="hidden" name="subject_id" value="{{ comment.subject_id }}">
+        <input type="hidden" name="comment_id" value="{{ comment.id }}">
 
         <div class="container">
              <button type="submit" class="validatedbtn">Soumettre la réponse</button>

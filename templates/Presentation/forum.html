@@ -34,12 +34,14 @@
             <thead>
             <tr>
                 <th>Sujets</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
             {% for subject in subjects %}
             <tr>
                 <td>{{ subject.nom }}</td>
+                <td><a href="{{ url_for('frontend.forum_subject', subject_id=subject.id) }}" class="btn btn-primary">Voir le sujet</a></td>
             </tr>
             {% endfor %}
             </tbody>

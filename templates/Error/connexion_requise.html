@@ -6,13 +6,11 @@
 {%endblock %}
 
 {% block body_content %}
-    {% block header_content %}
 <div id="container">
     <div id="Typeerror">
         <p>Vous n'avez pas la connexion requise afin d'accéder à ses fonctionnalités.</p>
         <p>Veuillez vous inscrire ou contacter l'administrateur réseau.</p>
     </div>
 </div>
-<button><a href="{{ url_for('auth.user_connection') }}">Se connecter</a></button>
-    {% endblock %}
+<button><a href="{{ url_for('auth.user_connection_error') }}">Se connecter</a></button>
 {% endblock %}

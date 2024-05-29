@@ -54,9 +54,8 @@
         <textarea name="comment_content" placeholder="Votre commentaire" required></textarea>
         <button type="submit">Poster le commentaire</button>
     </form>
-
-
 </div>
+
 <div class="separation"></div>
 <div id="container_comment">
     {% for comment in comments %}
@@ -75,29 +74,29 @@
         </div>
     </div>
     <div class="reply-button-container">
-        <a href="{{ url_for('user.reply_form', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
+        <a href="{{ url_for('user.reply_form_article', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
     </div>
     <div class="replies">
-        <!-- Ajoutez ici les réponses si elles existent -->
         {% for reply in comment.replies %}
-        <div class="comment reply">
+        <div class="comment-reply">
             <div class="reply-header">
                 <img src="{{ reply.user.profile_picture_url }}" alt="Photo de {{ reply.user.pseudo }}" class="profile-picture">
                 <div class="reply-details">
                     <strong>{{ reply.user.pseudo }}</strong> a répondu :
-                    <div class="reply-date">
-                        <small>Le {{ reply.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
-                    </div>
+                </div>
+                <div class="reply-date">
+                    <small>Le {{ reply.reply_date.strftime('%d-%m-%Y à %H:%M') }}</small>
                 </div>
             </div>
-            <div class="content-comment">
-                {{ reply.comment_content | replace('\n', '<br>') | safe }}
+            <div class="content-reply">
+                {{ reply.reply_content | replace('\n', '<br>') | safe }}
             </div>
+            <hr>
         </div>
         {% endfor %}
     </div>
     <hr>
-{% endfor %}
+    {% endfor %}
 </div>
 <div style="height: 10px;"> <!-- Espace de 10 pixels -->
 </div>
