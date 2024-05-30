@@ -31,7 +31,6 @@ class User(db.Model, UserMixin):
     date_naissance = db.Column(db.Date, nullable=False)
     banned = db.Column(db.Boolean, default=False)
 
-
     def __repr__(self):
         """
         Représentation en chaîne de caractères de l'objet Utilisateur.

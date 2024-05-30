@@ -24,10 +24,6 @@ class ReplyArticle(db.Model):
     reply_content = db.Column(db.Text(), nullable=False)
     reply_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    # Comptage des likes.
-    reply_likes = db.Column(db.Integer, nullable=False, default=0)
-    reply_dislikes = db.Column(db.Integer, nullable=False, default=0)
-
     # Relation avec la classe CommentArticle.
     comment_id = db.Column(db.Integer, db.ForeignKey('comment_article.id'), nullable=False)
     comment = db.relationship('CommentArticle', backref=db.backref('replies', lazy=True))

@@ -265,6 +265,11 @@ class DislikeForm(FlaskForm):
     submit = SubmitField('👎')
 
 
+class CommentLike(FlaskForm):
+    csrf_token = HiddenField()
+    submit = SubmitField()
+
+
 class ReplyArticleForm(FlaskForm):
     """
     Formulaire permettant d'ajouter une réponse à un commentaire.

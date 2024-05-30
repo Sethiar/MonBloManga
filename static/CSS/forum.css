@@ -233,7 +233,7 @@ h1 {
   color: black;
   background-color: gold;
   border: 1px solid black;
-  text-align: flex-end;
+  justify-content: flex-end;
   margin: 10px 0;
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(0, 0, 30, 1);

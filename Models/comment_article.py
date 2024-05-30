@@ -25,9 +25,8 @@ class CommentArticle(db.Model):
     comment_content = db.Column(db.Text(), nullable=False)
     comment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-    # Comptage des likes et dislikes.
+    # Comptage des likes.
     likes = db.Column(db.Integer, nullable=False, default=0)
-    dislikes = db.Column(db.Integer, nullable=False, default=0)
 
     # Relation avec la classe Article.
     article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
@@ -45,5 +44,5 @@ class CommentArticle(db.Model):
             str: Chaîne représentant l'objet Comment.
         """
         return f"CommentArticle(id={self.id}, article_id={self.article_id}, user_id={self.user_id}, " \
-               f"date={self.comment_date}, like={self.likes}, dislikes={self.dislikes})"
+               f"date={self.comment_date}, like={self.likes})"
 

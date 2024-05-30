@@ -4,6 +4,7 @@
     <meta name="description" content="Articles présents sur le blog.">
     <title>{% block title %}{{ article.title }}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/article.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 {% endblock %}
 
 {% block main_content %}
@@ -59,7 +60,7 @@
 <div class="separation"></div>
 <div id="container_comment">
     {% for comment in comments %}
-    <div id="comment">
+    <div class="comment" data-comment-id="{{ comment.id }}">
         <div class="comment-header">
             <img src="{{ comment.user.profile_picture_url }}" alt="Photo de {{ comment.user.pseudo }}" class="profile-picture">
         </div>
@@ -72,9 +73,20 @@
         <div class="content_comment">
             {{ comment.comment_content | replace('\n', '<br>') | safe }}
         </div>
-    </div>
-    <div class="reply-button-container">
-        <a href="{{ url_for('user.reply_form_article', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
+        <div class="reply-button-container">
+            <a href="{{ url_for('user.reply_form_article', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
+            <div class="like-section" data-user-id="{{ current_user.pseudo }}">
+                <form id="fromlikecomment" method="POST" action="{{ url_for('user.likes_comment_article') }}" style="display: none;">
+                    {{ formlikecomment.csrf_token }}
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
+                    <button type="submit" class="like-submit"></button>
+                </form>
+                <div class="like-icon" onclick="toggleLike(this, '{{ comment.id }}', '{{ current_user.pseudo }}')">&#9825;</div>
+                <span class="like-count">0</span>
+                <div class="liked-users"></div>
+            </div>
+        </div>
     </div>
     <div class="replies">
         {% for reply in comment.replies %}
@@ -100,4 +112,8 @@
 <div style="height: 10px;"> <!-- Espace de 10 pixels -->
 </div>
 <br>
+{% endblock %}
+{% block footer_content %}
+ <script src="{{ url_for('static', filename='CSS/javascript/like_comment_article.js') }}"></script>
+
 {% endblock %}

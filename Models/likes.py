@@ -1,7 +1,6 @@
+"""Classe représentant les likes et les dislikes pour les articles pour les utilisateurs du blog."""
 
 from . import db
-from Models.user import User
-from Models.articles import Article
 
 
 # Table de liaison pour les likes

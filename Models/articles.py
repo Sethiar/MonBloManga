@@ -28,10 +28,13 @@ class Article(db.Model):
     resume = db.Column(db.Text(), nullable=False)
     article_content = db.Column(db.Text(), nullable=False)
     date_edition = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
     author = db.relationship('Author', backref=db.backref('articles', lazy=True))
+
     categorie_id = db.Column(db.Integer, db.ForeignKey("categorie.id"), nullable=False)
     categorie = db.relationship("Categorie", backref=db.backref("articles", lazy="dynamic"))
+
     likes = db.Column(db.Integer, nullable=False, default=0)
     dislikes = db.Column(db.Integer, nullable=False, default=0)
 
