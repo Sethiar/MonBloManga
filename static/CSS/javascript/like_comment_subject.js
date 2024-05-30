@@ -11,7 +11,7 @@
         // Envoi d'une requête AJAX à Flask pour enregistrer l'utilisateur qui a aimé
             $.ajax({
             type: 'POST',
-            url: '/user/likes_comment_article',
+            url: '/user/likes_comment_subject',
             data: JSON.stringify({ comment_id: commentId, user_pseudo:userPseudo}),
             contentType: 'application/json',
             headers: {
