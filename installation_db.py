@@ -175,9 +175,8 @@ with app.app_context():
         comment_content = db.Column(db.Text(), nullable=False)
         comment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-        # Comptage des likes et dislikes.
+        # Comptage des likes.
         likes = db.Column(db.Integer, nullable=False, default=0)
-        dislikes = db.Column(db.Integer, nullable=False, default=0)
 
         # Relation avec la classe Article.
         article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
@@ -206,9 +205,8 @@ with app.app_context():
         comment_content = db.Column(db.Text(), nullable=False)
         comment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-        # Comptage des likes et dislikes.
+        # Comptage des likes.
         likes = db.Column(db.Integer, nullable=False, default=0)
-        dislikes = db.Column(db.Integer, nullable=False, default=0)
 
         # Relation avec la classe SubjectForum.
         subject_id = db.Column(db.Integer, db.ForeignKey('subject_forum.id'), nullable=False)
@@ -247,6 +245,38 @@ with app.app_context():
         user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
         article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
 
+    class CommentLikeArticle(db.Model):
+        """
+        Modèle de données représentant la relation entre les utilisateurs et les commentaires
+        qu'ils aiment de la section article.
+
+        Attributes:
+            user_id (int) : Identifiant de l'utilisateur.
+            comment_id (int) : Identifiant du commentaire.
+            """
+        __tablename__ = "likes_comment_article"
+        __table_args__ = {"extend_existing": True}
+
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+        comment_id = db.Column(db.Integer, db.ForeignKey("comment_article.id"), primary_key=True)
+        likes_article_count = db.Column(db.Integer, default=0)
+
+    class CommentLikeSubject(db.Model):
+        """
+        Modèle de données représentant la relation entre les utilisateurs et les commentaires
+        qu'ils aiment de la section forum.
+
+        Attributes:
+            user_id (int) : Identifiant de l'utilisateur.
+            comment_id (int) : Identifiant du commentaire.
+            likes_subject_count(int) : Nombre de likes du commentaire pour le sujet.
+        """
+        __tablename__ = "likes_comment_subject"
+        __table_args__ = {"extend_existing": True}
+
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+        comment_id = db.Column(db.Integer, db.ForeignKey("comment_subject.id"), primary_key=True)
+        likes_subject_count = db.Column(db.Integer, default=0)
 
     class ReplyArticle(db.Model):
         """
@@ -265,10 +295,6 @@ with app.app_context():
         id = db.Column(db.Integer, primary_key=True)
         reply_content = db.Column(db.Text(), nullable=False)
         reply_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-        # Comptage des likes.
-        reply_likes = db.Column(db.Integer, nullable=False, default=0)
-        reply_dislikes = db.Column(db.Integer, nullable=False, default=0)
 
         # Relation avec la classe CommentArticle.
         comment_id = db.Column(db.Integer, db.ForeignKey('comment_article.id'), nullable=False)
@@ -296,10 +322,6 @@ with app.app_context():
         id = db.Column(db.Integer, primary_key=True)
         reply_content = db.Column(db.Text(), nullable=False)
         reply_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-        # Comptage des likes.
-        reply_likes = db.Column(db.Integer, nullable=False, default=0)
-        reply_dislikes = db.Column(db.Integer, nullable=False, default=0)
 
         # Relation avec la classe CommentSubject.
         comment_id = db.Column(db.Integer, db.ForeignKey('comment_subject.id'), nullable=False)
