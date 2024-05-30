@@ -8,7 +8,7 @@ from flask_login import  login_required
 
 
 from Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
-    NewSubjectForumForm
+    NewSubjectForumForm, CommentLike
 
 from Models.author import Author
 from Models.articles import Article
@@ -96,6 +96,7 @@ def show_article(article_id):
     formcomment = CommentArticleForm()
     formlike = LikeForm()
     formdislike = DislikeForm()
+    formlikecomment = CommentLike()
 
     # Récupération de l'article depuis la base de données en utilisant son id.
     article = Article.query.get(article_id)
@@ -109,7 +110,8 @@ def show_article(article_id):
     comments = CommentArticle.query.filter_by(article_id=article_id).all()
 
     return render_template("Presentation/article.html", article=article, article_id=article_id, comments=comments,
-                           formcomment=formcomment, formlike=formlike, formdislike=formdislike)
+                           formcomment=formcomment, formlike=formlike, formdislike=formdislike,
+                           formlikecomment=formlikecomment)
 
 
 # Route permettant d'accéder à la page Mangaka du blog.
@@ -157,6 +159,7 @@ def forum_subject(subject_id):
 
     # Création de l'instance de formulaire.
     formcomment = CommentSubjectForm()
+    formlikecomment = CommentLike()
 
     # Récupération du sujet spécifié par subject_id depuis la base de données.
     subject = SubjectForum.query.get_or_404(subject_id)
@@ -170,4 +173,4 @@ def forum_subject(subject_id):
     comment_subject = CommentSubject.query.filter_by(subject_id=subject_id).all()
 
     return render_template("Presentation/subject_forum.html", subject=subject, subject_id=subject_id,
-                           comment_subject=comment_subject, formcomment=formcomment)
+                           comment_subject=comment_subject, formcomment=formcomment, formlikecomment=formlikecomment)

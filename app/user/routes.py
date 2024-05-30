@@ -7,12 +7,12 @@ from app.user import user_bp
 import bcrypt
 
 from flask_login import login_required, current_user
-from flask import redirect, url_for, render_template, flash, request
+from flask import redirect, url_for, render_template, flash, request, jsonify
 from markupsafe import escape
 
 from Models import db
 from Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm,\
-    CommentArticleForm, CommentSubjectForm, ReplyArticleForm, ReplySubjectForm
+    CommentSubjectForm, ReplyArticleForm, ReplySubjectForm
 
 from Models.articles import Article
 from Models.comment_article import CommentArticle
@@ -22,6 +22,8 @@ from Models.subjects_forum import SubjectForum
 from Models.reply_article import ReplyArticle
 from Models.reply_subject import ReplySubject
 from Models.likes import Likes, Dislikes
+from Models.likes_comment_article import CommentLikeArticle
+from Models.likes_comment_subject import CommentLikeSubject
 
 
 # Route permettant à un nouvel utilisateur de s'inscrire.
@@ -183,8 +185,6 @@ def comment_article(user_pseudo):
     Returns:
          Redirige vers al page de l'article après avoir laissé un commentaire.
     """
-    # Création de l'instance du formulaire.
-    formcomment = CommentArticleForm()
 
     if request.method == 'POST':
         # Obtention de l'id de l'article à partir de la requête POST.
@@ -213,6 +213,110 @@ def comment_article(user_pseudo):
         else:
             # Redirection vers une autre page si l'utilisateur n'existe pas.
             return redirect(url_for("functional.connection_requise"))
+
+
+# Route permettant de liker un commentaire de la section article.
+@user_bp.route("/likes_comment_article", methods=['POST'])
+@login_required
+def likes_comment_article():
+    """
+
+    :return:
+    """
+    data = request.get_json()
+    comment_id = data.get("comment_id")  # Utilisez 'comment_id' au lieu de 'commentId'
+    pseudo = current_user.pseudo  # Utiliser l'utilisateur actuellement connecté
+    liked = data.get("liked")
+
+    if not comment_id or not pseudo:
+        return jsonify({"status": "error", "message": "Invalid data"}), 400
+
+    try:
+        # Convertir le pseudo en identifiant d'utilisateur
+        user = User.query.filter_by(pseudo=pseudo).one()
+        user_id = user.id
+
+        # Vérifier si l'utilisateur et le commentaire existent
+        comment = CommentArticle.query.get(comment_id)
+        if not comment:
+            return jsonify({"status": "error", "message": "Comment not found"}), 404
+
+        liked = data.get("liked")
+        if liked:
+            # Ajouter un like
+            if not CommentLikeArticle.query.filter_by(user_id=user_id, comment_id=comment_id).first():
+                new_like = CommentLikeArticle(user_id=user_id, comment_id=comment_id)
+                db.session.add(new_like)
+                comment.likes_article_count += 1  # Incrémenter le compteur de likes
+                db.session.commit()
+                return jsonify(
+                    {"status": "success", "message": "Like added", "like_count": comment.likes_article_count})
+        else:
+            # Supprimer un like
+            like = CommentLikeArticle.query.filter_by(user_id=user_id, comment_id=comment_id).first()
+            if like:
+                db.session.delete(like)
+                comment.likes_article_count -= 1  # Décrémenter le compteur de likes
+                db.session.commit()
+                return jsonify(
+                    {"status": "success", "message": "Like removed", "like_count": comment.likes_article_count})
+
+        return jsonify({"status": "success", "message": "No action taken"})
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+# Route permettant de liker un commentaire dans la section forum..
+@user_bp.route("/likes_comment_subject", methods=['POST'])
+@login_required
+def likes_comment_subject():
+    """
+
+    :return:
+    """
+    data = request.get_json()
+    comment_id = data.get("comment_id")
+    pseudo = current_user.pseudo
+    liked = data.get("liked")
+
+    if not comment_id or not pseudo:
+        return jsonify({"status": "error", "message": "Invalid data"}), 400
+
+    try:
+        # Convertir le pseudo en identifiant d'utilisateur
+        user = User.query.filter_by(pseudo=pseudo).one()
+        user_id = user.id
+
+        # Vérifier si l'utilisateur et le commentaire existent
+        comment = CommentSubject.query.get(comment_id)
+        if not comment:
+            return jsonify({"status": "error", "message": "Comment not found"}), 404
+
+        liked = data.get("liked")
+        if liked:
+            # Ajouter un like
+            if not CommentLikeSubject.query.filter_by(user_id=user_id, comment_id=comment_id).first():
+                new_like = CommentLikeSubject(user_id=user_id, comment_id=comment_id)
+                db.session.add(new_like)
+                comment.likes_subject_count += 1  # Incrémenter le compteur de likes
+                db.session.commit()
+                return jsonify(
+                    {"status": "success", "message": "Like added", "like_count": comment.likes_subject_count})
+        else:
+            # Supprimer un like
+            like = CommentLikeSubject.query.filter_by(user_id=user_id, comment_id=comment_id).first()
+            if like:
+                db.session.delete(like)
+                comment.likes_subject_count -= 1  # Décrémenter le compteur de likes
+                db.session.commit()
+                return jsonify(
+                    {"status": "success", "message": "Like removed", "like_count": comment.likes_subject_count})
+
+        return jsonify({"status": "success", "message": "No action taken"})
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # Route permettant de répondre à un commentaire de la section article une fois connecté.

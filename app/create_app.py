@@ -7,6 +7,7 @@ import secrets
 import config
 
 from flask import Flask, session
+from dotenv import load_dotenv
 from flask_wtf.csrf import CSRFProtect
 
 
@@ -28,6 +29,8 @@ from login_manager import login_manager
 from config import Config
 from app.extensions import mail
 
+# Charge les variables d'environnement à partir du fichier .env
+load_dotenv()
 
 def create_app():
     """
@@ -39,13 +42,16 @@ def create_app():
     # Création de l'instance Flask.
     app = Flask("MonBlogManga")
 
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-    app.config['MAIL_PORT'] = 587
-    app.config['MAIL_USE_TLS'] = True
-    app.config['MAIL_USE_SSL'] = False
-    app.config['MAIL_USERNAME'] = 'alefetey123@gmail.com'
-    app.config['MAIL_PASSWORD'] = 'zrjo ahkg vwid hfap'
-    app.config['MAIL_DEFAULT_SENDER'] = 'alefetey123@gmail.com'
+    # Configuration du mail
+    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+    app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT'))
+    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS') == 'True'
+    app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL') == 'True'
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+    app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+
+    mail.init_app(app)
 
     mail.init_app(app)
 
