@@ -18,9 +18,6 @@ class CommentLikeArticle(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
     comment_id = db.Column(db.Integer, db.ForeignKey("comment_article.id"), primary_key=True)
-    likes_article_count = db.Column(db.Integer, default=0)
 
     def __repr__(self):
-        return f"CommentLikeArticle(user_id={self.user_id}, comment_id={self.comment_id}, " \
-               f"likes_article_count={self.likes_article_count})"
-
+        return f"CommentLikeArticle(user_id={self.user_id}, comment_id={self.comment_id})"

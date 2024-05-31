@@ -18,8 +18,6 @@ class CommentLikeSubject(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
     comment_id = db.Column(db.Integer, db.ForeignKey("comment_subject.id"), primary_key=True)
-    likes_subject_count = db.Column(db.Integer, default=0)
 
     def __repr__(self):
-        return f"CommentLikeSubject(user_id={self.user_id}, comment_id={self.comment_id}," \
-               f"likes_subject_count={self.likes_subject_count})"
+        return f"CommentLikeSubject(user_id={self.user_id}, comment_id={self.comment_id})"
