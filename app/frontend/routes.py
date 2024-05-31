@@ -14,6 +14,8 @@ from Models.author import Author
 from Models.articles import Article
 from Models.comment_article import CommentArticle
 from Models.comment_subject import CommentSubject
+from Models.likes_comment_subject import CommentLikeSubject
+from Models.likes_comment_article import CommentLikeArticle
 from Models.subjects_forum import SubjectForum
 
 
@@ -107,11 +109,24 @@ def show_article(article_id):
         abort(404)
 
     # Récupération des commentaires associés à cet article.
+    comment_article = CommentArticle.query.filter_by(article_id=article_id).all()
+
+    # Préparation des données de likes pour chaque commentaire.
+    comment_likes_data = {}
+    for comment in comment_article:
+        like_count = CommentLikeArticle.query.filter_by(comment_id=comment.id).count()
+        liked_user_ids = [like.user_id for like in CommentLikeArticle.query.filter_by(comment_id=comment.id).all()]
+        comment_likes_data[comment.id] = {
+            "like_count": like_count,
+            "liked_user_ids": liked_user_ids
+        }
+
+    # Récupération des commentaires associés à cet article.
     comments = CommentArticle.query.filter_by(article_id=article_id).all()
 
     return render_template("Presentation/article.html", article=article, article_id=article_id, comments=comments,
                            formcomment=formcomment, formlike=formlike, formdislike=formdislike,
-                           formlikecomment=formlikecomment)
+                           formlikecomment=formlikecomment, comment_likes_data=comment_likes_data)
 
 
 # Route permettant d'accéder à la page Mangaka du blog.
@@ -172,5 +187,16 @@ def forum_subject(subject_id):
     # Récupération des commentaires associés à cet article.
     comment_subject = CommentSubject.query.filter_by(subject_id=subject_id).all()
 
+    # Préparation des données de likes pour chaque commentaire.
+    comment_likes_data = {}
+    for comment in comment_subject:
+        like_count = CommentLikeSubject.query.filter_by(comment_id=comment.id).count()
+        liked_user_ids = [like.user_id for like in CommentLikeSubject.query.filter_by(comment_id=comment.id).all()]
+        comment_likes_data[comment.id] = {
+            "like_count": like_count,
+            "liked_user_ids": liked_user_ids
+        }
+
     return render_template("Presentation/subject_forum.html", subject=subject, subject_id=subject_id,
-                           comment_subject=comment_subject, formcomment=formcomment, formlikecomment=formlikecomment)
+                           comment_subject=comment_subject, formcomment=formcomment, formlikecomment=formlikecomment,
+                           comment_likes_data=comment_likes_data)
