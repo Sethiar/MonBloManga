@@ -175,9 +175,6 @@ with app.app_context():
         comment_content = db.Column(db.Text(), nullable=False)
         comment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-        # Comptage des likes.
-        likes = db.Column(db.Integer, nullable=False, default=0)
-
         # Relation avec la classe Article.
         article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
         article = db.relationship('Article', backref=db.backref('comments', lazy=True))
@@ -204,9 +201,6 @@ with app.app_context():
         id = db.Column(db.Integer, primary_key=True)
         comment_content = db.Column(db.Text(), nullable=False)
         comment_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-
-        # Comptage des likes.
-        likes = db.Column(db.Integer, nullable=False, default=0)
 
         # Relation avec la classe SubjectForum.
         subject_id = db.Column(db.Integer, db.ForeignKey('subject_forum.id'), nullable=False)
@@ -259,7 +253,6 @@ with app.app_context():
 
         user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
         comment_id = db.Column(db.Integer, db.ForeignKey("comment_article.id"), primary_key=True)
-        likes_article_count = db.Column(db.Integer, default=0)
 
     class CommentLikeSubject(db.Model):
         """
@@ -276,7 +269,6 @@ with app.app_context():
 
         user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
         comment_id = db.Column(db.Integer, db.ForeignKey("comment_subject.id"), primary_key=True)
-        likes_subject_count = db.Column(db.Integer, default=0)
 
     class ReplyArticle(db.Model):
         """
