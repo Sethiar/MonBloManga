@@ -83,8 +83,19 @@
                     <button type="submit" class="like-submit"></button>
                 </form>
                 <div class="like-icon" onclick="toggleLike(this, '{{ comment.id }}', '{{ current_user.pseudo }}')">&#9825;</div>
-                <span class="like-count">0</span>
-                <div class="liked-users"></div>
+                <div class="liked-users">
+                     <p id="like-message-{{ comment.id }}">
+                         {% set like_data = comment_likes_data[comment.id] %}
+                         {% if like_data.like_count > 0 %}
+                         {{ current_user.pseudo if current_user.id in like_data.liked_user_ids else '' }}
+                         {% if like_data.like_count > 1 %}
+                         et {{ like_data.like_count - 1 }} autre(s) personne(s) ont aimé votre commentaire.
+                         {% endif %}
+                         {% else %}
+                         Personne n'a aimé votre commentaire pour le moment.
+                         {% endif %}
+                     </p>
+                </div>
             </div>
         </div>
     </div>

@@ -32,39 +32,50 @@
         <h2>Discussion sur le sujet : {{ subject.nom }}</h2>
     </div>
     <div id="container_comment">
-    {% for comment in comment_subject %}
-    <div id="comment">
-        <div class="comment-header">
-            <img src="{{ comment.user.profile_picture_url }}" alt="Photo de {{ comment.user.pseudo }}" class="profile-picture">
+        {% for comment in comment_subject %}
+        <div id="comment">
+            <div class="comment-header">
+                <img src="{{ comment.user.profile_picture_url }}" alt="Photo de {{ comment.user.pseudo }}" class="profile-picture">
+            </div>
+            <div class="comment">
+                <strong>{{ comment.user.pseudo }}</strong> a commenté :
+            </div>
+            <div class="date_comment">
+                <small>Le {{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
+            </div>
+            <div class="content_comment">
+                {{ comment.comment_content | replace('\n', '<br>') | safe }}
+            </div>
         </div>
-        <div class="comment">
-            <strong>{{ comment.user.pseudo }}</strong> a commenté :
+        <div class="reply-button-container">
+            <a href="{{ url_for('user.reply_form_subject', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
+            <div class="like-section" data-user-id="{{ current_user.pseudo }}">
+                <form id="fromlikecomment" method="POST" action="{{ url_for('user.likes_comment_article') }}" style="display: none;">
+                    {{ formlikecomment.csrf_token }}
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
+                    <button type="submit" class="like-submit"></button>
+                </form>
+                <div class="like-icon" onclick="toggleLike(this, '{{ comment.id }}', '{{ current_user.pseudo }}')">&#9825;</div>
+                <div class="liked-users">
+                     <p id="like-message-{{ comment.id }}">
+                         {% set like_data = comment_likes_data[comment.id] %}
+                         {% if like_data.like_count > 0 %}
+                         {{ current_user.pseudo if current_user.id in like_data.liked_user_ids else '' }}
+                         {% if like_data.like_count > 1 %}
+                         et {{ like_data.like_count - 1 }} autre(s) personne(s) ont aimé votre commentaire.
+                         {% endif %}
+                         {% else %}
+                         Personne n'a aimé votre commentaire pour le moment.
+                         {% endif %}
+                     </p>
+                </div>
+            </div>
         </div>
-        <div class="date_comment">
-            <small>Le {{ comment.comment_date.strftime('%d-%m-%Y à %H:%M') }}</small>
-        </div>
-        <div class="content_comment">
-            {{ comment.comment_content | replace('\n', '<br>') | safe }}
-        </div>
-    </div>
-    <div class="reply-button-container">
-        <a href="{{ url_for('user.reply_form_subject', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
-        <div class="like-section" data-user-id="{{ current_user.pseudo }}">
-            <form id="fromlikecomment" method="POST" action="{{ url_for('user.likes_comment_article') }}" style="display: none;">
-                {{ formlikecomment.csrf_token }}
-                <input type="hidden" name="comment_id" value="{{ comment.id }}">
-                <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
-                <button type="submit" class="like-submit"></button>
-            </form>
-            <div class="like-icon" onclick="toggleLike(this, '{{ comment.id }}', '{{ current_user.pseudo }}')">&#9825;</div>
-            <span class="like-count">0</span>
-            <div class="liked-users"></div>
-        </div>
-    </div>
-    <div class="replies">
-        {% for reply in comment.replies %}
-        <div class="comment-reply">
-            <div class="reply-header">
+        <div class="replies">
+            {% for reply in comment.replies %}
+            <div class="comment-reply">
+                <div class="reply-header">
                 <img src="{{ reply.user.profile_picture_url }}" alt="Photo de {{ reply.user.pseudo }}" class="profile-picture">
                 <div class="reply-details">
                     <strong><i>{{ reply.user.pseudo }}</i></strong> a répondu :
@@ -73,15 +84,14 @@
                     <small>Le {{ reply.reply_date.strftime('%d-%m-%Y à %H:%M') }}</small>
                 </div>
             </div>
-            <div class="content-reply">
-                {{ reply.reply_content | replace('\n', '<br>') | safe }}
+                <div class="content-reply">
+                    {{ reply.reply_content | replace('\n', '<br>') | safe }}
+                </div>
             </div>
+            {% endfor %}
         </div>
         {% endfor %}
     </div>
-    {% endfor %}
-</div>
-
     <div class="separation"></div>
     <div id="comment_avis">
         <h2>Vous pouvez laisser un commentaire : </h2>
