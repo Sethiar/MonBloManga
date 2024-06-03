@@ -73,6 +73,7 @@
         <div class="content_comment">
             {{ comment.comment_content | replace('\n', '<br>') | safe }}
         </div>
+
         <div class="reply-button-container">
             <a href="{{ url_for('user.reply_form_article', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
             <div class="like-section" data-user-id="{{ current_user.pseudo }}">
@@ -82,19 +83,25 @@
                     <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
                     <button type="submit" class="like-submit"></button>
                 </form>
-                <div class="like-icon" onclick="toggleLike(this, '{{ comment.id }}', '{{ current_user.pseudo }}')">&#9825;</div>
+                <div id="like-icon-{{ comment.id }}" class="like-icon {% if comment_likes_data[comment.id].user_liked %}liked{% endif %}" onclick="toggleLike(this, '{{ comment.id }}', '{{ current_user.pseudo }}')">
+                    {% if comment_likes_data[comment.id].liked_by_current_user %}
+                    &#9829;  <!-- Icône pour un cœur plein -->
+                    {% else %}
+                    &#9825;  <!-- Icône pour un cœur vide -->
+                    {% endif %}
+                </div>
                 <div class="liked-users">
-                     <p id="like-message-{{ comment.id }}">
-                         {% set like_data = comment_likes_data[comment.id] %}
-                         {% if like_data.like_count > 0 %}
-                         {{ current_user.pseudo if current_user.id in like_data.liked_user_ids else '' }}
-                         {% if like_data.like_count > 1 %}
-                         et {{ like_data.like_count - 1 }} autre(s) personne(s) ont aimé votre commentaire.
-                         {% endif %}
-                         {% else %}
-                         Personne n'a aimé votre commentaire pour le moment.
-                         {% endif %}
-                     </p>
+                    <p id="like-message-{{ comment.id }}">
+                        {% set like_data = comment_likes_data[comment.id] %}
+                        {% if like_data.like_count > 0 %}
+                            {{ current_user.pseudo if current_user.id in like_data.liked_user_ids else '1 utilisateur a aimé le commentaire.'}}
+                            {% if like_data.like_count > 1 %}
+                                et {{ like_data.like_count - 1 }} autre(s) utilisateur(s) ont aimé le commentaire.
+                            {% endif %}
+                        {% else %}
+                            Personne n'a aimé le commentaire pour le moment.
+                        {% endif %}
+                    </p>
                 </div>
             </div>
         </div>
