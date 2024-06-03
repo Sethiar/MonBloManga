@@ -460,20 +460,20 @@ def likes_comment_subject():
         like_entry = CommentLikeSubject.query.filter_by(user_id=user_id, comment_id=comment_id).first()
 
         if like_entry:
-            # Supprimer un like
+            # Suppression d'un like.
             db.session.delete(like_entry)
             db.session.commit()
             liked = False
         else:
-            # Ajouter un like
+            # Ajout d'un like.
             new_like = CommentLikeSubject(user_id=user_id, comment_id=comment_id)
             db.session.add(new_like)
             db.session.commit()
             liked = True
 
-        # Compter le nombre de likes pour le commentaire
+        # Comptage du nombre de likes pour le commentaire.
         like_count = CommentLikeSubject.query.filter_by(comment_id=comment_id).count()
-        # Obtenir les IDs des utilisateurs ayant liké le commentaire
+        # Obtention des IDs des utilisateurs ayant liké le commentaire.
         liked_user_ids = [like.user_id for like in CommentLikeSubject.query.filter_by(comment_id=comment_id).all()]
 
         return jsonify({"status": "success",

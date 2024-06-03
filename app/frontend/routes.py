@@ -3,8 +3,8 @@ Code permettant de définir les routes concernant le frontend du blog.
 """
 from app.frontend import frontend_bp
 
-from flask import render_template, url_for, redirect, request, abort, flash
-from flask_login import  login_required
+from flask import render_template, url_for, redirect, request, abort
+from flask_login import login_required, current_user
 
 
 from Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
@@ -101,7 +101,7 @@ def show_article(article_id):
     formlikecomment = CommentLike()
 
     # Récupération de l'article depuis la base de données en utilisant son id.
-    article = Article.query.get(article_id)
+    article = Article.query.get_or_404(article_id)
 
     # Vérifier si l'article existe.
     if not article:
@@ -116,9 +116,11 @@ def show_article(article_id):
     for comment in comment_article:
         like_count = CommentLikeArticle.query.filter_by(comment_id=comment.id).count()
         liked_user_ids = [like.user_id for like in CommentLikeArticle.query.filter_by(comment_id=comment.id).all()]
+        liked_by_current_user = current_user.id in liked_user_ids
         comment_likes_data[comment.id] = {
             "like_count": like_count,
-            "liked_user_ids": liked_user_ids
+            "liked_user_ids": liked_user_ids,
+            "liked_by_current_user": liked_by_current_user
         }
 
     # Récupération des commentaires associés à cet article.
@@ -192,9 +194,11 @@ def forum_subject(subject_id):
     for comment in comment_subject:
         like_count = CommentLikeSubject.query.filter_by(comment_id=comment.id).count()
         liked_user_ids = [like.user_id for like in CommentLikeSubject.query.filter_by(comment_id=comment.id).all()]
+        liked_by_current_user = current_user.id in liked_user_ids
         comment_likes_data[comment.id] = {
             "like_count": like_count,
-            "liked_user_ids": liked_user_ids
+            "liked_user_ids": liked_user_ids,
+            "liked_by_current_user": liked_by_current_user
         }
 
     return render_template("Presentation/subject_forum.html", subject=subject, subject_id=subject_id,

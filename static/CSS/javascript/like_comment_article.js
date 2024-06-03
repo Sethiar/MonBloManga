@@ -1,15 +1,22 @@
+document.addEventListener("DOMContentLoaded", function() {
+    document.querySelectorAll('.like-icon').forEach(function(element) {
+        const commentId = element.getAttribute('onclick').match(/'(\d+)'/)[1];
+        const liked = localStorage.getItem(`like-${commentId}`) === 'true';
+        updateLikeMessage(commentId, liked);
+    });
+});
+
 // Récupérer le jeton CSRF depuis le modèle Flask
-    var csrfToken = document.querySelector('#fromlikecomment input[name="csrf_token"]').value;
+var csrfToken = document.querySelector('#fromlikecomment input[name="csrf_token"]').value;
 
-
-    function toggleLike(element, commentId, userPseudo) {
+function toggleLike(element, commentId, userPseudo) {
     // Ici, vous pouvez utiliser userPseudo directement passé en paramètre
     console.log(`User Pseudo: ${userPseudo}`);
     console.log(`CommentId: ${commentId}`);
     console.log(`csrfToken: ${csrfToken}`);
 
-        // Envoi d'une requête AJAX à Flask pour enregistrer l'utilisateur qui a aimé
-            $.ajax({
+    // Envoi d'une requête AJAX à Flask pour enregistrer l'utilisateur qui a aimé
+    $.ajax({
         type: 'POST',
         url: '/user/likes_comment_article',
         data: JSON.stringify({ comment_id: commentId, user_pseudo: userPseudo }),
@@ -27,19 +34,19 @@
                 element.classList.add('liked');
                 element.innerHTML = '&#9829;'; // Icône pour un cœur plein
                 if (likeCount > 1) {
-                    message = `${userPseudo} et ${likeCount - 1} autre(s) personne(s) ont aimé votre commentaire.`;
+                    message = `${userPseudo} et ${likeCount - 1} autre(s) utilisateur(s) ont aimé le commentaire.`;
                 } else {
-                    message = `Personne n'a aimé votre commentaire pour le moment.`;
+                    message = `${userPseudo} a aimé le commentaire.`;
                 }
             } else {
                 element.classList.remove('liked');
                 element.innerHTML = '&#9825;'; // Icône pour un cœur vide
                 if (likeCount > 1) {
-                    message = `Vous et ${likeCount - 1} autre(s) personne(s) ont aimé votre commentaire.`;
+                    message = `${likeCount} utilisateurs ont aimé le commentaire.`;
                 } else if (likeCount === 1) {
-                    message = `${userPseudo} a aimé votre commentaire.`;
+                    message = `${likeCount} utilisateur a aimé le commentaire.`;
                 } else {
-                    message = `Personne n'a aimé votre commentaire pour le moment.`;
+                    message = `Personne n'a aimé le commentaire pour le moment.`;
                 }
             }
             likeMessageElement.innerText = message;
@@ -49,3 +56,4 @@
         }
     });
 }
+
