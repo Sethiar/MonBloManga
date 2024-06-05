@@ -1,6 +1,3 @@
-"""Script qui permet de créer l'application,
-il contient toute la configuration nécessaire afin que le script fonctionne."""
-
 import logging
 import os
 import secrets
@@ -9,28 +6,20 @@ import config
 from flask import Flask, session
 from dotenv import load_dotenv
 from flask_wtf.csrf import CSRFProtect
-
-
+from flask_migrate import Migrate
 from datetime import timedelta
 
-from Models.user import User
-from Models.admin import Admin
-from Models.anonyme import Anonyme
-from Models import db
-
-from app.auth import auth_bp
-from app.admin import admin_bp
-from app.user import user_bp
-from app.functional import functional_bp
-from app.frontend import frontend_bp
-from app.mail import mail_bp
-
-from login_manager import login_manager
 from config import Config
 from app.extensions import mail
+from Models import db
+from login_manager import login_manager
 
-# Charge les variables d'environnement à partir du fichier .env
+# Charger les variables d'environnement à partir du fichier .env
 load_dotenv()
+
+# Instanciation de Flask-Migrate.
+migrate = Migrate()
+
 
 def create_app():
     """
@@ -41,19 +30,6 @@ def create_app():
 
     # Création de l'instance Flask.
     app = Flask("MonBlogManga")
-
-    # Configuration du mail
-    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
-    app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT'))
-    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS') == 'True'
-    app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL') == 'True'
-    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
-    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
-    app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
-
-    mail.init_app(app)
-
-    mail.init_app(app)
 
     # Charger la configuration de l'environnement.
     if os.environ.get("FLASK_ENV") == "development":
@@ -70,6 +46,33 @@ def create_app():
 
     # Définition de la clé secrète pour les cookies.
     app.secret_key = secrets.token_hex(16)
+
+    # Configuration du mail
+    app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+    app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT'))
+    app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS') == 'True'
+    app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL') == 'True'
+    app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+    app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+    app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+
+    mail.init_app(app)
+
+    # Initialisation de la base de données.
+    db.init_app(app)
+    # Initialisation de Flask-Migrate.
+    migrate.init_app(app, db)
+
+    from Models.user import User
+    from Models.admin import Admin
+    from Models.anonyme import Anonyme
+
+    from app.auth import auth_bp
+    from app.admin import admin_bp
+    from app.user import user_bp
+    from app.functional import functional_bp
+    from app.frontend import frontend_bp
+    from app.mail import mail_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
@@ -127,8 +130,5 @@ def create_app():
 
     # Configuration de l'application pour utiliser la protection CSRF.
     csrf = CSRFProtect(app)
-
-    # Initialisation de la base de données.
-    db.init_app(app)
 
     return app

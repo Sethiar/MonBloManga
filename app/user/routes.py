@@ -44,9 +44,12 @@ def user_recording():
         password_hash = bcrypt.hashpw(password_hash.encode('utf-8'), salt)
 
         # Enregistrement dans la table "User".
-        user = User(pseudo=pseudo, password_hash=password_hash, salt=salt, email=email,
-                    date_naissance=date_naissance)
-        db.session.add(user)
+        new_user = User(pseudo=pseudo,
+                        password_hash=password_hash,
+                        salt=salt,
+                        email=email,
+                        date_naissance=date_naissance)
+        db.session.add(new_user)
         db.session.commit()
 
         flash("Inscription réussie! Vous pouvez maintenant vous connecter.")

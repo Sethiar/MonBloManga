@@ -1,19 +1,19 @@
 """
 Code permettant de définir les routes concernant l'administration du blog.
 """
-from sqlalchemy import func
 
 from app.admin import admin_bp
 
 from datetime import datetime
-from flask import flash, redirect, url_for, session, render_template, request
+from flask import flash, redirect, url_for, session, render_template,\
+    request
 from markupsafe import escape
 
 from Models import db
 from Models.comment_article import CommentArticle
 
 from Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, UserSaving, \
-    CommentArticleForm, CommentSubjectForm
+    CommentArticleForm, FilterForm
 from Models.categories_articles import Categorie
 from Models.author import Author
 from Models.articles import Article
@@ -80,7 +80,6 @@ def back_end():
         return redirect(url_for("auth.admin_connection"))
 
 
-# Route permettant d'accéder à la liste des articles présents sur le blog.
 @admin_bp.route("/back_end_blog/articles")
 def articles_list():
     """
@@ -90,40 +89,82 @@ def articles_list():
         La liste de tous les articles.
     """
     formarticles = ArticleForm()
-    # Récupération de tous les articles depuis la base de données.
+    formfiltercategorie = FilterForm()
+
+    # Récupération de toutes les catégories depuis les articles
+    categories = Categorie.query.all()
+    formfiltercategorie.category.choices = [(cat.nom, cat.nom) for cat in categories]
+
+    # Récupération de tous les articles.
     articles = Article.query.all()
 
     return render_template("Admin/articles_list.html", articles=articles,
-                           formarticles=formarticles)
+                           formarticles=formarticles, formfiltercategorie=formfiltercategorie,
+                           categories=categories)
 
 
-# Route permettant d'accéder à la liste des utilisateurs enregistrés sur le blog.
+@admin_bp.route("/back_end_blog/articles/by_category", methods=['GET', 'POST'])
+def article_filter():
+    """
+    Affiche la liste des articles en les filtrant par catégorie.
+
+    Returns:
+        La liste des articles filtrés par catégorie.
+    """
+    formfiltercategorie = FilterForm()
+
+    # Peuplez les choix pour le champ category
+    formfiltercategorie.category.choices = [(cat.nom, cat.nom) for cat in Categorie.query.all()]
+
+    # Par défaut, récupérer tous les articles
+    articles = Article.query.all()
+
+    if formfiltercategorie.validate_on_submit():
+        category_name = request.form.get('category')
+        print(f"Nom de la catégorie reçu du formulaire : {category_name}")
+
+        if category_name:
+            # Récupération de l'id de la catégorie sélectionnée.
+            category = Categorie.query.filter_by(nom=category_name).first()
+            print(f"Catégorie récupérée : {category}")
+
+            if category:
+                # Filtrage des articles par l'id de la catégorie.
+                articles = Article.query.filter_by(categorie_id=category.id).all()
+                print(f"Articles filtrés par catégorie (id={category.id}) : {articles}")
+            else:
+                articles = []
+                print("Aucune catégorie trouvée avec ce nom.")
+        else:
+            print("Aucune catégorie spécifiée, récupération de tous les articles.")
+    else:
+        # Afficher les erreurs de validation
+        print("Formulaire non validé. Erreurs :")
+        print(formfiltercategorie.errors)
+
+    # Assurez-vous que la sélection reste après la soumission
+    if request.method == 'POST':
+        formfiltercategorie.category.data = request.form.get('category')
+
+    return render_template("Admin/articles_list.html", articles=articles,
+                           formarticles=ArticleForm(), formfiltercategorie=formfiltercategorie)
+
+
 @admin_bp.route("/back_end_blog/liste_utilisateur")
 def users_list():
     """
-
+    Route permettant d'accéder à la liste des utilisateurs enregistrés sur le blog.
     :return:
     """
     formuser = UserSaving()
-    users = db.session.query(
-        User.id,
-        User.pseudo,
-        func.count(CommentArticle.id).label('comment_count')
-    ).outerjoin(CommentArticle, User.id == CommentArticle.user_id) \
-     .group_by(User.id) \
-     .all()
+    users = db.session.query(User.id, User.pseudo).all()
 
-    user_data = []
-    for user_id, pseudo, comment_count in users:
-        user_info = {
-            'id': user_id,
-            'pseudo': pseudo,
-            'comment_count': comment_count,
-            'comments': User.comments
-        }
-        user_data.append(user_info)
+    user_data = [
+        {'id': user_id, 'pseudo': pseudo}
+        for user_id, pseudo in users
+    ]
 
-    return render_template("Admin/users_list.html", users=users, formuser=formuser)
+    return render_template("Admin/users_list.html", users=user_data, formuser=formuser)
 
 
 # Route permettant de supprimer d'un utilisateur.
@@ -147,6 +188,22 @@ def suppress_user(id):
         flash("L'utilisateur a été supprimé avec succès." + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
 
         return redirect(url_for("admin.users_list"))
+
+
+@admin_bp.route("/back_end_blog/bannir_utilisateur/<int:id>", methods=['GET', 'POST'])
+def banned_user(id):
+    """
+    Route pour bannir un utilisateur.
+
+    Args:
+        id (int):L'identifiant de l'utilisateur à bannir.
+
+    Returns:
+        Redirige vers la page de bannissement après l'action.
+    :param id:
+    :return:
+    """
+    pass
 
 
 # route permettant de créer une nouvelle catégorie.
@@ -331,6 +388,30 @@ def suppress_subject(id):
     return redirect(url_for("admin.back_end"))
 
 
+@admin_bp.route("/back_end_blog/commentaires_utilisateurs", methods=['GET', 'POST'])
+def users_comments():
+    """
+    Route permettant de voir chaque commentaire en fonction de l'utilisateur.
+    :param id:
+    :return:
+    """
+    formuser = UserSaving()
+    user_comments = []
+    users = User.query.all()
+
+    for user in users:
+        comments = CommentArticle.query.filter_by(user_id=user.id).all()
+        for comment in comments:
+            article = Article.query.get(comment.article_id)
+            user_comments.append({
+                'user': user.pseudo,
+                'article': article,
+                'comment': comment
+            })
+
+    return render_template("admin/users_comments.html", user_comments=user_comments)
+
+
 @admin_bp.route("/back_end_blog/supprimer_commentaires/<int:id>", methods=['GET', 'POST'])
 def suppress_comment(id):
     """
@@ -354,3 +435,11 @@ def suppress_comment(id):
 
     return redirect(url_for("admin.back_end"))
 
+
+@admin_bp.route("/back_end_blog/ajout_mangaka", methods=['GET', 'POST'])
+def create_mangaka():
+    """
+
+    :return:
+    """
+    return render_template("Admin/create_mangaka.html")
