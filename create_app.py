@@ -1,3 +1,7 @@
+"""
+
+"""
+
 import logging
 import os
 import secrets
@@ -16,9 +20,6 @@ from login_manager import login_manager
 
 # Charger les variables d'environnement à partir du fichier .env
 load_dotenv()
-
-# Instanciation de Flask-Migrate.
-migrate = Migrate()
 
 
 def create_app():
@@ -60,8 +61,6 @@ def create_app():
 
     # Initialisation de la base de données.
     db.init_app(app)
-    # Initialisation de Flask-Migrate.
-    migrate.init_app(app, db)
 
     from Models.user import User
     from Models.admin import Admin
