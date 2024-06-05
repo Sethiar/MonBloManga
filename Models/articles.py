@@ -45,6 +45,6 @@ class Article(db.Model):
         Returns :
             str: Chaîne représentant l'objet Article.
         """
-        return f"Article(Titre='{self.titre}', Auteur='{self.author.pseudo}', Résumé='{self.resume}', " \
+        return f"Article(Titre='{self.title}', Auteur='{self.author.pseudo}', Résumé='{self.resume}', " \
                f"Date d'édition='{self.date_edition}', like='{self.likes}', dislikes='{self.dislikes}')"
 

@@ -1,9 +1,9 @@
 """Modèles des formulaires"""
 
 from flask_wtf import FlaskForm
-from flask import render_template
+
 from wtforms import StringField, PasswordField, HiddenField, \
-    EmailField, DateField, SubmitField, TextAreaField
+    EmailField, DateField, SubmitField, TextAreaField, SelectField
 
 from wtforms.validators import DataRequired, EqualTo, ValidationError
 from Models.user import User
@@ -296,3 +296,12 @@ class ReplySubjectForm(FlaskForm):
     comment_id = HiddenField('ID du commentaire')
     # Action de soumettre le formulaire.
     submit = SubmitField()
+
+
+class FilterForm(FlaskForm):
+    """
+    Formulaire permettant de filtrer les articles par catégories.
+    """
+    category = SelectField('Categorie', choices=[])
+    submit = SubmitField()
+
