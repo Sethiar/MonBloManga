@@ -1,10 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'baseback.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page du backend afin d'afficher la liste des articles.">
+    <title>{% block title %}Page administrateur - Liste des utilisateurs et de leurs commentaires en fonction des articles{% endblock %}</title>
+
+{% endblock %}
+
+{% block body_content %}
+<br><br>
+<br><br>
+
+<div class="container">
+    <br><br>
+    <h5>Liste des Utilisateurs</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pseudo de l'utilisateur</th>
+                <th>Titre de l'article commenté</th>
+                <th>Commentaires</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.pseudo }}</td>
+                <td>{{ article.title }}</td>
+                <td>{{ comment.article_id }}</td>
+                <td>
+                    <form action="{{ url_for('admin.suppress_comment', id=comment.id) }}" method="POST" class="btn_suppression">
+                        {{ formuser.csrf_token }}
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

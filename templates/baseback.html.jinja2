@@ -31,10 +31,13 @@
     <nav>
         <h2>Bienvenue sur la page administrateur du blog</h2>
         <a class="retour_frontend" href="{{ url_for('landing_page') }}">Aller sur la page d'accueil du blog</a>
+
         <button><a href="{{ url_for('admin.articles_list') }}">Aller à la liste des articles</a></button>
         <button><a href="{{ url_for('admin.users_list') }}">Aller à la liste des utilisateurs</a></button>
-        <button><a href="{{ url_for('admin.back_end') }}">Retour à la création d'article</a></button>
-        <button><a href="{{ url_for('auth.admin_logout') }}"> Se déconnecter du back end</a></button>
+        <button><a href="{{ url_for('admin.users_comments') }}">Aller sur la liste des commentaires des utilisateurs</a></button>
+        <button><a href="{{ url_for('admin.create_mangaka') }}">Aller sur la page d'article sur les mangakas</a></button>
+        <button><a href="{{ url_for('admin.back_end') }}">Aller à la page de création d'article</a></button>
+        <button><a href="{{ url_for('auth.admin_logout') }}">Se déconnecter du back end</a></button>
 
     </nav>
 

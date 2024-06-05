@@ -28,6 +28,9 @@
                         {{ formuser.csrf_token }}
                         <button type="submit" class="btn_suppression" data-pseudo="l'utilisateur {{ user.pseudo }}"><i class="fas fa-trash"></i></button>
                     </form>
+                    <form method="POST" action="{{ url_for('admin.banned_user', id=user.id) }}">
+                        <button type="submit" class="btn_banned" data-pseudo="l'utilisateur {{ user.pseudo }}"><i class="fas fa-ban"></i></button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}

@@ -13,11 +13,13 @@
 <div class="container">
     <br><br>
     <h5>Liste des Articles</h5>
+
     <table class="table">
         <thead>
             <tr>
                 <th>Titre de l'article</th>
                 <th>Pseudo de l'auteur</th>
+                <th>Catégorie</th>
                 <th>Date d'édition</th>
             </tr>
         </thead>
@@ -26,6 +28,7 @@
             <tr>
                 <td>{{ article.title }}</td>
                 <td>{{ article.author }}</td>
+                <td>{{ article.categorie }}</td>
                 <td>{{ article.date_edition }}</td>
                 <td>
                     <form action="{{ url_for('admin.suppress_article', id=article.id) }}" method="POST" class="btn_suppression">
@@ -38,5 +41,24 @@
         </tbody>
     </table>
 </div>
+<br><br>
+<div class="separation"></div>
+<br><br>
+<div id="filtrage">
+    <p>Filtrage des catégories par nom</p>
+    <form method="POST" action="{{url_for('admin.article_filter') }}">
+        {{ formfiltercategorie.csrf_token }}
+        {{ formfiltercategorie.category.label }} {{ formfiltercategorie.category() }}
+        <button type="submit">Filtrer</button>
+    </form>
+</div>
+<br>
+<div>
+    <button><a href="{{ url_for('admin.articles_list') }}">Retour à la liste des articles</a></button>
+</div>
+<br>
+
+{% endblock %}
+{% block footer_content %}
 
 {% endblock %}
