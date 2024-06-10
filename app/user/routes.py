@@ -10,20 +10,20 @@ from flask_login import login_required, current_user
 from flask import redirect, url_for, render_template, flash, request, jsonify
 from markupsafe import escape
 
-from Models import db
-from Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm,\
+from app.Models import db
+from app.Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm,\
     CommentSubjectForm, ReplyArticleForm, ReplySubjectForm
 
-from Models.articles import Article
-from Models.comment_article import CommentArticle
-from Models.comment_subject import CommentSubject
-from Models.user import User
-from Models.subjects_forum import SubjectForum
-from Models.reply_article import ReplyArticle
-from Models.reply_subject import ReplySubject
-from Models.likes import Likes, Dislikes
-from Models.likes_comment_article import CommentLikeArticle
-from Models.likes_comment_subject import CommentLikeSubject
+from app.Models.articles import Article
+from app.Models.comment_article import CommentArticle
+from app.Models.comment_subject import CommentSubject
+from app.Models.user import User
+from app.Models.subjects_forum import SubjectForum
+from app.Models.reply_article import ReplyArticle
+from app.Models.reply_subject import ReplySubject
+from app.Models.likes import Likes, Dislikes
+from app.Models.likes_comment_article import CommentLikeArticle
+from app.Models.likes_comment_subject import CommentLikeSubject
 
 
 # Route permettant à un nouvel utilisateur de s'inscrire.

@@ -7,16 +7,16 @@ from flask import render_template, url_for, redirect, request, abort
 from flask_login import login_required, current_user
 
 
-from Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
+from app.Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
     NewSubjectForumForm, CommentLike
 
-from Models.author import Author
-from Models.articles import Article
-from Models.comment_article import CommentArticle
-from Models.comment_subject import CommentSubject
-from Models.likes_comment_subject import CommentLikeSubject
-from Models.likes_comment_article import CommentLikeArticle
-from Models.subjects_forum import SubjectForum
+from app.Models.author import Author
+from app.Models.articles import Article
+from app.Models.comment_article import CommentArticle
+from app.Models.comment_subject import CommentSubject
+from app.Models.likes_comment_subject import CommentLikeSubject
+from app.Models.likes_comment_article import CommentLikeArticle
+from app.Models.subjects_forum import SubjectForum
 
 
 # Route permettant d'accéder à la page article du blog.

@@ -5,8 +5,8 @@ Code permettant de définir les routes concernant le mailing du blog.
 from app.mail import mail_bp
 from flask import current_app as app, redirect, url_for, flash
 from flask_mail import Message
-from Models.user import User
-from Models import db
+from app.Models.user import User
+from app.Models import db
 from datetime import date
 
 

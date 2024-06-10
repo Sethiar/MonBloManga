@@ -1,6 +1,6 @@
 """Classe représentant les auteurs des articles."""
 
-from Models import db
+from . import db
 
 
 class Author(db.Model):

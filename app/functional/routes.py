@@ -5,10 +5,9 @@ politique du blog.
 
 import uuid
 
-from flask import render_template, redirect, url_for, session
+from flask import render_template, session
 from flask_login import current_user
 
-from login_manager import login_manager
 from app.functional import functional_bp
 
 

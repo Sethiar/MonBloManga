@@ -9,18 +9,18 @@ from flask import flash, redirect, url_for, session, render_template,\
     request
 from markupsafe import escape
 
-from Models import db
-from Models.comment_article import CommentArticle
+from app.Models import db
+from app.Models.comment_article import CommentArticle
 
-from Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, UserSaving, \
+from app.Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, UserSaving, \
     CommentArticleForm, CommentSubjectForm, FilterForm, SuppressCommentSubjectForm, CreateMangakaForm
-from Models.categories_articles import Categorie
-from Models.author import Author
-from Models.articles import Article
-from Models.mangaka import BiographyMangaka
-from Models.comment_subject import CommentSubject
-from Models.user import User
-from Models.subjects_forum import SubjectForum
+from app.Models.categories_articles import Categorie
+from app.Models.author import Author
+from app.Models.articles import Article
+from app.Models.mangaka import BiographyMangaka
+from app.Models.comment_subject import CommentSubject
+from app.Models.user import User
+from app.Models.subjects_forum import SubjectForum
 
 
 # Route utilisée pour accéder au back_end du blog.

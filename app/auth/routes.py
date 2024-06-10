@@ -9,11 +9,11 @@ import bcrypt
 from flask import session, redirect, url_for, request, current_app, render_template
 from flask_login import logout_user, login_user, login_required
 
-from Models.forms import UserConnection
-from Models.forms import AdminConnection
+from app.Models.forms import UserConnection
+from app.Models.forms import AdminConnection
 
-from Models.user import User
-from Models.admin import Admin
+from app.Models.user import User
+from app.Models.admin import Admin
 
 
 # Route permettant à l'administrateur de joindre le formulaire de connexion.

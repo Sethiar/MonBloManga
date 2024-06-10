@@ -6,7 +6,7 @@ from wtforms import StringField, PasswordField, HiddenField, \
     EmailField, DateField, SubmitField, TextAreaField, SelectField
 
 from wtforms.validators import DataRequired, EqualTo, ValidationError
-from Models.user import User
+from app.Models.user import User
 
 
 class AdminConnection(FlaskForm):

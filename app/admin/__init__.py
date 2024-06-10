@@ -11,3 +11,4 @@ admin_bp = Blueprint('admin', __name__)
 
 # Importation des routes associées au Blueprint admin
 from app.admin import routes
+
