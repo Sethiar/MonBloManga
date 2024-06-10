@@ -10,9 +10,9 @@ Classes de modèles de données :
 
 Les tables sont créées dans ce contexte d'application Flask pour garantir leur installation correcte.
 """
-from Models import db
+from app.Models import db
 from flask_login import UserMixin
-from create_app import create_app
+from .app import create_app
 
 from datetime import datetime
 

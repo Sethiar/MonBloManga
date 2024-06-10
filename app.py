@@ -2,21 +2,17 @@
 
 from datetime import datetime
 
-from create_app import create_app
+from app import create_app
 
 from flask import render_template, redirect, url_for
-from flask_migrate import Migrate
 
-from Models.author import Author
-from Models.articles import Article
+
+from app.Models.author import Author
+from app.Models.articles import Article
 
 from login_manager import login_manager
 
-from Models import db
-
-
 app = create_app()
-migrate = Migrate(app, db)
 
 
 # Route renvoyant l'erreur 404.
