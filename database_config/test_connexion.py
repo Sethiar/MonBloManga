@@ -27,7 +27,7 @@ try:
         password="Monolithe8",
         host="localhost",
         port="5432",
-        database="db_japaninfrance"
+        database="db_monblogmanga"
     )
 
     # Création du curseur pour agir sur la bade de données.
