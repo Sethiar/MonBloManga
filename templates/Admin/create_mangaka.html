@@ -1,0 +1,55 @@
+{% extends 'baseback.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page du backend afin d'ajouter une biographie de mangaka.">
+    <title>{% block title %}Page administrateur du blog permettant de créer une biographie de mangaka{% endblock %}</title>
+{% endblock %}
+
+{% block body_content %}
+<div class="container">
+    <div class="categorie">
+
+        <!-- Pour afficher la liste des auteurs -->
+        <div class="liste_categories">
+            <h5>Liste des auteurs</h5>
+            <ul>
+                {% for author in authors %}
+                <li>
+                    {{ author.pseudo }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Pour Ajouter de nouvelles biographies -->
+    <div class="mangaka">
+        <h4>Ajouter une biographie de mangaka</h4>
+        <form method="post" action="{{ url_for('admin.create_mangaka') }}" enctype="multipart/form-data">
+        {{ formmangaka.csrf_token }}
+            <label for="mangaka_name">Nom du Mangaka :</label>
+            <input type="text" id="mangaka_name" class="mangaka_name" name="mangaka_name" value="{{ mangaka_name }}" required><br><br>
+
+            <label for="biography_content">Contenu de la biographie :</label>
+            <textarea id="biography_content" class="biography_content" name="biography_content" rows="20" cols="50" required></textarea>
+            <br><br>
+
+            <label for="author_id">Pseudo :</label>
+            <select id="author_id" name="author_id">
+                <option class="bouton_article_categorie" value="author_id" disabled selected hidden>Sélectionnez un auteur</option>
+
+                {% for author in authors %}
+                    <option value="{{ author.id }}">{{ author.pseudo }}</option>
+                {% endfor %}
+            </select>
+            <br><br>
+            <label for="date">Date d'édition :</label>
+            <input type="date" id="date" class="date" name="date_bo_mangaka" value="{{ date_bio_mangaka }}" required><br><br>
+
+            <br><br>
+            <input type="submit" value="Ajouter la biographie">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -41,7 +41,8 @@
                 <td>{{ item.comment.comment_content }}</td>
                 <td>
                     <form action="{{ url_for('admin.suppress_subject_comment', id=item.comment.id) }}" method="POST" class="btn_suppression">
-                        {{ formuser.csrf_token }}
+                        {{ suppressform.csrf_token }}
+                        <input type="hidden" name="comment_id" value="{{ item.comment.id }}">
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                     </form>
                 </td>

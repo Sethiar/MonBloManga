@@ -10,30 +10,43 @@
 <br><br>
 <br><br>
 
+
+<h5>Liste des Utilisateurs</h5>
+<!-- Section de recherche par lettre -->
+<div class="lettre-navigation">
+    <a href="{{ url_for('admin.users_articles_alpha_filter') }}">Tous</a>
+    <br>
+    {% for lettre in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+    <a href="{{ url_for('admin.users_articles_alpha_filter', lettre=lettre) }}" style="margin-right: 10px;color:orange;">{{ lettre }}</a>
+    {% endfor %}
+</div>
+<br><br>
 <div class="container">
-    <br><br>
-    <h5>Liste des Utilisateurs</h5>
     <table class="table">
         <thead>
             <tr>
                 <th>Pseudo de l'utilisateur</th>
                 <th>Titre de l'article commenté</th>
                 <th>Commentaires</th>
+                <th>Actions</th>
+
             </tr>
         </thead>
         <tbody>
-            {% for user in users %}
+            {% for user, comments in user_comments.items() %}
+            {% for item in comments %}
             <tr>
-                <td>{{ user.pseudo }}</td>
-                <td>{{ article.title }}</td>
-                <td>{{ comment.article_id }}</td>
+                <td>{{ user }}</td>
+                <td>{{ item.article.title }}</td>
+                <td>{{ item.comment.comment_content }}</td>
                 <td>
-                    <form action="{{ url_for('admin.suppress_comment', id=comment.id) }}" method="POST" class="btn_suppression">
+                    <form action="{{ url_for('admin.suppress_comment_article', id=item.comment.id) }}" method="POST" class="btn_suppression">
                         {{ formuser.csrf_token }}
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                     </form>
                 </td>
             </tr>
+            {% endfor %}
             {% endfor %}
         </tbody>
     </table>
