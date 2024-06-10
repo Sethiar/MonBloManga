@@ -6,7 +6,7 @@ from app.mail import mail_bp
 from flask import current_app as app, redirect, url_for, flash
 from flask_mail import Message
 from Models.user import User
-from Models import db, user
+from Models import db
 from datetime import date
 
 
@@ -51,7 +51,6 @@ def send_confirmation_email(email):
                "Nous espérons que nous vous retrouverons bientôt afin d'entendre votre voix sur notre blog.\n" \
             f"Merci {user.pseudo} de votre confiance."
     mail.send(msg)
-    return redirect(url_for("landing_page"))
 
 
 def mail_birthday():
@@ -72,9 +71,6 @@ def send_birthday_email(user):
     """
     Envoie un e-mail de souhaits d'anniversaire à un utilisateur.
 
-    Cette fonction envoie un e-mail de souhaits d'anniversaire à l'utilisateur
-    fourni en paramètre.
-
     :param user: L'utilisateur à qui envoyer l'e-mail de souhaits d'anniversaire.
     """
     mail = app.extensions['mail']
@@ -82,5 +78,46 @@ def send_birthday_email(user):
                   sender='alefetey123@gmail.com',
                   recipients=[user.email])
     msg.body = f"Bonjour {user.email},\n\nNous vous souhaitons un très joyeux anniversaire !\n\nCordialement,\nL'équipe du blog."
+    mail.send(msg)
+
+
+def banned_user(user):
+    """
+    Envoie un e-mail de bannissement pour manquement aux règles du forum ou des commentaires des articles.
+
+    :param user: L'utilisateur qui sera banni.
+    :return:
+    """
+    mail = app.extensions['mail']
+    msg = Message("Bannissement",
+                  sender='alefetey123@gmail.com',
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo}," \
+               f"Suite à la tenue des règles en vigueur sur le blog, {user.pseudo}, vous avez été banni " \
+               f"pendant une semaine. J'espère que vous comprenez notre démarche. Si vous ne respectez pas " \
+               f"à nouveau les règles du blog, vous serez banni définitivement." \
+               f"Pour toute information complémentaires, N'hésitez pas à répondre à ce mail afin de nous expliquez " \
+               f"pourquoi vous avez été sujet au bannissement." \
+               f"Cordialement. L'équipe du blog de Sethiar."
+    mail.send(msg)
+
+
+def definitive_banned(user):
+    """
+    Envoie d'un mail informant l'utilisateur de son élimination des bases de données du blog.
+    :param user: L'utilisateur qui se fait effacé.
+    :return:
+    """
+    mail = app.extensions['mail']
+    msg = Message("Effacement des bases de données.",
+                 sender='alefetey123@gmail.com',
+                 recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo}," \
+               f"Comme nous vous l'avions indiqué dans un précédent mail, si vous étiez de nouveau sujet à un rappel " \
+               f"à l'ordre sur le respect des règles en vigueur sur notre blog, vous seriez définitivement effacé de " \
+               f"nos bases de données. Le fait que vous receviez ce mail signifie que vous avez été effacé de notre " \
+               f"base de données. Nous regrettons cette décision, mais nous ne pouvons tolérer ce manquement aux " \
+               f"règles établies. " \
+               f"Cordialement. L'équipe du blog de Sethiar."
     mail.send(msg)
 

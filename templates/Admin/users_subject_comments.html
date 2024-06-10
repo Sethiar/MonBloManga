@@ -1,0 +1,55 @@
+{% extends 'baseback.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page du backend afin d'afficher la liste des sujets du forum et d'en supprimer les commentaires.">
+    <title>{% block title %}Page administrateur - Liste des utilisateurs et de leurs commentaires en fonction des sujets du forum{% endblock %}</title>
+
+{% endblock %}
+
+{% block body_content %}
+<br><br>
+<br><br>
+
+
+<h5>Liste des Utilisateurs</h5>
+<!-- Section de recherche par lettre -->
+<div class="lettre-navigation">
+    <a href="{{ url_for('admin.users_subject_alpha_filter') }}">Tous</a>
+    <br>
+    {% for lettre in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+    <a href="{{ url_for('admin.users_subject_alpha_filter', lettre=lettre) }}" style="margin-right: 10px;color:orange;">{{ lettre }}</a>
+    {% endfor %}
+</div>
+<br><br>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pseudo de l'utilisateur</th>
+                <th>Sujet du forum commenté</th>
+                <th>Commentaires</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for user, comments in user_comments.items() %}
+            {% for item in comments %}
+            <tr>
+                <td>{{ user }}</td>
+                <td>{{ item.subject }}</td>
+                <td>{{ item.comment.comment_content }}</td>
+                <td>
+                    <form action="{{ url_for('admin.suppress_subject_comment', id=item.comment.id) }}" method="POST" class="btn_suppression">
+                        {{ formuser.csrf_token }}
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -13,10 +13,12 @@ from Models import db
 from Models.comment_article import CommentArticle
 
 from Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, UserSaving, \
-    CommentArticleForm, FilterForm
+    CommentArticleForm, CommentSubjectForm, FilterForm, SuppressCommentSubjectForm, CreateMangakaForm
 from Models.categories_articles import Categorie
 from Models.author import Author
 from Models.articles import Article
+from Models.mangaka import BiographyMangaka
+from Models.comment_subject import CommentSubject
 from Models.user import User
 from Models.subjects_forum import SubjectForum
 
@@ -157,11 +159,11 @@ def users_list():
     :return:
     """
     formuser = UserSaving()
-    users = db.session.query(User.id, User.pseudo).all()
+    users = db.session.query(User.id, User.pseudo, User.email).all()
 
     user_data = [
-        {'id': user_id, 'pseudo': pseudo}
-        for user_id, pseudo in users
+        {'id': user_id, 'pseudo': pseudo, 'email': email}
+        for user_id, pseudo, email in users
     ]
 
     return render_template("Admin/users_list.html", users=user_data, formuser=formuser)
@@ -348,6 +350,80 @@ def suppress_article(id):
     return redirect(url_for("admin.back_end"))
 
 
+@admin_bp.route("/back_end_blog/commentaires_article_utilisateurs", methods=['GET', 'POST'])
+def users_comments():
+    """
+    Route permettant de voir chaque commentaire en fonction de l'utilisateur.
+    """
+    formuser = UserSaving()
+    user_comments = {}
+
+    comments = CommentArticle.query.all()
+    for comment in comments:
+        user = User.query.get(comment.user_id)
+        article = Article.query.get(comment.article_id)
+        if user.pseudo not in user_comments:
+            user_comments[user.pseudo] = []
+        user_comments[user.pseudo].append({
+            'article': article,
+            'comment': comment
+        })
+
+    return render_template("admin/users_comments.html", user_comments=user_comments, formuser=formuser)
+
+
+@admin_bp.route("back_end_blog/filtrage_utilisateur_article_alphabet", methods=['GET', 'POST'])
+def users_articles_alpha_filter():
+    """
+    Route permettant de filtrer les utilisateurs par la première lettre de leur pseudo.
+    """
+    formuser = ArticleForm()
+
+    lettre = request.args.get('lettre', type=str)
+    if lettre:
+        users = User.query.filter(User.pseudo.ilike(f'{lettre}%')).order_by(
+            User.pseudo.asc()).all()
+    else:
+        users = User.query.order_by(User.pseudo.asc()).all()
+
+    user_comments = {}
+    for user in users:
+        comments = CommentArticle.query.filter_by(user_id=user.id).all()
+        for comment in comments:
+            article = Article.query.get(comment.article_id)
+            if user.pseudo not in user_comments:
+                user_comments[user.pseudo] = []
+            user_comments[user.pseudo].append({
+                'article': article,
+                'comment': comment
+            })
+    return render_template('admin/users_comments.html', user_comments=user_comments, formuser=formuser)
+
+
+@admin_bp.route("/back_end_blog/supprimer_commentaires/<int:id>", methods=['GET', 'POST'])
+def suppress_comment_article(id):
+    """
+    Route pour supprimer un commentaire du blog.
+
+    Args:
+        id (int): L'identifiant du commentaire à supprimer.
+
+    Returns:
+        Redirige vers la page de visualisation des commentaires en fonction des utilisateurs après la suppression.
+
+    """
+
+    comment = CommentArticle.query.get(id)
+    if comment:
+        # Suppression du commentaire de l'article.
+        db.session.delete(comment)
+        # Validation de l'action.
+        db.session.commit()
+        flash("Le commentaire a été supprimé avec succès." + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
+
+    return redirect(url_for("admin.users_articles_alpha_filter"))
+
+
 @admin_bp.route("/back_end_blog/ajouter_sujet", methods=['POST'])
 def add_subject_forum_back():
     """
@@ -388,32 +464,62 @@ def suppress_subject(id):
     return redirect(url_for("admin.back_end"))
 
 
-@admin_bp.route("/back_end_blog/commentaires_utilisateurs", methods=['GET', 'POST'])
-def users_comments():
+@admin_bp.route("/back_end_blog/commentaires_sujets_utilisateurs", methods=['GET', 'POST'])
+def users_comments_subject():
     """
     Route permettant de voir chaque commentaire en fonction de l'utilisateur.
-    :param id:
-    :return:
     """
     formuser = UserSaving()
-    user_comments = []
-    users = User.query.all()
+    suppressform = SuppressCommentSubjectForm()
+    user_comments = {}
 
+    comments = CommentSubject.query.all()
+    for comment in comments:
+        user = User.query.get(comment.user_id)
+        subject = SubjectForum.query.get(comment.subject_id)
+        if user.pseudo not in user_comments:
+            user_comments[user.pseudo] = []
+        user_comments[user.pseudo].append({
+            'sujet': subject,
+            'comment': comment
+        })
+
+    return render_template("admin/users_subject_comments.html", user_comments=user_comments, formuser=formuser,
+                           suppressform=suppressform)
+
+
+@admin_bp.route("back_end_blog/filtrage_utilisateur_sujets_alphabet", methods=['GET', 'POST'])
+def users_subject_alpha_filter():
+    """
+    Route permettant de filtrer les utilisateurs par la première lettre de leur pseudo.
+    """
+    formuser = CommentSubjectForm()
+    suppressform = SuppressCommentSubjectForm()
+
+    lettre = request.args.get('lettre', type=str)
+    if lettre:
+        users = User.query.filter(User.pseudo.ilike(f'{lettre}%')).order_by(
+            User.pseudo.asc()).all()
+    else:
+        users = User.query.order_by(User.pseudo.asc()).all()
+
+    user_comments = {}
     for user in users:
-        comments = CommentArticle.query.filter_by(user_id=user.id).all()
+        comments = CommentSubject.query.filter_by(user_id=user.id).all()
         for comment in comments:
-            article = Article.query.get(comment.article_id)
-            user_comments.append({
-                'user': user.pseudo,
-                'article': article,
+            subject = SubjectForum.query.get(comment.subject_id)
+            if user.pseudo not in user_comments:
+                user_comments[user.pseudo] = []
+            user_comments[user.pseudo].append({
+                'sujet': subject,
                 'comment': comment
             })
+    return render_template('admin/users_subject_comments.html', user_comments=user_comments, formuser=formuser,
+                           suppressform=suppressform)
 
-    return render_template("admin/users_comments.html", user_comments=user_comments)
 
-
-@admin_bp.route("/back_end_blog/supprimer_commentaires/<int:id>", methods=['GET', 'POST'])
-def suppress_comment(id):
+@admin_bp.route("/back_end_blog/supprimer_commentaires_sujets/<int:id>", methods=['GET', 'POST'])
+def suppress_subject_comment(id):
     """
     Route pour supprimer un commentaire du blog.
 
@@ -424,22 +530,45 @@ def suppress_comment(id):
         Redirige vers la page d'administration après la suppression.
 
     """
-
-    comment = CommentArticle.query.get(id)
+    comment = CommentSubject.query.get(id)
     if comment:
         # Suppression du sujet.
         db.session.delete(comment)
         # Validation de l'action.
         db.session.commit()
-        flash("Le commentaire a été supprimé avec succès." + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
+        flash("Le commentaire du blog a été supprimé avec succès." + " "
+              + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
 
-    return redirect(url_for("admin.back_end"))
+    return redirect(url_for("admin.users_subject_alpha_filter"))
 
 
 @admin_bp.route("/back_end_blog/ajout_mangaka", methods=['GET', 'POST'])
 def create_mangaka():
     """
+    Route permettant de créer une nouvelle biographie de mangaka.
+
+
 
     :return:
     """
-    return render_template("Admin/create_mangaka.html")
+    formmangaka = CreateMangakaForm()
+    authors = Author.query.all()
+
+    if request.method == "POST":
+        # Saisie des caractéristiques de la biographie.
+        mangaka_name = request.form.get("mangaka_name")
+        biography_content = request.form.get("biography_content")
+        date_bio_mangaka = request.form.get("date_bio_mangaka")
+        author_id = request.form.get('author_id')
+        author = Author.query.filter_by(id=author_id).first()
+
+        biography_mangaka = BiographyMangaka(mangaka_name=mangaka_name, biography_content=biography_content,
+                                             date_bio_mangaka=date_bio_mangaka, author=author)
+
+        # Enregistrement de la biographie dans la base de données.
+        db.session.add(biography_mangaka)
+        db.session.commit()
+
+    flash("La biographie a bien été ajoutée" + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
+
+    return render_template('Admin/create_mangaka.html', formmangaka=formmangaka, authors=authors)
