@@ -12,7 +12,7 @@ Les tables sont créées dans ce contexte d'application Flask pour garantir leur
 """
 from Models import db
 from flask_login import UserMixin
-from app.create_app import create_app
+from create_app import create_app
 
 from datetime import datetime
 
@@ -183,6 +183,14 @@ with app.app_context():
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
         user = db.relationship('User', backref=db.backref('article_comments', lazy=True))
 
+        # Relation avec la classe ReplyArticle avec suppression en cascade
+        replies_suppress_article = db.relationship('ReplyArticle', backref='parent_comment',
+                                                   cascade='all, delete-orphan')
+
+        # Relation avec la classe LikeCommentArticle avec suppression en cascade
+        likes_suppress_article = db.relationship('CommentLikeArticle', backref='comment_like_article',
+                                                 cascade='all, delete-orphan')
+
     # Modèle de la classe Comment pour les sujets du forum.
     class CommentSubject(db.Model):
         """
@@ -209,6 +217,15 @@ with app.app_context():
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
         user = db.relationship('User', backref=db.backref('subject_comments', lazy=True))
+
+        # Relation avec la classe ReplySubject avec suppression en cascade.
+        replies_suppress_subject = db.relationship('ReplySubject', backref='parent_comment',
+                                                   cascade='all, delete-orphan')
+
+        # Relation avec la classe LikeCommentSubject avec suppression en cascade.
+        likes_suppress_subject = db.relationship('CommentLikeSubject', backref='comment_like_subject',
+                                                 cascade='all, delete-orphan')
+
 
     class Likes(db.Model):
         """
@@ -303,10 +320,10 @@ with app.app_context():
 
         Attributes:
             id (int): Identifiant unique de la réponse.
-            reply_content (str): Contenu de la réponse.
-            reply_date (date): Date de la réponse.
-            comment_id (int): Identifiant du commentaire associé à la réponse.
-            user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
+            reply_content (str) : Contenu de la réponse.
+            reply_date (date) : Date de la réponse.
+            comment_id (int) : Identifiant du commentaire associé à la réponse.
+            user_id (int) : Identifiant de l'utilisateur ayant posté la réponse.
         """
         __tablename__ = "reply_subject"
         __table_args__ = {"extend_existing": True}
@@ -323,7 +340,37 @@ with app.app_context():
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
         user = db.relationship('User', backref=db.backref('subject_replies', lazy=True))
 
+    # Table de données concernant les biographies des mangakas.
+    class BiographyMangaka(db.Model):
+        """
+        Table de données qui enregistre les biographies des mangakas.
+
+        Attributes :
+            id (int) : identifiant unique de la table.
+            biography_content (str) : Contenu de la biographie.
+            mangaka_name (str) : Nom du mangaka.
+        """
+        __tablename__ = "biography_mangaka"
+        __table_args__ = {"extend_existing": True}
+
+        id = db.Column(db.Integer, primary_key=True)
+        biography_content = db.Column(db.Text(), nullable=False)
+
+        # Date d'édition de la biographie.
+        date_bio_mangaka = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+        # Nom du mangaka.
+        mangaka_name = db.Column(db.String(50), nullable=False)
+
+        # Pseudo de l'auteur de l'article.
+        pseudo_author = db.Column(db.String(30), db.ForeignKey('author.pseudo'), nullable=True)
+
+        # Relation avec la classe Author.
+        author = db.relationship('Author', backref=db.backref('biography_mangaka', lazy=True))
+
+
     # Création de toutes les tables à partir de leur classe.
     db.create_all()
 
 print("Félicitations, toutes vos tables ont été installées.")
+

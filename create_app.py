@@ -10,11 +10,12 @@ import config
 from flask import Flask, session
 from dotenv import load_dotenv
 from flask_wtf.csrf import CSRFProtect
-from flask_migrate import Migrate
 from datetime import timedelta
 
 from config import Config
 from app.extensions import mail
+from flask_migrate import Migrate
+
 from Models import db
 from login_manager import login_manager
 
@@ -61,6 +62,8 @@ def create_app():
 
     # Initialisation de la base de données.
     db.init_app(app)
+    # Instanciation de flask-Migrate.
+    Migrate(app, db)
 
     from Models.user import User
     from Models.admin import Admin
