@@ -33,6 +33,13 @@ class CommentSubject(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship('User', backref=db.backref('subject_comments', lazy=True))
 
+    # Relation avec la classe ReplySubject avec suppression en cascade.
+    replies_suppress_subject = db.relationship('ReplySubject', backref='parent_comment', cascade='all, delete-orphan')
+
+    # Relation avec la classe LikeCommentSubject avec suppression en cascade.
+    likes_suppress_subject = db.relationship('CommentLikeSubject', backref='comment_like_subject',
+                                             cascade='all, delete-orphan')
+
     def __repr__(self):
         """
         Représentation en chaîne de caractères de l'objet Comment.

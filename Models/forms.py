@@ -305,3 +305,35 @@ class FilterForm(FlaskForm):
     category = SelectField('Categorie', choices=[])
     submit = SubmitField()
 
+
+class SuppressCommentSubjectForm(FlaskForm):
+    """
+    Formulaire pour supprimer un commentaire de la section forum.
+    """
+    comment_id = HiddenField('Comment_id', validators=[DataRequired()])
+    submit = SubmitField('Supprimer')
+
+
+class CreateMangakaForm(FlaskForm):
+    """
+    Formulaire pour créer une biographie de mangaka.
+    """
+    # Nom du mangaka.
+    mangaka_name = StringField(validators=[DataRequired()],
+                               render_kw={"placeholder": "Veuillez renseigner le nom du mangaka."})
+    # Contenu de la biographie.
+    biography_content = TextAreaField('', validators=[DataRequired()],
+                                      render_kw={"placeholder": "Veuillez saisir la biographie"})
+    # Date d'édition de la biographie.
+    date_bio_mangaka = StringField("Date d'édition", validators=[DataRequired()])
+
+    # Pseudo de l'auteur.
+    pseudo_author = StringField("Pseudo de l'auteur", validators=[DataRequired()],
+                                render_kw={
+                                    "placeholder": "Veuillez renseigner le pseudo de l'auteur de la biographie."})
+
+    # Action de soumettre le formulaire.
+    submit = SubmitField("Soumettre le commentaire")
+
+    csrf_token = HiddenField()
+

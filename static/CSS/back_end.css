@@ -54,6 +54,18 @@ body {
   text-decoration: underline;
 }
 
+h5 {
+  padding-left: 5%;
+}
+
+.lettre-navigation {
+  padding-left: 10%;
+}
+.lettre-navigation a {
+  color: orange;
+  font-size: 15px;
+}
+
 /* Style pour les éléments d'écriture (texte, boutons, liens) */
 .ecriture {
   background-color: darkgrey;
