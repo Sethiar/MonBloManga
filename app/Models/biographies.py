@@ -33,6 +33,9 @@ class BiographyMangaka(db.Model):
     # Relation avec la classe Author.
     author = db.relationship('Author', backref=db.backref('biography_mangaka', lazy=True))
 
+    likes = db.Column(db.Integer, nullable=True, default=0)
+    dislikes = db.Column(db.Integer, nullable=True, default=0)
+
     def __repr__(self):
         """
         Représentation en chaîne de caractères de l'objet biography_mangaka.
@@ -41,4 +44,6 @@ class BiographyMangaka(db.Model):
             str: Chaîne représentant biography_mangaka.
         """
         return f"BiographyMangaka(nom_mangaka='{self.mangaka_name}', Auteur='{self.author.pseudo}', " \
-               f"Date d'édition='{self.date_bio_mangaka}', Biographie_contenu='{self.biography_content}')"
+               f"Date d'édition='{self.date_bio_mangaka}', Biographie_contenu='{self.biography_content}')" \
+               f"like='{self.likes}', dislikes='{self.dislikes}')"
+

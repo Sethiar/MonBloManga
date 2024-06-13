@@ -7,17 +7,20 @@ from app.admin import admin_bp
 from datetime import datetime
 from flask import flash, redirect, url_for, session, render_template,\
     request
+
 from markupsafe import escape
 
 from app.Models import db
 from app.Models.comment_article import CommentArticle
 
 from app.Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, UserSaving, \
-    CommentArticleForm, CommentSubjectForm, FilterForm, SuppressCommentSubjectForm, CreateMangakaForm
+    CommentArticleForm, CommentSubjectForm, CommentBiographyForm, FilterForm, SuppressCommentSubjectForm,\
+    CreateMangakaForm, SuppressCommentBiographyForm, DeleteBiographyForm
 from app.Models.categories_articles import Categorie
 from app.Models.author import Author
 from app.Models.articles import Article
-from app.Models.mangaka import BiographyMangaka
+from app.Models.biographies import BiographyMangaka
+from app.Models.comment_biography import CommentBiography
 from app.Models.comment_subject import CommentSubject
 from app.Models.user import User
 from app.Models.subjects_forum import SubjectForum
@@ -553,6 +556,8 @@ def create_mangaka():
     """
     formmangaka = CreateMangakaForm()
     authors = Author.query.all()
+    biographies = BiographyMangaka.query.all()
+    delete_form = DeleteBiographyForm()
 
     if request.method == "POST":
         # Saisie des caractéristiques de la biographie.
@@ -571,4 +576,49 @@ def create_mangaka():
 
     flash("La biographie a bien été ajoutée" + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
 
-    return render_template('Admin/create_mangaka.html', formmangaka=formmangaka, authors=authors)
+    return render_template('Admin/create_mangaka.html', formmangaka=formmangaka, authors=authors,
+                           biographies=biographies, delete_form=delete_form)
+
+
+@admin_bp.route("back_end_blog/filtrage_utilisateur_biographie_recherche", methods=['GET', 'POST'])
+def biography_search():
+    """
+    Route permettant de rechercher des biographies par le nom ou le prénom du mangaka.
+    """
+    formuser = CommentBiographyForm()
+    suppressform = SuppressCommentBiographyForm()
+    formmangaka = CreateMangakaForm()
+    delete_form = DeleteBiographyForm()
+
+    authors = Author.query.all()
+
+    search_query = request.args.get('search_query', type=str)
+    if search_query:
+        biographies = BiographyMangaka.query.filter(
+            BiographyMangaka.mangaka_name.ilike(f'%{search_query}%')
+        ).order_by(BiographyMangaka.mangaka_name.asc()).all()
+    else:
+        biographies = []
+
+    return render_template('admin/create_mangaka.html', authors=authors, biographies=biographies, formuser=formuser,
+                           suppressform=suppressform, formmangaka=formmangaka, delete_form=delete_form)
+
+
+@admin_bp.route("back_end_blog/supprimer_biographie/<int:biography_id>", methods=['POST'])
+def delete_biography(biography_id):
+    """
+    Route permettant de supprimer une biographie par son ID.
+    """
+    biography = BiographyMangaka.query.get_or_404(biography_id)
+    if biography:
+        db.session.delete(biography)
+        db.session.commit()
+        flash(f'La biographie de {biography.mangaka_name} a été supprimée.', 'success')
+        return redirect(url_for('admin.biography_search'))
+    else:
+        raise ValueError(f"Aucune biographie trouvée avec l'ID {biography_id}")
+
+
+
+
+

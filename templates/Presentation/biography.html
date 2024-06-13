@@ -1,0 +1,40 @@
+{% extends 'base.html.jinja2' %}
+
+
+{% block head_content %}
+    <meta name="description" content="Articles présents sur le blog.">
+    <title>{% block title %}Découvrez les Mangakas{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='CSS/accueil.css') }}">
+{% endblock %}
+
+{% block main_content %}
+<br><br>
+<div id="principle_container">
+    <div id="pics_mangaka">
+        <img src="../static/Images/images_mangaka/ryuk_moon.jpg">
+    </div>
+    <div id="table-mangaka">
+        <table>
+            <thead>
+            <tr>
+                <th>Photo du mangaka</th>
+                <th>Nom du mangaka</th>
+                <th>Biographie</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for biography in biographies %}
+            <tr>
+                <td>photo du mangaka</td>
+                <td>{{ mangaka_name }}</td>
+                <td><a href="{{ url_for('frontend.show_biography', biography_mangaka_id=biography.id) }}">{{ biography.mangaka_name }}</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="separation">
+
+</div>
+{% endblock %}

@@ -8,15 +8,24 @@ from flask_login import login_required, current_user
 
 
 from app.Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
-    NewSubjectForumForm, CommentLike
+    NewSubjectForumForm, CommentLike, CommentBiographyForm, CommentBiographyLike, DislikeBiographyForm,\
+    LikeBiographyForm
 
 from app.Models.author import Author
 from app.Models.articles import Article
+from app.Models.biographies import BiographyMangaka
+
 from app.Models.comment_article import CommentArticle
 from app.Models.comment_subject import CommentSubject
+from app.Models.comment_biography import CommentBiography
+
 from app.Models.likes_comment_subject import CommentLikeSubject
 from app.Models.likes_comment_article import CommentLikeArticle
+from app.Models.likes_comment_biography import CommentLikeBiography
+
+
 from app.Models.subjects_forum import SubjectForum
+from app.Models.biographies import BiographyMangaka
 
 
 # Route permettant d'accéder à la page article du blog.
@@ -131,18 +140,6 @@ def show_article(article_id):
                            formlikecomment=formlikecomment, comment_likes_data=comment_likes_data)
 
 
-# Route permettant d'accéder à la page Mangaka du blog.
-@frontend_bp.route("/mangaka")
-def mangaka():
-    """
-    Accès à la page de la biographie des mangakas.
-
-    Returns :
-    La page des Mangakas.
-    """
-    return render_template("Presentation/mangaka.html")
-
-
 # Route permettant d'accéder à la page forum du blog.
 @frontend_bp.route("/forum", methods=['GET', 'POST'])
 def forum():
@@ -204,3 +201,63 @@ def forum_subject(subject_id):
     return render_template("Presentation/subject_forum.html", subject=subject, subject_id=subject_id,
                            comment_subject=comment_subject, formcomment=formcomment, formlikecomment=formlikecomment,
                            comment_likes_data=comment_likes_data)
+
+
+# Route permettant d'accéder à la page Mangaka du blog.
+@frontend_bp.route("/biographie_mangaka")
+def biography():
+    """
+    Accès à la page de la biographie des mangakas.
+
+    Returns :
+    La page des Mangakas.
+    """
+
+    biographies = BiographyMangaka.query.all()
+
+    return render_template("Presentation/biography.html", biographies=biographies)
+
+
+@frontend_bp.route("/biographie_mangaka/<int:biography_mangaka_id>", methods=['GET', 'POST'])
+def show_biography(biography_mangaka_id):
+    """
+    Route permettant de visualiser une biographie de mangaka en particulier.
+
+    :param biography_mangaka_id:
+    :return:
+    """
+    formcomment = CommentBiographyForm()
+    formdislike = DislikeForm()
+    formlike = LikeBiographyForm()
+    formlikecomment = CommentBiographyLike()
+
+    # Récupération de la biographie si elle existe.
+    biography = BiographyMangaka.query.get_or_404(biography_mangaka_id)
+
+    # Vérification de l'existence de la biographie.
+    if not biography:
+        # Si l'article n'existe pas, renvoyer une erreur 404.
+        abort(404)
+
+    # Récupération des commentaires associés à cette biographie.
+    comment_biography = CommentBiography.query.filter_by(biography_mangaka_id=biography_mangaka_id).all()
+
+    # Préparation des données de likes pour chaque commentaire.
+    comment_likes_data = {}
+    for comment in comment_biography:
+        like_count = CommentLikeBiography.query.filter_by(comment_id=comment.id).count()
+        liked_user_ids = [like.user_id for like in CommentLikeBiography.query.filter_by(comment_id=comment.id).all()]
+        liked_by_current_user = current_user.id in liked_user_ids
+        comment_likes_data[comment.id] = {
+            "like_count": like_count,
+            "liked_user_ids": liked_user_ids,
+            "liked_by_current_user": liked_by_current_user
+        }
+
+    # Récupération des commentaires associés à cette biographie.
+    comments = CommentBiography.query.filter_by(biography_mangaka_id=biography_mangaka_id).all()
+
+    return render_template("Presentation/biography_mangaka.html", biography=biography,
+                           biography_mangaka_id=biography_mangaka_id, comments=comments,
+                           formcomment=formcomment, formlike=formlike, formdislike=formdislike,
+                           formlikecomment=formlikecomment, comment_likes_data=comment_likes_data)

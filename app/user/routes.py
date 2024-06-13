@@ -12,18 +12,27 @@ from markupsafe import escape
 
 from app.Models import db
 from app.Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm,\
-    CommentSubjectForm, ReplyArticleForm, ReplySubjectForm
+    CommentSubjectForm, ReplyArticleForm, ReplySubjectForm, LikeBiographyForm, DislikeBiographyForm, ReplyBiographyForm
 
 from app.Models.articles import Article
 from app.Models.comment_article import CommentArticle
 from app.Models.comment_subject import CommentSubject
+
+from app.Models.biographies import BiographyMangaka
+from app.Models.comment_biography import CommentBiography
+
 from app.Models.user import User
 from app.Models.subjects_forum import SubjectForum
 from app.Models.reply_article import ReplyArticle
 from app.Models.reply_subject import ReplySubject
+from app.Models.reply_biography import ReplyBiography
+
 from app.Models.likes import Likes, Dislikes
+from app.Models.likes_biography import LikesBiography, DislikesBiography
+
 from app.Models.likes_comment_article import CommentLikeArticle
 from app.Models.likes_comment_subject import CommentLikeSubject
+from app.Models.likes_comment_biography import CommentLikeBiography
 
 
 # Route permettant à un nouvel utilisateur de s'inscrire.
@@ -39,7 +48,7 @@ def user_recording():
         email = form.email.data
         date_naissance = form.date_naissance.data
 
-        # Création du sel et hachage du mot de passe
+        # Création du sel et hachage du mot de passe.
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password_hash.encode('utf-8'), salt)
 
@@ -54,7 +63,7 @@ def user_recording():
 
         flash("Inscription réussie! Vous pouvez maintenant vous connecter.")
 
-        # Redirection vers la route pour envoyer l'e-mail de confirmation
+        # Redirection vers la route pour envoyer l'e-mail de confirmation.
         return redirect(url_for("mail.send_confirmation_email", email=email))
 
     return render_template("User/form_user.html", form=form)
@@ -289,6 +298,9 @@ def comment_replies_article(comment_article_id, user_pseudo):
     # Récupération du commentaire par son id.
     comment = CommentArticle.query.get(comment_article_id)
 
+    # Récupération des réponses au commentaire.
+    reply = ReplyArticle.query.get(comment_article_id)
+
     # Vérification de l'existence du commentaire.
     if not comment:
         flash("Le commentaire n'a pas été trouvé.", "error")
@@ -318,7 +330,7 @@ def comment_replies_article(comment_article_id, user_pseudo):
             # Redirection vers une autre page si l'utilisateur n'existe pas.
             return redirect(url_for("functional.connection_requise"))
 
-    return redirect(url_for('frontend.show_article', article_id=comment.article_id))
+    return redirect(url_for('frontend.show_article', article_id=comment.article_id, reply=reply))
 
 
 # Route permettant de joindre le formulaire afin de poster une réponse à un commentaire.
@@ -542,3 +554,257 @@ def comment_dislike(comment_id):
 
     return redirect(url_for('frontend.show_article'))
 
+
+# Route permettant de poster un commentaire dans la section biographie une fois connecté.
+@user_bp.route("/<string:user_pseudo>/biographie/commentaires", methods=['POST'])
+@login_required
+def comment_biography(user_pseudo):
+    """
+    Permet à uin utilisateur de laisser un commentaire sur une biographie.
+
+    Args:
+        user_pseudo(str): le pseudo de l'utilisateur.
+
+    Returns:
+         Redirige vers la page de la biographie après avoir laissé un commentaire.
+    """
+
+    if request.method == 'POST':
+        # Obtention de l'id de la biographie à partir de la requête POST.
+        biography_mangaka_id = request.form.get("biography_mangaka_id")
+
+        # Obtention de l'utilisateur actuel à partir du pseudo.
+        user = User.query.filter_by(pseudo=user_pseudo).first()
+
+        # Vérification de l'existence de l'utilisateur et de la biography.
+        if user and biography_mangaka_id:
+            # Obtenir le contenu du commentaire à partir de la requête POST.
+            comment_content = request.form.get("comment_content")
+
+            # Créer un nouvel objet de commentaire.
+            new_comment = CommentBiography(comment_content=comment_content, user_id=user.id, biography_mangaka_id=biography_mangaka_id)
+
+            # Ajouter le nouveau commentaire à la table de données.
+            db.session.add(new_comment)
+            db.session.commit()
+
+            # Récupération de tous les commentaires de l'article après ajout du commentaire.
+            comment_content = CommentBiography.query.filter_by(biography_mangaka_id=biography_mangaka_id).first()
+
+            # Redirection sur la page d'affichage des articles.
+            return redirect(url_for("frontend.show_biography", biography_mangaka_id=biography_mangaka_id, comment_content=comment_content))
+        else:
+            # Redirection vers une autre page si l'utilisateur n'existe pas.
+            return redirect(url_for("functional.connection_requise"))
+
+
+# Route permettant de liker une biographie.
+@user_bp.route("/biographie/likes<int:biography_mangaka_id>", methods=['POST'])
+@login_required
+def biography_like(biography_mangaka_id):
+    """
+
+    :param biography_mangaka_id:
+    :return:
+    """
+    # Instanciation des formulaires.
+    formlike = LikeBiographyForm()
+
+    if formlike.validate_on_submit():
+        # Récupération de la biographie ou de l'error 404 si aucune biographie.
+        biography = BiographyMangaka.query.get_or_404(biography_mangaka_id)
+
+        # Vérification si l'utilisateur a déjà liké ou disliké cette biographie.
+        existing_like = LikesBiography.query.filter_by(user_id=current_user.id,
+                                                       biography_mangaka_id=biography_mangaka_id).first()
+        existing_dislike = DislikesBiography.query.filter_by(user_id=current_user.id,
+                                                             biography_mangaka_id=biography_mangaka_id).first()
+
+        if existing_like:
+            flash("Vous avez déjà liké cette biographie.", "info")
+        else:
+            if existing_dislike:
+                db.session.delete(existing_dislike)
+                biography.dislikes -= 1
+
+            # Ajout d'un like.
+            new_like = LikesBiography(user_id=current_user.id, biography_mangaka_id=biography_mangaka_id)
+            db.session.add(new_like)
+            biography.likes += 1
+
+            # Enregistrement dans la base de données.
+            db.session.commit()
+            flash("Merci pour votre like!", "success")
+
+        # Redirection vers la page de la biographie.
+        return redirect(url_for('frontend.show_biography', biography_mangaka_id=biography_mangaka_id))
+
+        # En cas de non-validation du formulaire, redirection avec message d'erreur.
+    flash("Erreur lors de la soumission du formulaire.", "danger")
+    return redirect(url_for('frontend.show_biography', biography_mangaka_id=biography_mangaka_id))
+
+
+# Route permettant de disliker une biographie.
+@user_bp.route("/biographie/dislikes<int:biography_mangaka_id>", methods=['POST'])
+@login_required
+def biography_dislike(biography_mangaka_id):
+    """
+
+    :param biography_mangaka_id:
+    :return:
+    """
+    # Instanciation des formulaires.
+    formdislike = DislikeBiographyForm()
+
+    if formdislike.validate_on_submit():
+        # Récupération de la biographie ou de l'error 404 si aucune biographie.
+        biography = BiographyMangaka.query.get_or_404(biography_mangaka_id)
+
+        # Vérifiez si l'utilisateur a déjà liké ou disliké cette biographie.
+        existing_like = LikesBiography.query.filter_by(user_id=current_user.id,
+                                                       biography_mangaka_id=biography_mangaka_id).first()
+        existing_dislike = DislikesBiography.query.filter_by(user_id=current_user.id,
+                                                             biography_mangaka_id=biography_mangaka_id).first()
+
+        if existing_dislike:
+            flash("Vous avez déjà disliké cet article.", "info")
+        else:
+            if existing_like:
+                db.session.delete(existing_like)
+                biography.likes -= 1
+
+            # Ajout d'un dislike.
+            new_dislike = DislikesBiography(user_id=current_user.id, biography_mangaka_id=biography_mangaka_id)
+            db.session.add(new_dislike)
+            biography.dislikes += 1
+
+            # Enregistrement dans la base de données.
+            db.session.commit()
+            flash("Merci pour votre dislike!", "success")
+
+        # Redirection vers la page de l'article.
+        return redirect(url_for('frontend.show_biography', biography_mangaka_id=biography_mangaka_id))
+
+        # En cas de non-validation du formulaire, redirection avec message d'erreur.
+    flash("Erreur lors de la soumission du formulaire.", "danger")
+    return redirect(url_for('frontend.show_biography', biography_mangaka_id=biography_mangaka_id))
+
+
+# Route permettant de liker un commentaire de la section article.
+@user_bp.route("/likes_comment_biographie", methods=['POST'])
+@login_required
+def likes_comment_biography():
+    """
+
+    :return:
+    """
+    data = request.get_json()
+    comment_id = data.get("comment_id")
+    pseudo = current_user.pseudo
+
+    if not comment_id or not pseudo:
+        return jsonify({"status": "error", "message": "Invalid data"}), 400
+
+    try:
+        user = User.query.filter_by(pseudo=pseudo).one()
+        user_id = user.id
+        comment = CommentBiography.query.get(comment_id)
+        if not comment:
+            return jsonify({"status": "error", "message": "Comment not found"}), 404
+
+        like_entry = CommentLikeBiography.query.filter_by(user_id=user_id, comment_id=comment_id).first()
+
+        if like_entry:
+            # Suppression d'un like.
+            db.session.delete(like_entry)
+            db.session.commit()
+            liked = False
+        else:
+            # Ajout d'un like.
+            new_like = CommentLikeBiography(user_id=user_id, comment_id=comment_id)
+            db.session.add(new_like)
+            db.session.commit()
+            liked = True
+
+        # Comptage du nombre de likes pour le commentaire des articles.
+        like_count = CommentLikeBiography.query.filter_by(comment_id=comment_id).count()
+        # Obtention des IDs des utilisateurs ayant liké le commentaire des articles.
+        liked_user_ids = [like.user_id for like in CommentLikeBiography.query.filter_by(comment_id=comment_id).all()]
+
+        return jsonify({"status": "success",
+                        "liked": liked,
+                        "like_count": like_count,
+                        "user_pseudo": pseudo,
+                        "liked_user_ids": liked_user_ids})
+
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+
+# Route permettant de répondre à un commentaire de la section article une fois connecté.
+@user_bp.route("/<string:user_pseudo>/comment<int:comment_biography_id>/reply_biography", methods=['GET', 'POST'])
+@login_required
+def comment_replies_biography(comment_biography_id, user_pseudo):
+    """
+    Permet à un utilisateur de laisser une réponse à un commentaire d'une biographie.
+
+    Args:
+        comment_biography_id(int): l'identifiant du commentaire.
+        user_pseudo(str): le pseudo de l'utilisateur.
+
+    Returns:
+         Redirige vers la page de l'article après avoir laissé une réponse.
+    """
+    # Création de l'instance du formulaire.
+    formbiographyreply = ReplyBiographyForm()
+
+    # Récupération du commentaire par son id.
+    comment = CommentBiography.query.get(comment_biography_id)
+
+    # Vérification de l'existence du commentaire.
+    if not comment:
+        flash("Le commentaire n'a pas été trouvé.", "error")
+        return redirect(url_for("frontend.show_biography", biography_id=comment.biography_id))
+
+    if formbiographyreply.validate_on_submit():
+
+        # Obtention de l'utilisateur actuel à partir du pseudo.
+        user = User.query.filter_by(pseudo=user_pseudo).first()
+
+        # Vérification de l'existence de l'utilisateur.
+        if user:
+            # Obtenir le contenu du commentaire à partir de la requête POST.
+            reply_content = formbiographyreply.reply_content.data
+
+            # Créer un nouvel objet de commentaire.
+            new_reply = ReplyBiography(reply_content=reply_content, user_id=user.id, comment_id=comment.id)
+
+            # Ajouter le nouveau commentaire à la table de données.
+            db.session.add(new_reply)
+            db.session.commit()
+            print('la réponse au commentaire à bien été enregistrée.')
+
+            # Redirection sur la page d'affichage des biographies.
+            return redirect(url_for("frontend.show_biography", biography_mangaka_id=comment.biography_mangaka_id))
+        else:
+            # Redirection vers une autre page si l'utilisateur n'existe pas.
+            return redirect(url_for("functional.connection_requise"))
+
+    return redirect(url_for('frontend.show_biography', biography_mangaka_id=comment.biography_id))
+
+
+# Route permettant de joindre le formulaire afin de poster une réponse à un commentaire.
+@user_bp.route("/<string:user_pseudo>/comment<int:comment_id>/reply_form_biography", methods=['GET'])
+@login_required
+def reply_form_biography(comment_id, user_pseudo):
+    """
+    Affiche le formulaire pour répondre à un commentaire de la section biographie.
+    """
+    # Création d'une instance du formulaire.
+    formbiographyreply = ReplyBiographyForm()
+    # Récupération des commentaires.
+    comment = db.session.get(CommentBiography, comment_id)
+    # Récupération de l'utilisateur connecté.
+    user = User.query.filter_by(pseudo=user_pseudo).first()
+
+    return render_template("User/reply_form_biography.html", form=formbiographyreply, comment=comment, user=user)
