@@ -19,7 +19,7 @@ class CommentBiography(db.Model):
         user_id (int): Identifiant de l'utilisateur enregistré pour le commentaire.
     """
     __tablename__ = "comment_biography"
-    __table_args__ = {"extend_existing":True}
+    __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
     comment_content = db.Column(db.Text(), nullable=False)
