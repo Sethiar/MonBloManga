@@ -1,11 +1,3 @@
-document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll('.like-icon').forEach(function(element) {
-        const commentId = element.getAttribute('onclick').match(/'(\d+)'/)[1];
-        const liked = localStorage.getItem(`like-${commentId}`) === 'true';
-        updateLikeMessage(commentId, liked);
-    });
-});
-
 // Récupérer le jeton CSRF depuis le modèle Flask
 var csrfToken = document.querySelector('#fromlikecomment input[name="csrf_token"]').value;
 
@@ -18,7 +10,7 @@ function toggleLike(element, commentId, userPseudo) {
     // Envoi d'une requête AJAX à Flask pour enregistrer l'utilisateur qui a aimé
     $.ajax({
         type: 'POST',
-        url: '/user/likes_comment_biography',
+        url: '/user/likes_comment_biographie',
         data: JSON.stringify({ comment_id: commentId, user_pseudo: userPseudo }),
         contentType: 'application/json',
         headers: {
