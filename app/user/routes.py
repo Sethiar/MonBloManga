@@ -726,9 +726,9 @@ def likes_comment_biography():
             db.session.commit()
             liked = True
 
-        # Comptage du nombre de likes pour le commentaire des articles.
+        # Comptage du nombre de likes pour le commentaire des biographies.
         like_count = CommentLikeBiography.query.filter_by(comment_id=comment_id).count()
-        # Obtention des IDs des utilisateurs ayant liké le commentaire des articles.
+        # Obtention des IDs des utilisateurs ayant liké le commentaire des biographies.
         liked_user_ids = [like.user_id for like in CommentLikeBiography.query.filter_by(comment_id=comment_id).all()]
 
         return jsonify({"status": "success",
@@ -741,7 +741,7 @@ def likes_comment_biography():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-# Route permettant de répondre à un commentaire de la section article une fois connecté.
+# Route permettant de répondre à un commentaire de la section biographie une fois connecté.
 @user_bp.route("/<string:user_pseudo>/comment<int:comment_biography_id>/reply_biography", methods=['GET', 'POST'])
 @login_required
 def comment_replies_biography(comment_biography_id, user_pseudo):
