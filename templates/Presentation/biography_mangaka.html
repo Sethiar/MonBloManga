@@ -77,7 +77,7 @@
         <div class="reply-button-container">
             <a href="{{ url_for('user.reply_form_biography', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
             <div class="like-section" data-user-id="{{ current_user.pseudo }}">
-                <form id="formlikecomment" method="POST" action="{{ url_for('user.likes_comment_biography') }}" style="display: none;">
+                <form id="fromlikecomment" method="POST" action="{{ url_for('user.likes_comment_biography') }}" style="display: none;">
                     {{ formlikecomment.csrf_token }}
                     <input type="hidden" name="comment_id" value="{{ comment.id }}">
                     <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
