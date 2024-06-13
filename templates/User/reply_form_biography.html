@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'baseform.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Formulaire de réponse par un utilisateur au commentaire laissé sur le blog dans la section biographie.">
+    <title>{% block title %}Réponse au commentaire d'une biographie{% endblock %}</title>
+{% endblock %}
+
+{% block header_content %}
+
+{% endblock %}
+
+{% block body_content %}
+<div id="introduction">
+    <p>Voici le formulaire pour écrire une réponse aux commentaires postés de la section biographie.</p>
+</div>
+<form method="POST" action="{{ url_for('user.comment_replies_biography', comment_biography_id=comment.id, user_pseudo=current_user.pseudo) }}">
+    <div class="imgcontainer">
+        <img src="{{ url_for('static', filename='Images/images_mangaka/L_form.jpg') }}" alt="Avatar" class="avatar">
+    </div>
+    <h3>Réponse au commentaire</h3>
+    {{ form.csrf_token }}
+    <div class="container">
+        {{ form.reply_content.label }} {{ form.reply_content() }}
+        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+        <input type="hidden" name="biography_mangaka_id" value="{{ comment.biography_mangaka_id }}">
+
+        <div class="container">
+             <button type="submit" class="validatedbtn">Soumettre la réponse</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

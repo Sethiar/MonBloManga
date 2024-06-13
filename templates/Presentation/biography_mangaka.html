@@ -1,10 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html.jinja2' %}
+
+{% block head_content %}
+<meta name="description" content="Biographies présentes sur le blog.">
+<title>{% block title %}{{ biography.mangaka_name }}{% endblock %}</title>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='CSS/biography.css') }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+{% endblock %}
+
+{% block main_content %}
+<div id="container_biography">
+    <br><br><br>
+    <br><br><br>
+    <br><br><br>
+    <div id="mangaka_name">
+        <h1>{{ biography.mangaka_name }}</h1>
+    </div>
+    <br><br>
+    <div id="biography_content">
+        {{ biography.biography_content | safe }}
+    </div>
+    <br>
+    <br>
+</div>
+<br>
+<div id="biography_date">
+    <i>La biographie a été publiée le {{biography.date_bio_mangaka.strftime('%d-%m-%Y à %H:%M') }} par {{ biography.author.pseudo }}</i>
+</div>
+<div class="separation"></div>
+<div id="comment_avis">
+    <p>Vous pouvez laisser un commentaire : </p>
+    <div id="form-comment">
+        <div class="likes_dislikes">
+            <form action="{{ url_for('user.biography_like', biography_mangaka_id=biography.id) }}" method="post">
+                {{ formlike.csrf_token }}
+                {{ formlike.submit }}
+            </form>
+            <span id="biographies_likes">{{ biography.likes }}</span>
+        </div>
+        <div class="likes_dislikes">
+            <form action="{{ url_for('user.biography_dislike', biography_mangaka_id=biography.id) }}" method="post">
+                {{ formdislike.csrf_token }}
+                {{ formdislike.submit }}
+            </form>
+            <span id="biographies_dislikes">{{ biography.dislikes }}</span>
+        </div>
+    </div>
+</div>
+<div id="comment_content">
+    <!-- Formulaire pour laisser un commentaire à la biographie-->
+    <form method="POST" action="{{ url_for('user.comment_biography', user_pseudo=current_user.pseudo) }}">
+        {{ formcomment.csrf_token }}
+        <input type="hidden" name="biography_mangaka_id" value="{{ biography.id }}">
+        <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
+        <textarea name="comment_content" placeholder="Votre commentaire" required></textarea>
+        <button type="submit">Poster le commentaire</button>
+    </form>
+</div>
+
+<div class="separation"></div>
+<div id="container_comment">
+    {% for comment in comments %}
+    <div class="comment" data-comment-id="{{ comment.id }}">
+        <div class="comment-header">
+            <img src="{{ comment.user.profile_picture_url }}" alt="Photo de {{ comment.user.pseudo }}" class="profile-picture">
+        </div>
+        <div class="comment">
+            <strong>{{ comment.user.pseudo }}</strong> a commenté :
+        </div>
+        <div class="date_comment">
+            <small>Le {{ comment.comment_biography_date.strftime('%d-%m-%Y à %H:%M') }}</small>
+        </div>
+        <div class="content_comment">
+            {{ comment.comment_content | replace('\n', '<br>') | safe }}
+        </div>
+
+        <div class="reply-button-container">
+            <a href="{{ url_for('user.reply_form_biography', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
+            <div class="like-section" data-user-id="{{ current_user.pseudo }}">
+                <form id="formlikecomment" method="POST" action="{{ url_for('user.likes_comment_biography') }}" style="display: none;">
+                    {{ formlikecomment.csrf_token }}
+                    <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                    <input type="hidden" name="user_pseudo" value="{{ current_user.pseudo }}">
+                    <button type="submit" class="like-submit"></button>
+                </form>
+                <div id="like-icon-{{ comment.id }}" class="like-icon {% if comment_likes_data[comment.id].liked_by_current_user %}liked{% endif %}" onclick="toggleLike(this, '{{ comment.id }}', '{{ current_user.pseudo }}')">
+                    {% if comment_likes_data[comment.id].liked_by_current_user %}
+                    &#9829;  <!-- Icône pour un cœur plein -->
+                    {% else %}
+                    &#9825;  <!-- Icône pour un cœur vide -->
+                    {% endif %}
+                </div>
+                <div class="liked-users">
+                    <p id="like-message-{{ comment.id }}">
+                        {% set like_data = comment_likes_data[comment.id] %}
+                        {% if like_data.like_count > 0 %}
+                            {{ current_user.pseudo if current_user.id in like_data.liked_user_ids else '1 utilisateur a aimé le commentaire.'}}
+                            {% if like_data.like_count > 1 %}
+                                et {{ like_data.like_count - 1 }} autre(s) utilisateur(s) ont aimé le commentaire.
+                            {% endif %}
+                        {% else %}
+                            Personne n'a aimé le commentaire pour le moment.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="replies">
+        {% for reply in comment.replies_comment_biography %}
+        <div class="comment-reply">
+            <div class="reply-header">
+                <img src="{{ reply.user.profile_picture_url }}" alt="Photo de {{ reply.user.pseudo }}" class="profile-picture">
+                <div class="reply-details">
+                    <strong><i>{{ reply.user.pseudo }}</i></strong> a répondu :
+                </div>
+                <div class="reply-date">
+                    <small>Le {{ reply.reply_date.strftime('%d-%m-%Y à %H:%M') }}</small>
+                </div>
+            </div>
+            <div class="content-reply">
+                {{ reply.reply_content | replace('\n', '<br>') | safe }}
+            </div>
+            <br>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+<div style="height: 10px;"> <!-- Espace de 10 pixels -->
+</div>
+<br>
+{% endblock %}
+{% block footer_content %}
+<script src="{{ url_for('static', filename='CSS/javascript/like_comment_biography.js') }}"></script>
+<script src="{{ url_for('static', filename='CSS/javascript/biography_like_dislike.js') }}"></script>
+{% endblock %}

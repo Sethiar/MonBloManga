@@ -107,7 +107,7 @@
         </div>
     </div>
     <div class="replies">
-        {% for reply in comment.replies %}
+        {% for reply in comment.replies_comment_article %}
         <div class="comment-reply">
             <div class="reply-header">
                 <img src="{{ reply.user.profile_picture_url }}" alt="Photo de {{ reply.user.pseudo }}" class="profile-picture">

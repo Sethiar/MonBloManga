@@ -20,6 +20,33 @@
                 {% endfor %}
             </ul>
         </div>
+        <div class="liste biographie">
+            <h5>Rechercher des biographies</h5>
+            <form method="get" action="{{ url_for('admin.biography_search') }}">
+                <label for="search_query">Nom ou prénom du mangaka :</label>
+                <input type="text" id="search_query" name="search_query">
+                <button type="submit">Lancer la recherche</button>
+            </form>
+            <div>
+                {% if biographies %}
+                <ul>
+                    {% for biography in biographies %}
+                    <li>
+                        {{ biography.mangaka_name }}
+                        <form method="post" action="{{ url_for('admin.delete_biography', biography_id=biography.id) }}" style="display:inline;">
+                            {{delete_form.hidden_tag() }}
+                            <button type="submit" title="Supprimer cette biographie" onclick="return confirm('Voulez-vous vraiment supprimer cette biographie ?');">
+                                <i class="fas fa-trash-alt"></i> <!-- Icône de suppression -->
+                            </button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p>Aucun résultat trouvé.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
 
     <!-- Pour Ajouter de nouvelles biographies -->
