@@ -337,3 +337,72 @@ class CreateMangakaForm(FlaskForm):
 
     csrf_token = HiddenField()
 
+
+class CommentBiographyForm(FlaskForm):
+    """
+    Formulaire pour ajouter un commentaire à un e biographie.
+    """
+
+    # Le contenu du commentaire.
+    comment_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                    render_kw={"placeholder": "Veuillez entrer votre commentaire."})
+
+    # Le pseudo de l'utilisateur.
+    user_pseudo = StringField("Pseudo de l'utilisateur", validators=[DataRequired()],
+                              render_kw={"placeholder": "Veuillez renseigner votre pseudo."})
+
+    # Action de soumettre le formulaire.
+    submit = SubmitField("Soumettre le commentaire")
+
+    csrf_token = HiddenField()
+
+
+class LikeBiographyForm(FlaskForm):
+    """
+    Formulaire permettant d'ajouter un like à un article ou à un commentaire.
+    """
+    csrf_token = HiddenField()
+    # Action de soumettre le formulaire.
+    submit = SubmitField('👍')
+
+
+class DislikeBiographyForm(FlaskForm):
+    """
+    Formulaire permettant d'ajouter un dislike à une biographie ou à un commentaire.
+    """
+    csrf_token = HiddenField()
+    # Action de soumettre le formulaire.
+    submit = SubmitField('👎')
+
+
+class CommentBiographyLike(FlaskForm):
+
+    csrf_token = HiddenField()
+    # Action de soumettre le formulaire.
+    submit = SubmitField()
+
+
+class ReplyBiographyForm(FlaskForm):
+    """
+    Formulaire permettant d'ajouter une réponse à un commentaire.
+    """
+    csrf_token = HiddenField()
+
+    # Le contenu de la réponse.
+    reply_content = TextAreaField("Réponse au commentaire", validators=[DataRequired()],
+                                  render_kw={"placeholder": "Veuillez écrire votre commentaire."})
+
+    # Action de soumettre le formulaire.
+    submit = SubmitField()
+
+
+class SuppressCommentBiographyForm(FlaskForm):
+    """
+    Formulaire pour supprimer un commentaire de la section biographie.
+    """
+    comment_id = HiddenField('Comment_id', validators=[DataRequired()])
+    submit = SubmitField('Supprimer')
+
+
+class DeleteBiographyForm(FlaskForm):
+    csrf_token = HiddenField()

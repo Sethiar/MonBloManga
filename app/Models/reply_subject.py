@@ -26,11 +26,11 @@ class ReplySubject(db.Model):
 
     # Relation avec la classe CommentSubject.
     comment_id = db.Column(db.Integer, db.ForeignKey('comment_subject.id'), nullable=False)
-    comment = db.relationship('CommentSubject', backref=db.backref('replies', lazy=True))
+    comment = db.relationship('CommentSubject', backref=db.backref('replies_comment_subject', lazy=True))
 
     # Relation avec la classe User.
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('subject_replies', lazy=True))
+    user = db.relationship('User', backref=db.backref('user_comment_subject_replies', lazy=True))
 
     def __repr__(self):
         """

@@ -38,6 +38,13 @@ class Article(db.Model):
     likes = db.Column(db.Integer, nullable=False, default=0)
     dislikes = db.Column(db.Integer, nullable=False, default=0)
 
+    # Ajout de la relation avec suppression en cascade pour les commentaires.
+    comments = db.relationship('CommentArticle', backref='comment_article', cascade='all, delete-orphan')
+
+    # Ajout des relations avec suppression en cascade pour les likes et dislikes.
+    likes_rel = db.relationship('Likes', backref='liked_article', cascade='all, delete-orphan', lazy='dynamic')
+    dislikes_rel = db.relationship('Dislikes', backref='disliked_article', cascade='all, delete-orphan', lazy='dynamic')
+
     def __repr__(self):
         """
         Représentation en chaîne de caractères de l'objet Article.

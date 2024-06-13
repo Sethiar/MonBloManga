@@ -33,8 +33,15 @@ class BiographyMangaka(db.Model):
     # Relation avec la classe Author.
     author = db.relationship('Author', backref=db.backref('biography_mangaka', lazy=True))
 
-    likes = db.Column(db.Integer, nullable=True, default=0)
-    dislikes = db.Column(db.Integer, nullable=True, default=0)
+    likes = db.Column(db.Integer, nullable=False, default=0)
+    dislikes = db.Column(db.Integer, nullable=False, default=0)
+
+    # Ajout de la relation avec suppression en cascade pour les commentaires.
+    comments = db.relationship('CommentBiography', backref='comment_biography', cascade='all, delete-orphan')
+
+    # Ajout des relations avec suppression en cascade pour les likes et dislikes.
+    likes_rel = db.relationship('LikesBiography', backref='liked_biography', cascade='all, delete-orphan', lazy='dynamic')
+    dislikes_rel = db.relationship('DislikesBiography', backref='disliked_biography', cascade='all, delete-orphan', lazy='dynamic')
 
     def __repr__(self):
         """

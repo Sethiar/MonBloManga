@@ -27,11 +27,11 @@ class CommentSubject(db.Model):
 
     # Relation avec la classe SubjectForum.
     subject_id = db.Column(db.Integer, db.ForeignKey('subject_forum.id'), nullable=False)
-    subject = db.relationship('SubjectForum', backref=db.backref('comments', lazy=True))
+    subject = db.relationship('SubjectForum', backref=db.backref('subject_comments', lazy=True))
 
     # Relation avec la classe User.
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('subject_comments', lazy=True))
+    user = db.relationship('User', backref=db.backref('user_subject_comments', lazy=True))
 
     # Relation avec la classe ReplySubject avec suppression en cascade.
     replies_suppress_subject = db.relationship('ReplySubject', backref='parent_comment', cascade='all, delete-orphan')

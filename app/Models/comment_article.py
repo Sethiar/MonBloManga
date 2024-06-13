@@ -27,17 +27,18 @@ class CommentArticle(db.Model):
 
     # Relation avec la classe Article.
     article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
-    article = db.relationship('Article', backref=db.backref('comments', lazy=True))
+    article = db.relationship('Article', backref=db.backref('article_comments', lazy=True))
 
     # Relation avec la classe User.
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship('User', backref=db.backref('article_comments', lazy=True))
+    user = db.relationship('User', backref=db.backref('user_article_comments', lazy=True))
 
-    # Relation avec la classe ReplyArticle avec suppression en cascade
+    # Relation avec la classe ReplyArticle avec suppression en cascade.
     replies_suppress_article = db.relationship('ReplyArticle', backref='parent_comment', cascade='all, delete-orphan')
 
-    # Relation avec la classe LikeCommentArticle avec suppression en cascade
-    likes_suppress_article = db.relationship('CommentLikeArticle', backref='comment_like_article', cascade='all, delete-orphan')
+    # Relation avec la classe LikeCommentArticle avec suppression en cascade.
+    likes_suppress_article = db.relationship('CommentLikeArticle', backref='comment_like_article',
+                                             cascade='all, delete-orphan')
 
     def __repr__(self):
         """

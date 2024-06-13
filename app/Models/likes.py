@@ -15,8 +15,8 @@ class Likes(db.Model):
 
     __tablename__ = "likes"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
-    article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+    article_id = db.Column(db.Integer, db.ForeignKey("article.id", ondelete="CASCADE"), primary_key=True)
 
     def __repr__(self):
         """
@@ -39,8 +39,8 @@ class Dislikes(db.Model):
         """
     __tablename__ = "dislikes"
 
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
-    article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+    article_id = db.Column(db.Integer, db.ForeignKey("article.id", ondelete="CASCADE"), primary_key=True)
 
     def __repr__(self):
         return f"Dislikes(user_id='{self.user_id}', article_id='{self.article_id}')"
