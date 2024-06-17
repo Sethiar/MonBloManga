@@ -12,7 +12,7 @@ header {
   width: 70%;
   margin: 0 auto;
   height: 150px;
-  background-image: url('../Images/images_banniere/banniere4.jpg');
+  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
   background-position: center;
   background-size: 100% 100%;
 }
@@ -21,7 +21,7 @@ header {
 header::before {
   /* Obligatoire pour afficher le pseudo-élément */
   content: "";
-  background-image: url('../Images/images_banniere/luffy2.jpg');
+  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
   background-position: top left;
   background-size: 100% 100%;
   position: absolute;
@@ -35,7 +35,7 @@ header::before {
 /* Image en haut à droite */
 header::after {
   content: ""; /* Obligatoire pour afficher le pseudo-élément */
-  background-image: url('../Images/images_banniere/goku1.jpg');
+  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
   background-position: top right;
   background-size: 100% 100%;
   position: absolute;
@@ -126,7 +126,7 @@ button a {
 
 /* Style pour le conteneur principal */
 #container_article {
-  background-image: url("../Images/images_article/background1.jpeg");
+  background-image: url("https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_article/background1.jpeg");
 }
 
 #article_title h1{
@@ -407,7 +407,7 @@ textarea {
     width: 70%;
     margin: 0 auto;
     height: 80px;
-    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -416,7 +416,7 @@ textarea {
   header::before {
     /* Obligatoire pour afficher le pseudo-élément */
     content: "";
-    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
     background-position: top left;
     background-size: 100% 100%;
     position: absolute;
@@ -430,7 +430,7 @@ textarea {
   /* Image en haut à droite */
   header::after {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;
@@ -521,7 +521,7 @@ textarea {
 
   /* Style pour le conteneur principal */
   #container_article {
-    background-image: url("../Images/images_article/background1.jpeg");
+    background-image: url("https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_article/background1.jpeg");
   }
 
   #article_title h1{
@@ -704,7 +704,7 @@ textarea {
     width: 60%;
     margin: 0 auto;
     height: 60px;
-    background-image: url('../Images/images_banniere/banniere4.jpg');
+    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -713,7 +713,7 @@ textarea {
   header::before {
     /* Obligatoire pour afficher le pseudo-élément */
     content: "";
-    background-image: url('../Images/images_banniere/luffy2.jpg');
+    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
     background-position: top left;
     background-size: 100% 100%;
     position: absolute;
@@ -727,7 +727,7 @@ textarea {
   /* Image en haut à droite */
   header::after {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('../Images/images_banniere/goku1.jpg');
+    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;
@@ -818,7 +818,7 @@ textarea {
 
   /* Style pour le conteneur principal */
   #container_article {
-    background-image: url("../Images/images_article/background1.jpeg");
+    background-image: url("https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_article/background1.jpeg");
   }
 
   #article_title h1{
