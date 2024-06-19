@@ -16,11 +16,11 @@ from app.Models.comment_article import CommentArticle
 from app.Models.forms import ArticleForm, NewCategorieForm, NewAuthor, NewSubjectForumForm, UserSaving, \
     CommentArticleForm, CommentSubjectForm, CommentBiographyForm, FilterForm, SuppressCommentSubjectForm,\
     CreateMangakaForm, SuppressCommentBiographyForm, DeleteBiographyForm
+
 from app.Models.categories_articles import Categorie
 from app.Models.author import Author
 from app.Models.articles import Article
 from app.Models.biographies import BiographyMangaka
-from app.Models.comment_biography import CommentBiography
 from app.Models.comment_subject import CommentSubject
 from app.Models.user import User
 from app.Models.subjects_forum import SubjectForum

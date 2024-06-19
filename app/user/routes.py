@@ -1,6 +1,7 @@
 """
 Code permettant à l'utilisateur d'utiliser le blog.
 """
+from werkzeug.utils import secure_filename
 
 from app.user import user_bp
 
@@ -11,6 +12,7 @@ from flask import redirect, url_for, render_template, flash, request, jsonify
 from markupsafe import escape
 
 from app.Models import db
+
 from app.Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm,\
     CommentSubjectForm, ReplyArticleForm, ReplySubjectForm, LikeBiographyForm, DislikeBiographyForm, ReplyBiographyForm
 
@@ -39,33 +41,43 @@ from app.Models.likes_comment_biography import CommentLikeBiography
 @user_bp.route("/enregistrement_membre", methods=['GET', 'POST'])
 def user_recording():
     """
-     Enregistrement du membre dans la base de données du site.
-     """
+
+    :return:
+    """
     form = UserSaving()
+
     if form.validate_on_submit():
+        print("Formulaire valide. Soumission en cours...")
+
         pseudo = form.pseudo.data
         password_hash = form.password.data
         email = form.email.data
         date_naissance = form.date_naissance.data
+        profil_photo = form.profil_photo.data
 
-        # Création du sel et hachage du mot de passe.
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password_hash.encode('utf-8'), salt)
 
-        # Enregistrement dans la table "User".
-        new_user = User(pseudo=pseudo,
-                        password_hash=password_hash,
-                        salt=salt,
-                        email=email,
-                        date_naissance=date_naissance)
-        db.session.add(new_user)
-        db.session.commit()
+        if profil_photo:
+            filename = secure_filename(profil_photo.filename)
+            print(f"Nom du fichier : {filename}")
 
-        flash("Inscription réussie! Vous pouvez maintenant vous connecter.")
 
-        # Redirection vers la route pour envoyer l'e-mail de confirmation.
-        return redirect(url_for("mail.send_confirmation_email", email=email))
+            new_user = User(
+                pseudo=pseudo,
+                password_hash=password_hash,
+                salt=salt,
+                email=email,
+                date_naissance=date_naissance
+            )
+            db.session.add(new_user)
+            db.session.commit()
 
+            flash("Inscription réussie! Vous pouvez maintenant vous connecter.")
+
+            return redirect(url_for("mail.send_confirmation_email", email=email))
+
+    # Si le formulaire n'est pas valide ou s'il y a eu une erreur.
     return render_template("User/form_user.html", form=form)
 
 

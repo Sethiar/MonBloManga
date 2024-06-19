@@ -13,7 +13,6 @@ from app.Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, D
 
 from app.Models.author import Author
 from app.Models.articles import Article
-from app.Models.biographies import BiographyMangaka
 
 from app.Models.comment_article import CommentArticle
 from app.Models.comment_subject import CommentSubject
