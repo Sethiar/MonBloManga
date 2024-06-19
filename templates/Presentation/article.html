@@ -62,7 +62,7 @@
     {% for comment in comments %}
     <div class="comment" data-comment-id="{{ comment.id }}">
         <div class="comment-header">
-            <img src="{{ comment.user.profile_picture_url }}" alt="Photo de {{ comment.user.pseudo }}" class="profile-picture">
+            <img src="{{ url_for('user.profil_photo', user_id=comment.user_id) }}" alt="Photo de profil" class="profile-picture">
         </div>
         <div class="comment">
             <strong>{{ comment.user.pseudo }}</strong> a commenté :
@@ -110,7 +110,7 @@
         {% for reply in comment.replies_comment_article %}
         <div class="comment-reply">
             <div class="reply-header">
-                <img src="{{ reply.user.profile_picture_url }}" alt="Photo de {{ reply.user.pseudo }}" class="profile-picture">
+                <img src="{{ url_for('user.profil_photo', user_id=comment.user_id) }}" alt="Photo de profil" class="profile-picture">
                 <div class="reply-details">
                     <strong><i>{{ reply.user.pseudo }}</i></strong> a répondu :
                 </div>
