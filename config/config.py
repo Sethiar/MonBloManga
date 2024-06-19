@@ -3,6 +3,11 @@ Ceci est le code pour la configuration de l'application de mon blog
 """
 
 
+# Configuration des fichiers uploadés.
+UPLOAD_FOLDER = "static/Images/images_profil"
+ALLOWED_EXTENSIONS = {'jpg', 'jpeg', 'png'}
+
+
 # Modèle de la classe Config.
 class Config:
     """
