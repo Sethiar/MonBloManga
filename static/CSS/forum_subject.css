@@ -176,6 +176,10 @@ h1 {
   border-bottom: 1px solid black;
   margin: 3%;
 }
+img.profile-picture {
+  width: 10%;
+  height: auto;
+  }
 
 /* Styles de la section commentaire */
 #comment_avis {
