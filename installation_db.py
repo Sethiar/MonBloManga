@@ -65,7 +65,7 @@ with app.app_context():
         salt = db.Column(db.LargeBinary(254), nullable=False)
         email = db.Column(db.String(255), nullable=False)
         date_naissance = db.Column(db.Date, nullable=False)
-        profil_photo = db.Column(db.String(255), nullable=False)
+        profil_photo = db.Column(db.LargeBinary, nullable=False)
         banned = db.Column(db.Boolean, default=False)
 
     # Modèle de la classe Author.
