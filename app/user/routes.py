@@ -1,15 +1,20 @@
 """
 Code permettant à l'utilisateur d'utiliser le blog.
 """
-from werkzeug.utils import secure_filename
+import os.path
 
 from app.user import user_bp
 
 import bcrypt
 
+from PIL import Image
+from io import BytesIO
+
 from flask_login import login_required, current_user
 from flask import redirect, url_for, render_template, flash, request, jsonify
 from markupsafe import escape
+
+from app.extensions import allowed_file
 
 from app.Models import db
 
@@ -47,38 +52,77 @@ def user_recording():
     form = UserSaving()
 
     if form.validate_on_submit():
-        print("Formulaire valide. Soumission en cours...")
-
         pseudo = form.pseudo.data
         password_hash = form.password.data
         email = form.email.data
         date_naissance = form.date_naissance.data
-        profil_photo = form.profil_photo.data
 
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password_hash.encode('utf-8'), salt)
 
-        if profil_photo:
-            filename = secure_filename(profil_photo.filename)
-            print(f"Nom du fichier : {filename}")
+        # Vérifiez si le fichier a été soumis
+        if 'profil_photo' not in request.files or request.files['profil_photo'].filename == '':
+            print("Aucune photo de profil fournie.", "error")
+            return redirect(url_for('user.user_recording'))
 
+        profil_photo = request.files['profil_photo']
+        if profil_photo and allowed_file(profil_photo.filename):
+            photo_data = profil_photo.read()
 
-            new_user = User(
-                pseudo=pseudo,
-                password_hash=password_hash,
-                salt=salt,
-                email=email,
-                date_naissance=date_naissance
-            )
+            # Utilisation de pillow pour redimensionner l'image.
+            try:
+                img = Image.open(BytesIO(photo_data))
+                img.thumbnail((75, 75))
+                img_format = img.format if img.format else 'JPEG'
+                output = BytesIO()
+                img.save(output, format=img_format)
+                photo_data_resized = output.getvalue()
+            except Exception as e:
+                print(f"Erreur lors du redimensionnement de l'image : {str(e)}", "error")
+                return redirect(url_for("user.user_recording"))
+
+            if len(photo_data_resized) > 5 * 1024 * 1024:  # 5 Mo
+                print("Le fichier est trop grand (maximum 5 Mo).", "error")
+                return redirect(url_for('user.user_recording'))
+
+            photo_data = profil_photo.read()  # Lire les données binaires de l'image
+        else:
+            print("Type de fichier non autorisé.", "error")
+            return redirect(url_for('user.user_recording'))
+
+        new_user = User(
+            pseudo=pseudo,
+            password_hash=password_hash,
+            salt=salt,
+            email=email,
+            date_naissance=date_naissance,
+            profil_photo=photo_data_resized  # Stockez les données binaires de l'image
+        )
+
+        try:
             db.session.add(new_user)
             db.session.commit()
-
-            flash("Inscription réussie! Vous pouvez maintenant vous connecter.")
-
+            print("Inscription réussie! Vous pouvez maintenant vous connecter.")
             return redirect(url_for("mail.send_confirmation_email", email=email))
+        except Exception as e:
+            db.session.rollback()
+            print(f"Erreur lors de l'enregistrement de l'utilisateur: {str(e)}", "error")
 
-    # Si le formulaire n'est pas valide ou s'il y a eu une erreur.
     return render_template("User/form_user.html", form=form)
+
+
+@user_bp.route("/profil_photo/<int:user_id>")
+def profil_photo(user_id):
+    """
+
+    :param user_id:
+    :return:
+    """
+    user = User.query.get_or_404(user_id)
+    if user.profil_photo:
+        return user.profil_photo, {'Content-Type': 'image/jpeg'}  # Ou 'image/png' selon le format
+    else:
+        return "No image found", 404
 
 
 # Route permettant de liker un article.

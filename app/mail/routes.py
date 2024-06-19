@@ -3,10 +3,14 @@ Code permettant de définir les routes concernant le mailing du blog.
 """
 
 from app.mail import mail_bp
-from flask import current_app as app, redirect, url_for, flash
+
+from flask import redirect, url_for, flash, current_app
+
 from flask_mail import Message
+
 from app.Models.user import User
 from app.Models import db
+
 from datetime import date
 
 
@@ -20,7 +24,7 @@ def send_email():
 
     :return: Un message indiquant que l'e-mail a été envoyé avec succès.
     """
-    mail = app.extensions['mail']
+    mail = current_app['mail']
     msg = Message("Hello",
                   sender="alefetey123@gmail.com",
                   recipients=["alefetey123@gmail.com"])
@@ -45,7 +49,7 @@ def send_confirmation_email(email):
         flash("Utilisateur non trouvé.", "Attention")
         return redirect(url_for('landing_page'))
 
-    mail = app.extensions['mail']
+    mail = current_app.extensions['mail']
     msg = Message("Confirmation d'inscription", sender='alefetey123@gmail.com', recipients=[email])
     msg.body = "Merci de vous être inscrit sur notre site. Votre inscription a été confirmée avec succès.\n" \
                "Nous espérons que nous vous retrouverons bientôt afin d'entendre votre voix sur notre blog.\n" \
@@ -77,7 +81,8 @@ def send_birthday_email(user):
     msg = Message("Joyeux anniversaire !",
                   sender='alefetey123@gmail.com',
                   recipients=[user.email])
-    msg.body = f"Bonjour {user.email},\n\nNous vous souhaitons un très joyeux anniversaire !\n\nCordialement,\nL'équipe du blog."
+    msg.body = f"Bonjour {user.email},\n\nNous vous souhaitons un très joyeux anniversaire !\n" \
+               f"\nCordialement,\nL'équipe du blog."
     mail.send(msg)
 
 
