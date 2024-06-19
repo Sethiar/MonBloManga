@@ -13,7 +13,7 @@ header {
   width: 70%;
   margin: 0 auto;
   height: 150px;
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+  background-image: url('../Images/images_banniere/banniere4.jpg');
   background-position: center;
   background-size: 100% 100%;
 }
@@ -21,7 +21,7 @@ header {
 /* Image en haut à gauche */
 header::before {
   content: ""; /* Obligatoire pour afficher le pseudo-élément */
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+  background-image: url('../Images/images_banniere/luffy2.jpg');
   background-position: top left;
   background-size: 100% 100%;
   position: absolute;
@@ -34,7 +34,7 @@ header::before {
 /* Image en haut à droite */
 header::after {
   content: ""; /* Obligatoire pour afficher le pseudo-élément */
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+  background-image: url('../Images/images_banniere/goku1.jpg');
   background-position: top right;
   background-size: 100% 100%;
   position: absolute;
@@ -130,13 +130,13 @@ h1 {
 
 /* Style pour le forum */
 #forum_pic {
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/background1.jpg');
+  background-image: url('../Images/images_forum/background1.jpg');
   height: 100%;
 }
 
 #forum_pic_center {
   border-radius: 100%;
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/fairy_forum.jpg');
+  background-image: url('../Images/images_forum/fairy_forum.jpg');
   background-position: center;
   margin: 0 auto;
   background-size: cover;
@@ -146,7 +146,7 @@ h1 {
 }
 
 #forum_pic_left {
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/erza.jpg');
+  background-image: url('../Images/images_forum/erza.jpg');
   background-position: left;
   position: absolute;
   background-size: cover;
@@ -159,7 +159,7 @@ h1 {
 }
 
 #forum_pic_right {
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/jojo.jpg');
+  background-image: url('../Images/images_forum/jojo.jpg');
   background-position: right;
   position: absolute;
   margin: 0 auto;
@@ -458,7 +458,7 @@ textarea {
     width: 70%;
     margin: 0 auto;
     height: 150px;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+    background-image: url('../Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -466,7 +466,7 @@ textarea {
   /* Image en haut à gauche */
   header::before {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+    background-image: url('../Images/images_banniere/luffy2.jpg');
     background-position: top left;
     background-size: 100% 100%;
     position: absolute;
@@ -479,7 +479,7 @@ textarea {
   /* Image en haut à droite */
   header::after {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+    background-image: url('../Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;
@@ -576,13 +576,13 @@ textarea {
 
   /* Style pour le forum */
   #forum_pic {
-   background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/background1.jpg');
+   background-image: url('../Images/images_forum/background1.jpg');
     height: 100%;
   }
 
   #forum_pic_center {
     border-radius: 100%;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/fairy_forum.jpg');
+    background-image: url('../Images/images_forum/fairy_forum.jpg');
     background-position: center;
     margin: 0 auto;
     background-size: cover;
@@ -592,7 +592,7 @@ textarea {
   }
 
   #forum_pic_left {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/erza.jpg');
+    background-image: url('../Images/images_forum/erza.jpg');
     background-position: left;
     position: absolute;
     background-size: cover;
@@ -605,7 +605,7 @@ textarea {
   }
 
   #forum_pic_right {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/jojo.jpg');
+    background-image: url('../Images/images_forum/jojo.jpg');
     background-position: right;
     position: absolute;
     margin: 0 auto;
@@ -674,7 +674,7 @@ textarea {
     width: 70%;
     margin: 0 auto;
     height: 150px;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+    background-image: url('../Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -682,7 +682,7 @@ textarea {
   /* Image en haut à gauche */
   header::before {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+    background-image: url('../Images/images_banniere/luffy2.jpg');
     background-position: top left;
     background-size: 100% 100%;
     position: absolute;
@@ -695,7 +695,7 @@ textarea {
   /* Image en haut à droite */
   header::after {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+    background-image: url('../Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;
@@ -792,13 +792,13 @@ textarea {
 
   /* Style pour le forum */
   #forum_pic {
-   background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/background1.jpg');
+   background-image: url('../Images/images_forum/background1.jpg');
     height: 100%;
   }
 
   #forum_pic_center {
     border-radius: 100%;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/fairy_forum.jpg');
+    background-image: url('../Images/images_forum/fairy_forum.jpg');
     background-position: center;
     margin: 0 auto;
     background-size: cover;
@@ -808,7 +808,7 @@ textarea {
   }
 
   #forum_pic_left {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/erza.jpg');
+    background-image: url('../Images/images_forum/erza.jpg');
     background-position: left;
     position: absolute;
     background-size: cover;
@@ -821,7 +821,7 @@ textarea {
   }
 
   #forum_pic_right {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_forum/jojo.jpg');
+    background-image: url('../Images/images_forum/jojo.jpg');
     background-position: right;
     position: absolute;
     margin: 0 auto;

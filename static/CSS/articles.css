@@ -11,7 +11,7 @@ header {
   width: 70%;
   margin: 0 auto;
   height: 150px;
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+  background-image: url('../Images/images_banniere/banniere4.jpg');
   background-position: center;
   background-size: 100% 100%;
 }
@@ -19,7 +19,7 @@ header {
 /* Image en haut à gauche */
 header::before {
   content: ""; /* Obligatoire pour afficher le pseudo-élément */
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+  background-image: url('../Images/images_banniere/luffy2.jpg');
   background-position: top left;
   background-size: 100% 100%;
   position: absolute;
@@ -33,7 +33,7 @@ header::before {
 /* Image en haut à droite */
 header::after {
   content: "";
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+  background-image: url('../Images/images_banniere/goku1.jpg');
   background-position: top right;
   background-size: 100% 100%;
   position: absolute;
@@ -124,7 +124,7 @@ h1 {
 
 /*Style pour les photos */
 #pics_articles1 {
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/mouette_mail1.jpeg');
+  background-image: url('../Images/images_articles/mouette_mail1.jpg');
   width: 17%;
   height: 250px;
   position: absolute;
@@ -135,7 +135,7 @@ h1 {
 }
 
 #pics_articles2 {
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/Announcer1.jpg');
+  background-image: url('../Images/images_articles/Announcer1.jpg');
   width: 30%;
   height: 350px;
   margin: 0 auto;
@@ -143,7 +143,7 @@ h1 {
 }
 
 #pics_articles3 {
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/city_hunter2.jpg');
+  background-image: url('../Images/images_articles/city_hunter2.jpg');
   width: 12%;
   height: 300px;
   position: absolute;
@@ -276,7 +276,7 @@ footer ul li a {
     width: 70%;
     margin: 0 auto;
     height: 150px;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+    background-image: url('../Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -284,7 +284,7 @@ footer ul li a {
   /* Image en haut à gauche */
   header::before {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+    background-image: url('../Images/images_banniere/luffy2.jpg');
     background-position: top left;
     background-size: 100% 100%;
     position: absolute;
@@ -298,7 +298,7 @@ footer ul li a {
   /* Image en haut à droite */
   header::after {
     content: "";
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+    background-image: url('../Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;
@@ -389,7 +389,7 @@ footer ul li a {
 
   *Style pour les photos */
   #pics_articles1 {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/mouette_mail1.jpeg');
+    background-image: url('../Images/images_articles/mouette_mail1.jpg');
     width: 17%;
     height: 250px;
     position: absolute;
@@ -400,7 +400,7 @@ footer ul li a {
   }
 
   #pics_articles2 {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/Announcer1.jpg');
+    background-image: url('../Images/images_articles/Announcer1.jpg');
     width: 30%;
     height: 350px;
     margin: 0 auto;
@@ -408,7 +408,7 @@ footer ul li a {
   }
 
   #pics_articles3 {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/city_hunter2.jpg');
+    background-image: url('../Images/images_articles/city_hunter2.jpg');
     width: 12%;
     height: 300px;
     position: absolute;
@@ -542,7 +542,7 @@ footer ul li a {
     width: 70%;
     margin: 0 auto;
     height: 150px;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+    background-image: url('../Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -550,7 +550,7 @@ footer ul li a {
   /* Image en haut à gauche */
   header::before {
     content: ""; /* Obligatoire pour afficher le pseudo-élément */
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+    background-image: url('../Images/images_banniere/luffy2.jpg');
     background-position: top left;
     background-size: 100% 100%;
     position: absolute;
@@ -564,7 +564,7 @@ footer ul li a {
   /* Image en haut à droite */
   header::after {
     content: "";
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+    background-image: url('../Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;
@@ -655,7 +655,7 @@ footer ul li a {
 
   *Style pour les photos */
   #pics_articles1 {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/mouette_mail1.jpeg');
+    background-image: url('../Images/images_articles/mouette_mail1.jpg');
     width: 17%;
     height: 250px;
     position: absolute;
@@ -666,7 +666,7 @@ footer ul li a {
   }
 
   #pics_articles2 {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/Announcer1.jpg');
+    background-image: url('../Images/images_articles/Announcer1.jpg');
     width: 30%;
     height: 350px;
     margin: 0 auto;
@@ -674,7 +674,7 @@ footer ul li a {
   }
 
   #pics_articles3 {
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/city_hunter2.jpg');
+    background-image: url('../Images/images_articles/city_hunter2.jpg');
     width: 12%;
     height: 300px;
     position: absolute;

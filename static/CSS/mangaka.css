@@ -13,7 +13,7 @@ header {
   width: 70%;
   margin: 0 auto;
   height: 150px;
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+  background-image: url('../Images/images_banniere/banniere4.jpg');
   background-position: center;
   background-size: 100% 100%;
 }
@@ -21,7 +21,7 @@ header {
 /* Image en haut à gauche */
 header::before {
   content: "";
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+  background-image: url('../Images/images_banniere/luffy2.jpg');
   background-position: top left;
   background-size: 100% 100%;
   position: absolute;
@@ -35,7 +35,7 @@ header::before {
 /* Image en haut à droite */
 header::after {
   content: "";
-  background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+  background-image: url('../Images/images_banniere/goku1.jpg');
   background-position: top right;
   background-size: 100% 100%;
   position: absolute;
@@ -161,7 +161,7 @@ h1 {
     width: 70%;
     margin: 0 auto;
     height: 150px;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+    background-image: url('../Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -169,7 +169,7 @@ h1 {
   /* Image en haut à gauche */
   header::before {
     content: "";
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+    background-image: url('../Images/images_banniere/luffy2.jpg');
     background-position: top left;
     ackground-size: 100% 100%;
     position: absolute;
@@ -183,7 +183,7 @@ h1 {
   /* Image en haut à droite */
   header::after {
     content: "";
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+    background-image: url('../Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;
@@ -310,7 +310,7 @@ h1 {
     width: 70%;
     margin: 0 auto;
     height: 150px;
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/banniere4.jpg');
+    background-image: url('../Images/images_banniere/banniere4.jpg');
     background-position: center;
     background-size: 100% 100%;
   }
@@ -318,7 +318,7 @@ h1 {
   /* Image en haut à gauche */
   header::before {
     content: "";
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/luffy2.jpg');
+    background-image: url('../Images/images_banniere/luffy2.jpg');
     background-position: top left;
     ackground-size: 100% 100%;
     position: absolute;
@@ -332,7 +332,7 @@ h1 {
   /* Image en haut à droite */
   header::after {
     content: "";
-    background-image: url('https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_banniere/goku1.jpg');
+    background-image: url('../Images/images_banniere/goku1.jpg');
     background-position: top right;
     background-size: 100% 100%;
     position: absolute;

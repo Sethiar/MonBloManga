@@ -2,7 +2,7 @@
 
 /* Style pour le conteneur principal */
 #container_biography {
-  background-image: url("https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_mangaka/ryuk_moon.jpg");
+  background-image: url("../Images/images_mangaka/ryuk_moon.jpg");
 }
 
 #mangaka_name h1{
