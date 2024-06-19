@@ -55,6 +55,12 @@ def create_app():
     # Définition de la clé secrète pour les cookies.
     app.secret_key = secrets.token_hex(16)
 
+    # Configuration des fichiers uploadés.
+    app.config['UPLOADS_FOLDER'] = "uploads"
+    app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'jpeg', 'png'}
+
+    app.config['BUCKET_NAME'] = 'sethiarblogmanga'
+
     # Configuration du mail
     app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
     app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT'))
