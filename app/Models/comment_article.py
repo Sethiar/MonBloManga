@@ -27,7 +27,7 @@ class CommentArticle(db.Model):
 
     # Relation avec la classe Article.
     article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
-    article = db.relationship('Article', backref=db.backref('article_comments', lazy=True))
+    article = db.relationship('Article', backref=db.backref('comment_article', lazy=True))
 
     # Relation avec la classe User.
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

@@ -6,6 +6,7 @@ from . import db
 from datetime import datetime
 
 
+# Table des réponses aux commentaires des articles.
 class ReplyArticle(db.Model):
     """
     Représente une réponse à un commentaire sur un article.

@@ -14,6 +14,7 @@ class Likes(db.Model):
     """
 
     __tablename__ = "likes"
+    __table_args__ = {"extend_existing": True}
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
     article_id = db.Column(db.Integer, db.ForeignKey("article.id", ondelete="CASCADE"), primary_key=True)
@@ -38,6 +39,7 @@ class Dislikes(db.Model):
             article_id (int) : Identifiant de l'article.
         """
     __tablename__ = "dislikes"
+    __table_args__ = {"extend_existing": True}
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
     article_id = db.Column(db.Integer, db.ForeignKey("article.id", ondelete="CASCADE"), primary_key=True)

@@ -14,6 +14,7 @@ class LikesBiography(db.Model):
     """
 
     __tablename__ = "likes_biography"
+    __table_args__ = {"extend_existing": True}
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"),  primary_key=True)
     biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"), primary_key=True)
@@ -38,6 +39,7 @@ class DislikesBiography(db.Model):
             biography_mangaka_id (int) : Identifiant de la biographie.
         """
     __tablename__ = "dislikes_biography"
+    __table_args__ = {"extend_existing": True}
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
     biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"), primary_key=True)

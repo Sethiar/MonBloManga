@@ -13,7 +13,10 @@ class BiographyMangaka(db.Model):
     Attributes :
         id (int) : identifiant unique de la table.
         biography_content (str) : Contenu de la biographie.
+        date_bio_mangaka (date) : Date d'édition de la biographie.
         mangaka_name (str) : Nom du mangaka.
+        pseudo_author (str) : pseudo de l'auteur de la biographie.
+
     """
     __tablename__ = "biography_mangaka"
     __table_args__ = {"extend_existing": True}
@@ -27,12 +30,11 @@ class BiographyMangaka(db.Model):
     # Nom du mangaka.
     mangaka_name = db.Column(db.String(50), nullable=False)
 
-    # Pseudo de l'auteur de l'article.
-    pseudo_author = db.Column(db.String(30), db.ForeignKey('author.pseudo'), nullable=True)
-
     # Relation avec la classe Author.
-    author = db.relationship('Author', backref=db.backref('biography_mangaka', lazy=True))
+    author_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
+    author = db.relationship('Author', backref=db.backref('biography_mangaka_author', lazy=True))
 
+    # Enregistrement des likes et dislikes des biographies.
     likes = db.Column(db.Integer, nullable=False, default=0)
     dislikes = db.Column(db.Integer, nullable=False, default=0)
 
@@ -40,8 +42,10 @@ class BiographyMangaka(db.Model):
     comments = db.relationship('CommentBiography', backref='comment_biography', cascade='all, delete-orphan')
 
     # Ajout des relations avec suppression en cascade pour les likes et dislikes.
-    likes_rel = db.relationship('LikesBiography', backref='liked_biography', cascade='all, delete-orphan', lazy='dynamic')
-    dislikes_rel = db.relationship('DislikesBiography', backref='disliked_biography', cascade='all, delete-orphan', lazy='dynamic')
+    likes_rel = db.relationship('LikesBiography', backref='liked_biography',
+                                cascade='all, delete-orphan', lazy='dynamic')
+    dislikes_rel = db.relationship('DislikesBiography', backref='disliked_biography',
+                                   cascade='all, delete-orphan', lazy='dynamic')
 
     def __repr__(self):
         """

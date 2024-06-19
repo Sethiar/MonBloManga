@@ -1,7 +1,5 @@
 """Modèle de la classe Utilisateur."""
 
-import logging
-
 from . import db
 from flask_login import UserMixin
 
@@ -29,6 +27,7 @@ class User(db.Model, UserMixin):
     salt = db.Column(db.LargeBinary(254), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     date_naissance = db.Column(db.Date, nullable=False)
+    profil_photo = db.Column(db.LargeBinary, nullable=False)
     banned = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
@@ -38,7 +37,8 @@ class User(db.Model, UserMixin):
         Returns :
             str: Chaîne représentant l'objet Utilisateur.
         """
-        return f"User(pseudo='{self.pseudo}', email='{self.email}', date_naissance='{self.date_naissance}', banned='{self.banned}')"
+        return f"User(pseudo='{self.pseudo}', email='{self.email}', date_naissance='{self.date_naissance}', " \
+               f"chemin_photo='{self.chemin_photo}, banned='{self.banned}')"
 
     def is_active(self):
         """

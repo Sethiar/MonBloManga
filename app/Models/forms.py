@@ -3,12 +3,14 @@
 from flask_wtf import FlaskForm
 
 from wtforms import StringField, PasswordField, HiddenField, \
-    EmailField, DateField, SubmitField, TextAreaField, SelectField
+    EmailField, DateField, SubmitField, TextAreaField, SelectField, FileField
 
 from wtforms.validators import DataRequired, EqualTo, ValidationError
+from flask_wtf.file import FileAllowed, FileRequired
 from app.Models.user import User
 
 
+# Formulaire permettant la connexion administrateur.
 class AdminConnection(FlaskForm):
     """
     Formulaire de connexion pour les administrateurs du site.
@@ -31,6 +33,7 @@ class AdminConnection(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant d'enregistrer un utilisateur.
 class UserSaving(FlaskForm):
     """
         Formulaire de souscription pour les utilisateurs du site.
@@ -39,6 +42,7 @@ class UserSaving(FlaskForm):
         :param pseudo: Pseudo unique de l'utilisateur.
         :param password: Mot de passe de l'utilisateur.
         :param password2: Vérification de la concordance avec le premier mot de passe donné.
+        :param profil_photo: Photo de l'utilisateur.
         :param date_naissance: Date de naissance de l'utilisateur.
         :param submit: Bouton de soumission du formulaire.
 
@@ -67,6 +71,8 @@ class UserSaving(FlaskForm):
     date_naissance = DateField(
         "Date de naissance",
         validators=[DataRequired()])
+    profil_photo = FileField("Photo de profil souhaitée :",
+                             validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'], "Images only !!")])
 
     submit = SubmitField(
         "Souscrire aux conditions générales du blog.")
@@ -95,6 +101,7 @@ class UserSaving(FlaskForm):
         return f"UserSaving(pseudo='{self.pseudo}', email='{self.email.data}', date de naissance='{self.date_naissance}')"
 
 
+# Formulaire permettant l'enregistrement d'un auteur.
 class NewAuthor(FlaskForm):
     """
     Formulaire d'enregistrement d'un nouvel auteur.
@@ -118,6 +125,7 @@ class NewAuthor(FlaskForm):
         return f"NewAuthor(pseudo='{self.pseudo}')"
 
 
+# Formulaire permettant l'authentification d'un utilisateur.
 class UserConnection(FlaskForm):
     """
     Formulaire de connexion pour les utilisateurs du site.
@@ -138,6 +146,7 @@ class UserConnection(FlaskForm):
     submit = SubmitField("se connecter")
 
 
+# Formulaire permettant la création d'une nouvelle catégorie d'article.
 class NewCategorieForm(FlaskForm):
     """
     Formulaire pour ajouter une nouvelle catégorie.
@@ -154,6 +163,7 @@ class NewCategorieForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant la création d'un nouveau sujet sur le forum.
 class NewSubjectForumForm(FlaskForm):
     """
     Formulaire pour ajouter un nouveau sujet pour le forum.
@@ -172,6 +182,7 @@ class NewSubjectForumForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant la création d'un nouvel article.
 class ArticleForm(FlaskForm):
     """
     Formulaire pour ajouter un article.
@@ -209,6 +220,7 @@ class ArticleForm(FlaskForm):
     submit = SubmitField("Ajouter l'article")
 
 
+# Formulaire permettant à un utilisateur de créer un commentaire pour la section article.
 class CommentArticleForm(FlaskForm):
     """
     Formulaire pour ajouter un commentaire à un article.
@@ -228,6 +240,7 @@ class CommentArticleForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant à un utilisateur de créer un commentaire pour la section forum.
 class CommentSubjectForm(FlaskForm):
     """
     Formulaire pour ajouter un commentaire à un article.
@@ -247,6 +260,7 @@ class CommentSubjectForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant de liker un article.
 class LikeForm(FlaskForm):
     """
     Formulaire permettant d'ajouter un like à un article ou à un commentaire.
@@ -256,6 +270,7 @@ class LikeForm(FlaskForm):
     submit = SubmitField('👍')
 
 
+# Formulaire permettant de disliker un article
 class DislikeForm(FlaskForm):
     """
     Formulaire permettant d'ajouter un dislike à un article ou à un commentaire.
@@ -265,11 +280,13 @@ class DislikeForm(FlaskForm):
     submit = SubmitField('👎')
 
 
+# Formulaire permettant de liker un commentaire dans la section article.
 class CommentLike(FlaskForm):
     csrf_token = HiddenField()
     submit = SubmitField()
 
 
+# Formulaire permettant de répondre à un commentaire dans la section article.
 class ReplyArticleForm(FlaskForm):
     """
     Formulaire permettant d'ajouter une réponse à un commentaire.
@@ -284,6 +301,7 @@ class ReplyArticleForm(FlaskForm):
     submit = SubmitField()
 
 
+# Formulaire permettant de répondre à un commentaire dans la section forum.
 class ReplySubjectForm(FlaskForm):
     """
     Formulaire permettant d'ajouter une réponse à un commentaire dans la section du forum.
@@ -298,6 +316,7 @@ class ReplySubjectForm(FlaskForm):
     submit = SubmitField()
 
 
+# Formulaire permettant de filtrer les articles par catégorie.
 class FilterForm(FlaskForm):
     """
     Formulaire permettant de filtrer les articles par catégories.
@@ -306,6 +325,7 @@ class FilterForm(FlaskForm):
     submit = SubmitField()
 
 
+# Formulaire permettant de supprimer les commentaires dans la section forum.
 class SuppressCommentSubjectForm(FlaskForm):
     """
     Formulaire pour supprimer un commentaire de la section forum.
@@ -314,6 +334,7 @@ class SuppressCommentSubjectForm(FlaskForm):
     submit = SubmitField('Supprimer')
 
 
+# Formulaire permettant d'enregistrer une nouvelle biographie.
 class CreateMangakaForm(FlaskForm):
     """
     Formulaire pour créer une biographie de mangaka.
@@ -338,9 +359,10 @@ class CreateMangakaForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant de laisser un commentaire dans la section biographie.
 class CommentBiographyForm(FlaskForm):
     """
-    Formulaire pour ajouter un commentaire à un e biographie.
+    Formulaire pour ajouter un commentaire à une biographie.
     """
 
     # Le contenu du commentaire.
@@ -357,6 +379,7 @@ class CommentBiographyForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant de liker une biographie.
 class LikeBiographyForm(FlaskForm):
     """
     Formulaire permettant d'ajouter un like à un article ou à un commentaire.
@@ -366,6 +389,7 @@ class LikeBiographyForm(FlaskForm):
     submit = SubmitField('👍')
 
 
+# Formulaire permettant de disliker une biographie.
 class DislikeBiographyForm(FlaskForm):
     """
     Formulaire permettant d'ajouter un dislike à une biographie ou à un commentaire.
@@ -375,6 +399,7 @@ class DislikeBiographyForm(FlaskForm):
     submit = SubmitField('👎')
 
 
+# Formulaire permettant de disliker une biographie.
 class CommentBiographyLike(FlaskForm):
 
     csrf_token = HiddenField()
@@ -382,6 +407,7 @@ class CommentBiographyLike(FlaskForm):
     submit = SubmitField()
 
 
+# Formulaire permettant de laisser une réponse à un commentaire dans la section biographie.
 class ReplyBiographyForm(FlaskForm):
     """
     Formulaire permettant d'ajouter une réponse à un commentaire.
@@ -396,6 +422,7 @@ class ReplyBiographyForm(FlaskForm):
     submit = SubmitField()
 
 
+# Formulaire permettant de supprimer un commentaire dans la section biographie.
 class SuppressCommentBiographyForm(FlaskForm):
     """
     Formulaire pour supprimer un commentaire de la section biographie.
@@ -404,5 +431,6 @@ class SuppressCommentBiographyForm(FlaskForm):
     submit = SubmitField('Supprimer')
 
 
+# Formulaire permettant de supprimer une biographie.
 class DeleteBiographyForm(FlaskForm):
     csrf_token = HiddenField()
