@@ -12,7 +12,7 @@ Les tables sont créées dans ce contexte d'application Flask pour garantir leur
 """
 from app.Models import db
 from flask_login import UserMixin
-from .app import create_app
+from app import create_app
 
 from datetime import datetime
 
@@ -53,6 +53,7 @@ with app.app_context():
             salt (str): Processus de salage du mot de passe.
             email (str): Adresse e-mail de l'utilisateur.
             date_naissance (date): Date de naissance de l'utilisateur.
+            profil_photo (string): url de récupération des photos utilisateurs du blog.
             banned (bool): renseigne sur l'état de bannissement de l'utilisateur.
         """
         __tablename__ = "user"
@@ -64,6 +65,7 @@ with app.app_context():
         salt = db.Column(db.LargeBinary(254), nullable=False)
         email = db.Column(db.String(255), nullable=False)
         date_naissance = db.Column(db.Date, nullable=False)
+        profil_photo = db.Column(db.String(255), nullable=False)
         banned = db.Column(db.Boolean, default=False)
 
     # Modèle de la classe Author.
@@ -88,21 +90,21 @@ with app.app_context():
     # Modèle de la classe Article.
     class Article(db.Model):
         """
-        Représente un article.
+        Modèle de données représentant un article du blog.
 
         Attributes:
             id (int): Identifiant unique de l'article.
             title (str): Titre de l'article.
-            resume (str): Résumé de l'article.
-            article_content (str): Contenu de l'article.
-            date_edition (date): Date d'édition de l'article.
-            pseudo_author (str): Pseudo de l'auteur de l'article.
-            author (Author): Relation avec la classe Author.
-            categorie_id (int): Identifiant de la catégorie de l'article.
-            categorie (Categorie): Relation avec la classe Categorie.
-            likes (int): Nombre de likes.
-            dislikes (int): Nombre de dislikes.
+            author_id (int): Identifiant de l'auteur de l'article.
+            resume: (str): Résumé de l'article (100 caractères max).
+            article_content (str) : Contenu de l'article.
+            date_edition (datetime) : Date d'édition de l'article.
+            categorie_id (int) : Identifiant de la catégorie associée à l'article.
+            categorie (Categorie) : Référence à l'objet Categorie associé à l'article.
+            likes (int) : Nombre de likes.
+            dislikes (int) : Nombre de dislikes.
         """
+
         __tablename__ = "article"
         __table_args__ = {"extend_existing": True}
 
@@ -112,19 +114,63 @@ with app.app_context():
         article_content = db.Column(db.Text(), nullable=False)
         date_edition = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-        # Comptage des likes et dislikes.
+        author_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
+        author = db.relationship('Author', backref=db.backref('articles', lazy=True))
+
+        categorie_id = db.Column(db.Integer, db.ForeignKey("categorie.id"), nullable=False)
+        categorie = db.relationship("Categorie", backref=db.backref("articles", lazy="dynamic"))
+
         likes = db.Column(db.Integer, nullable=False, default=0)
         dislikes = db.Column(db.Integer, nullable=False, default=0)
 
-        # Pseudo de l'auteur de l'article.
-        pseudo_author = db.Column(db.String(30), db.ForeignKey('author.pseudo'), nullable=True)
+        # Ajout de la relation avec suppression en cascade pour les commentaires.
+        comments = db.relationship('CommentArticle', backref='comment_article', cascade='all, delete-orphan')
+
+        # Ajout des relations avec suppression en cascade pour les likes et dislikes.
+        likes_rel = db.relationship('Likes', backref='liked_article', cascade='all, delete-orphan', lazy='dynamic')
+        dislikes_rel = db.relationship('Dislikes', backref='disliked_article', cascade='all, delete-orphan',
+                                       lazy='dynamic')
+
+    # Table de données concernant les biographies des mangakas.
+    class BiographyMangaka(db.Model):
+        """
+        Table de données qui enregistre les biographies des mangakas.
+
+        Attributes :
+            id (int) : identifiant unique de la table.
+            biography_content (str) : Contenu de la biographie.
+            date_bio_mangaka (date) : Date d'édition de la biographie.
+            mangaka_name (str) : Nom du mangaka.
+            pseudo_author (str) : pseudo de l'auteur de la biographie.
+
+        """
+        __tablename__ = "biography_mangaka"
+        __table_args__ = {"extend_existing": True}
+
+        id = db.Column(db.Integer, primary_key=True)
+        biography_content = db.Column(db.Text(), nullable=False)
+
+        # Date d'édition de la biographie.
+        date_bio_mangaka = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+        # Nom du mangaka.
+        mangaka_name = db.Column(db.String(50), nullable=False)
 
         # Relation avec la classe Author.
-        author = db.relationship('Author', backref=db.backref('articles', lazy=True))
+        author_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
+        author = db.relationship('Author', backref=db.backref('biography_mangaka_author', lazy=True))
 
-        # Relation avec la classe catégorie.
-        categorie_id = db.Column(db.Integer, db.ForeignKey("categorie.id"), nullable=False)
-        categorie = db.relationship("Categorie", backref=db.backref("articles", lazy="dynamic"))
+        likes = db.Column(db.Integer, nullable=False, default=0)
+        dislikes = db.Column(db.Integer, nullable=False, default=0)
+
+        # Ajout de la relation avec suppression en cascade pour les commentaires.
+        comments = db.relationship('CommentBiography', backref='comment_biography', cascade='all, delete-orphan')
+
+        # Ajout des relations avec suppression en cascade pour les likes et dislikes.
+        likes_rel = db.relationship('LikesBiography', backref='liked_biography',
+                                    cascade='all, delete-orphan', lazy='dynamic')
+        dislikes_rel = db.relationship('DislikesBiography', backref='disliked_biography',
+                                       cascade='all, delete-orphan', lazy='dynamic')
 
     # Modèle de la classe Catégorie.
     class Categorie(db.Model):
@@ -157,6 +203,7 @@ with app.app_context():
         nom = db.Column(db.String(50), nullable=False)
 
     # Modèle de la classe Comment pour les articles.
+    # Modèle de la classe Comment.
     class CommentArticle(db.Model):
         """
         Représente un commentaire sur un article.
@@ -177,17 +224,17 @@ with app.app_context():
 
         # Relation avec la classe Article.
         article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
-        article = db.relationship('Article', backref=db.backref('comments', lazy=True))
+        article = db.relationship('Article', backref=db.backref('article_comments', lazy=True))
 
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        user = db.relationship('User', backref=db.backref('article_comments', lazy=True))
+        user = db.relationship('User', backref=db.backref('user_article_comments', lazy=True))
 
-        # Relation avec la classe ReplyArticle avec suppression en cascade
+        # Relation avec la classe ReplyArticle avec suppression en cascade.
         replies_suppress_article = db.relationship('ReplyArticle', backref='parent_comment',
                                                    cascade='all, delete-orphan')
 
-        # Relation avec la classe LikeCommentArticle avec suppression en cascade
+        # Relation avec la classe LikeCommentArticle avec suppression en cascade.
         likes_suppress_article = db.relationship('CommentLikeArticle', backref='comment_like_article',
                                                  cascade='all, delete-orphan')
 
@@ -212,11 +259,11 @@ with app.app_context():
 
         # Relation avec la classe SubjectForum.
         subject_id = db.Column(db.Integer, db.ForeignKey('subject_forum.id'), nullable=False)
-        subject = db.relationship('SubjectForum', backref=db.backref('comments', lazy=True))
+        subject = db.relationship('SubjectForum', backref=db.backref('subject_comments', lazy=True))
 
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        user = db.relationship('User', backref=db.backref('subject_comments', lazy=True))
+        user = db.relationship('User', backref=db.backref('user_subject_comments', lazy=True))
 
         # Relation avec la classe ReplySubject avec suppression en cascade.
         replies_suppress_subject = db.relationship('ReplySubject', backref='parent_comment',
@@ -227,6 +274,43 @@ with app.app_context():
                                                  cascade='all, delete-orphan')
 
 
+    class CommentBiography(db.Model):
+        """
+        Représente un commentaire sur une biographie.
+
+        Attributes:
+            id (int) :  identifiant unique du commentaire.
+            comment_content (str): Contenu du commentaire.
+            comment_biography_date (str): Date du commentaire.
+            biography_mangaka_id (int): Identifiant de la biographie associé au commentaire.
+            user_id (int): Identifiant de l'utilisateur enregistré pour le commentaire.
+        """
+        __tablename__ = "comment_biography"
+        __table_args__ = {"extend_existing": True}
+
+        id = db.Column(db.Integer, primary_key=True)
+        comment_content = db.Column(db.Text(), nullable=False)
+
+        # Date du commentaire.
+        comment_biography_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+        # Relation avec la classe BiographyMangaka.
+        biography_mangaka_id = db.Column(db.Integer, db.ForeignKey('biography_mangaka.id'), nullable=False)
+        biography_mangaka = db.relationship('BiographyMangaka', backref=db.backref('biography_comments', lazy=True))
+
+        # Relation avec la classe User.
+        user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        user = db.relationship('User', backref=db.backref('user_biography_comments', lazy=True))
+
+        # Relation avec la classe ReplyBiography avec suppression en cascade.
+        replies_suppress_biography = db.relationship('ReplyBiography', backref='parent_comment',
+                                                     cascade='all, delete-orphan')
+
+        # Relation avec la classe LikeCommentBiography avec suppression en cascade.
+        likes_suppress_biography = db.relationship('CommentLikeBiography', backref='comment_like_biography',
+                                                   cascade='all, delete-orphan')
+
+    # Table de liaison pour les likes
     class Likes(db.Model):
         """
         Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils aiment.
@@ -235,27 +319,64 @@ with app.app_context():
             user_id (int) : Identifiant de l'utilisateur.
             article_id (int) : Identifiant de l'article.
         """
+
         __tablename__ = "likes"
         __table_args__ = {"extend_existing": True}
 
-        user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
-        article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+        article_id = db.Column(db.Integer, db.ForeignKey("article.id", ondelete="CASCADE"), primary_key=True)
 
+    # Table de liaison pour les dislikes
     # Table de liaison pour les dislikes
     class Dislikes(db.Model):
         """
-        Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
+            Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
 
-        Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            article_id (int) : Identifiant de l'article.
-        """
+            Attributes:
+                user_id (int) : Identifiant de l'utilisateur.
+                article_id (int) : Identifiant de l'article.
+            """
         __tablename__ = "dislikes"
         __table_args__ = {"extend_existing": True}
 
-        user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
-        article_id = db.Column(db.Integer, db.ForeignKey("article.id"), primary_key=True)
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+        article_id = db.Column(db.Integer, db.ForeignKey("article.id", ondelete="CASCADE"), primary_key=True)
 
+    # Table de liaison pour les likes de la section biographie.
+    class LikesBiography(db.Model):
+        """
+        Modèle de données représentant la relation entre les utilisateurs et les biographies qu'ils aiment.
+
+        Attributes:
+            user_id (int) : Identifiant de l'utilisateur.
+            biography_mangaka_id (int) : Identifiant de la biographie.
+        """
+
+        __tablename__ = "likes_biography"
+        __table_args__ = {"extend_existing": True}
+
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+        biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"),
+                                         primary_key=True)
+
+
+    # Table de liaison pour les dislikes de la section biographie.
+    class DislikesBiography(db.Model):
+        """
+            Modèle de données représentant la relation entre les utilisateurs et les biographies qu'ils n'aiment pas.
+
+            Attributes:
+                user_id (int) : Identifiant de l'utilisateur.
+                biography_mangaka_id (int) : Identifiant de la biographie.
+            """
+        __tablename__ = "dislikes_biography"
+        __table_args__ = {"extend_existing": True}
+
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
+        biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"),
+                                         primary_key=True)
+
+    # Table de liaison pour les likes des commentaires de la section article.
     class CommentLikeArticle(db.Model):
         """
         Modèle de données représentant la relation entre les utilisateurs et les commentaires
@@ -264,13 +385,14 @@ with app.app_context():
         Attributes:
             user_id (int) : Identifiant de l'utilisateur.
             comment_id (int) : Identifiant du commentaire.
-            """
+        """
         __tablename__ = "likes_comment_article"
         __table_args__ = {"extend_existing": True}
 
         user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
         comment_id = db.Column(db.Integer, db.ForeignKey("comment_article.id"), primary_key=True)
 
+    # Table de liaison pour les likes des commentaires de la section forum.
     class CommentLikeSubject(db.Model):
         """
         Modèle de données représentant la relation entre les utilisateurs et les commentaires
@@ -279,7 +401,6 @@ with app.app_context():
         Attributes:
             user_id (int) : Identifiant de l'utilisateur.
             comment_id (int) : Identifiant du commentaire.
-            likes_subject_count(int) : Nombre de likes du commentaire pour le sujet.
         """
         __tablename__ = "likes_comment_subject"
         __table_args__ = {"extend_existing": True}
@@ -287,6 +408,23 @@ with app.app_context():
         user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
         comment_id = db.Column(db.Integer, db.ForeignKey("comment_subject.id"), primary_key=True)
 
+    # Table de liaison pour les likes des commentaires de la section biographie.
+    class CommentLikeBiography(db.Model):
+        """
+        Modèle de données représentant la relation entre les utilisateurs et les commentaires
+        qu'ils aiment de la section biographie.
+
+        Attributes:
+            user_id (int) : Identifiant de l'utilisateur.
+            comment_id (int) : Identifiant du commentaire.
+        """
+        __tablename__ = "likes_comment_biography"
+        __table_args__ = {"extend_existing": True}
+
+        user_id = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key=True)
+        comment_id = db.Column(db.Integer, db.ForeignKey("comment_biography.id"), primary_key=True)
+
+    # Table des réponses aux commentaires des articles.
     class ReplyArticle(db.Model):
         """
         Représente une réponse à un commentaire sur un article.
@@ -307,23 +445,23 @@ with app.app_context():
 
         # Relation avec la classe CommentArticle.
         comment_id = db.Column(db.Integer, db.ForeignKey('comment_article.id'), nullable=False)
-        comment = db.relationship('CommentArticle', backref=db.backref('replies', lazy=True))
+        comment = db.relationship('CommentArticle', backref=db.backref('replies_comment_article', lazy=True))
 
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        user = db.relationship('User', backref=db.backref('article_replies', lazy=True))
+        user = db.relationship('User', backref=db.backref('user_comment_article_replies', lazy=True))
 
-
+    # Table des réponses aux commentaires des sujets du forum.
     class ReplySubject(db.Model):
         """
         Représente une réponse à un commentaire sur un sujet du forum.
 
         Attributes:
             id (int): Identifiant unique de la réponse.
-            reply_content (str) : Contenu de la réponse.
-            reply_date (date) : Date de la réponse.
-            comment_id (int) : Identifiant du commentaire associé à la réponse.
-            user_id (int) : Identifiant de l'utilisateur ayant posté la réponse.
+            reply_content (str): Contenu de la réponse.
+            reply_date (date): Date de la réponse.
+            comment_id (int): Identifiant du commentaire associé à la réponse.
+            user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
         """
         __tablename__ = "reply_subject"
         __table_args__ = {"extend_existing": True}
@@ -334,39 +472,38 @@ with app.app_context():
 
         # Relation avec la classe CommentSubject.
         comment_id = db.Column(db.Integer, db.ForeignKey('comment_subject.id'), nullable=False)
-        comment = db.relationship('CommentSubject', backref=db.backref('replies', lazy=True))
+        comment = db.relationship('CommentSubject', backref=db.backref('replies_comment_subject', lazy=True))
 
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-        user = db.relationship('User', backref=db.backref('subject_replies', lazy=True))
+        user = db.relationship('User', backref=db.backref('user_comment_subject_replies', lazy=True))
 
-    # Table de données concernant les biographies des mangakas.
-    class BiographyMangaka(db.Model):
+    # Table des réponses aux commentaires des biographies.
+    class ReplyBiography(db.Model):
         """
-        Table de données qui enregistre les biographies des mangakas.
+        Représente une réponse à un commentaire sur une biographie.
 
-        Attributes :
-            id (int) : identifiant unique de la table.
-            biography_content (str) : Contenu de la biographie.
-            mangaka_name (str) : Nom du mangaka.
+        Attributes:
+            id (int): Identifiant unique de la réponse.
+            reply_content (str): Contenu de la réponse.
+            reply_date (date): Date de la réponse.
+            comment_id (int): Identifiant du commentaire associé à la réponse.
+            user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
         """
-        __tablename__ = "biography_mangaka"
+        __tablename__ = "reply_biography"
         __table_args__ = {"extend_existing": True}
 
         id = db.Column(db.Integer, primary_key=True)
-        biography_content = db.Column(db.Text(), nullable=False)
+        reply_content = db.Column(db.Text(), nullable=False)
+        reply_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
-        # Date d'édition de la biographie.
-        date_bio_mangaka = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+        # Relation avec la classe CommentArticle.
+        comment_id = db.Column(db.Integer, db.ForeignKey('comment_biography.id'), nullable=False)
+        comment = db.relationship('CommentBiography', backref=db.backref('replies_comment_biography', lazy=True))
 
-        # Nom du mangaka.
-        mangaka_name = db.Column(db.String(50), nullable=False)
-
-        # Pseudo de l'auteur de l'article.
-        pseudo_author = db.Column(db.String(30), db.ForeignKey('author.pseudo'), nullable=True)
-
-        # Relation avec la classe Author.
-        author = db.relationship('Author', backref=db.backref('biography_mangaka', lazy=True))
+        # Relation avec la classe User.
+        user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+        user = db.relationship('User', backref=db.backref('user_comment_biography_replies', lazy=True))
 
 
     # Création de toutes les tables à partir de leur classe.

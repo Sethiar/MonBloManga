@@ -14,9 +14,9 @@
         </div>
     </header>
 
-    <form method="POST" action="{{ url_for('user.user_recording') }}">
+    <form method="POST" action="{{ url_for('user.user_recording') }}" enctype="multipart/form-data">
     <div class="imgcontainer">
-        <img src="https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_formulaire/greetings.jpg" alt="Avatar" class="avatar">
+        <img src="../static/Images/images_formulaire/greetings.jpg" alt="Avatar" class="avatar">
     </div>
 
     <h3>Enregistrement Membre</h3>
@@ -66,6 +66,10 @@
                 {% endfor %}
             </ul>
         {% endif %}
+        <ul>
+            {{ form.profil_photo.label }}<br>
+            {{ form.profil_photo }}
+        </ul>
         <br><br>
     </div>
         <div class="separation"></div>

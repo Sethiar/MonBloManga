@@ -11,7 +11,7 @@
 {% block body_content %}
 <form method="POST" action="{{ url_for('auth.login_admin') }}">
 	<div class="imgcontainer">
-		<img src="https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_formulaire/vegM.jpg" alt="Avatar" class="avatar">
+		<img src="../static/Images/images_formulaire/vegM.jpg" alt="Avatar" class="avatar">
 	</div>
 	<h3>Authentification administrateur</h3>
 	{{ form.csrf_token }}

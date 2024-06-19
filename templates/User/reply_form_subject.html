@@ -15,7 +15,7 @@
 </div>
 <form method="POST" action="{{ url_for('user.comment_replies_subject', comment_subject_id=comment.id, user_pseudo=current_user.pseudo) }}">
     <div class="imgcontainer">
-        <img src="https://sethiarblogmanga.s3.eu-north-1.amazonaws.com/Images/images_articles/city_hunter1.jpeg" alt="Avatar" class="avatar">
+        <img src="../static/Images/images_articles/city_hunter1.jpeg" alt="Avatar" class="avatar">
     </div>
     <h3>Réponse au commentaire</h3>
     {{ formsubjectreply.csrf_token }}
