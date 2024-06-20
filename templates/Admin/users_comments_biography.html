@@ -37,11 +37,11 @@
             {% for item in comments %}
             <tr>
                 <td>{{ user }}</td>
-                <td>{{ item.subject }}</td>
-                <td>{{ item.comment_biography.comment_content }}</td>
+                <td>{{ item.biography.mangaka_name }}</td>
+                <td>{{ item.comment.comment_biography_content }}</td>
                 <td>
                     <form action="{{ url_for('admin.suppress_biography_comment', id=item.comment.id) }}" method="POST" class="btn_suppression">
-                        {{ suppressform.csrf_token }}
+                        {{ formbiography.csrf_token }}
                         <input type="hidden" name="comment_id" value="{{ item.comment.id }}">
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
                     </form>

@@ -71,7 +71,7 @@
             <small>Le {{ comment.comment_biography_date.strftime('%d-%m-%Y à %H:%M') }}</small>
         </div>
         <div class="content_comment">
-            {{ comment.comment_content | replace('\n', '<br>') | safe }}
+            {{ comment.comment_biography_content | replace('\n', '<br>') | safe }}
         </div>
 
         <div class="reply-button-container">
@@ -110,7 +110,7 @@
         {% for reply in comment.replies_comment_biography %}
         <div class="comment-reply">
             <div class="reply-header">
-                <img src="{{ url_for('user.profil_photo', user_id=comment.user_id) }}" alt="Photo de profil" class="profile-picture">
+                <img src="{{ url_for('user.profil_photo', user_id=reply.user_id) }}" alt="Photo de profil" class="profile-picture">
                 <div class="reply-details">
                     <strong><i>{{ reply.user.pseudo }}</i></strong> a répondu :
                 </div>
