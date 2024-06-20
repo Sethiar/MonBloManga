@@ -31,30 +31,24 @@ from app.Models.biographies import BiographyMangaka
 @frontend_bp.route("/articles", methods=['GET', 'POST'])
 def reading_articles():
     """
-    Route pour afficher tous les articles disponibles sur le blog.
+    Route permettant d'accéder à la page des articles du blog.
+
+    Cette route prend en charge les méthodes GET et POST.
+
+    GET :
+        Affiche tous les articles disponibles sur le blog.
+        Utilise le template HTML 'Presentation/articles.html'.
+
+    POST :
+        Valide et traite le formulaire de commentaire soumis.
+        Si le formulaire est valide, redirige l'utilisateur vers une autre page.
+        Sinon, affiche la liste des articles avec les erreurs de formulaire.
 
     Returns:
-        Template HTML contenant la liste des articles.
-
-    Notes:
-        Si la méthode HTTP est GET, la fonction récupère tous les articles de la base de données
-        et les affiche dans le template HTML 'Presentation/articles.html'.
-        Si la méthode HTTP est POST, la fonction valide le formulaire de commentaire soumis.
-        Si le formulaire est valide, elle redirige l'utilisateur vers une autre page.
-        Sinon, elle affiche la liste des articles avec les erreurs de formulaire.
+        Template HTML 'Presentation/articles.html' avec la liste des articles et le formulaire de commentaire.
 
     Raises:
         Aucune exception n'est levée.
-
-    Examples:
-        Exemple d'utilisation GET :
-            L'utilisateur accède à la route /articles via un navigateur web.
-            La fonction récupère tous les articles de la base de données et les affiche dans le template HTML.
-
-        Exemple d'utilisation POST :
-            L'utilisateur soumet un formulaire de commentaire avec des données valides.
-            La fonction valide le formulaire, traite les données et redirige l'utilisateur vers une autre page.
-
     """
     form = CommentArticleForm()
 
@@ -83,25 +77,17 @@ def reading_articles():
 @frontend_bp.route("/article/<int:article_id>")
 def show_article(article_id):
     """
-    Route permettant d'afficher un article spécifique.
+    Route permettant d'afficher un article spécifique du blog.
 
     Args:
-        article_id (int): L'ID de l'article à afficher.
+        article_id (int): L'identifiant unique de l'article à afficher.
 
     Returns:
-        Template HTML contenant les détails de l'article.
+        Template HTML 'Presentation/article.html' avec les détails de l'article spécifié.
 
     Raises:
-        404 Error: Si l'article avec l'ID spécifié n'est pas trouvé dans la base de données.
-
-    Examples:
-        Exemple d'utilisation :
-            L'utilisateur accède à la route /article/<article_id> via un navigateur web.
-            La fonction récupère l'article correspondant à l'ID spécifié depuis la base de données.
-            Si l'article est trouvé, la fonction affiche ses détails dans le template HTML 'Presentation/article.html'.
-            Si aucun article correspondant à l'ID n'est trouvé, la fonction renvoie une erreur 404.
+        404 Error: Si aucun article correspondant à l'ID spécifié n'est trouvé dans la base de données.
     """
-
     # Création de l'instance du formulaire.
     formcomment = CommentArticleForm()
     formlike = LikeForm()
@@ -142,11 +128,11 @@ def show_article(article_id):
 # Route permettant d'accéder à la page forum du blog.
 @frontend_bp.route("/forum", methods=['GET', 'POST'])
 def forum():
-    """"
-    Page du forum.
+    """
+    Route permettant d'accéder à la page du forum du blog.
 
-    Returns :
-        La page du forum.
+    Returns:
+        Template HTML 'Presentation/forum.html' affichant la page du forum et ses sujets.
     """
     # Création de l'instance du formulaire.
     formsubjectforum = NewSubjectForumForm()
@@ -161,15 +147,17 @@ def forum():
 @login_required
 def forum_subject(subject_id):
     """
-    Page permettant d'échanger sur un sujet émis par la communauté.
+    Route permettant d'accéder à un sujet spécifique du forum.
 
     Args:
         subject_id (int): L'identifiant du sujet à afficher.
 
     Returns:
-        La page de discussion sur le sujet spécifié.
-    """
+        Template HTML 'Presentation/subject_forum.html' avec les détails du sujet et ses commentaires associés.
 
+    Raises:
+        404 Error: Si aucun sujet correspondant à l'ID spécifié n'est trouvé dans la base de données.
+    """
     # Création de l'instance de formulaire.
     formcomment = CommentSubjectForm()
     formlikecomment = CommentLike()
@@ -206,12 +194,11 @@ def forum_subject(subject_id):
 @frontend_bp.route("/biographie_mangaka")
 def biography():
     """
-    Accès à la page de la biographie des mangakas.
+    Route permettant d'accéder à la page de la biographie des mangakas.
 
-    Returns :
-    La page des Mangakas.
+    Returns:
+        Template HTML 'Presentation/biography.html' affichant la biographie des mangakas.
     """
-
     biographies = BiographyMangaka.query.all()
 
     return render_template("Presentation/biography.html", biographies=biographies)
@@ -220,10 +207,16 @@ def biography():
 @frontend_bp.route("/biographie_mangaka/<int:biography_mangaka_id>", methods=['GET', 'POST'])
 def show_biography(biography_mangaka_id):
     """
-    Route permettant de visualiser une biographie de mangaka en particulier.
+    Route permettant d'afficher la biographie détaillée d'un mangaka.
 
-    :param biography_mangaka_id:
-    :return:
+    Args:
+        biography_mangaka_id (int): L'identifiant unique de la biographie de mangaka à afficher.
+
+    Returns:
+        Template HTML 'Presentation/biography_mangaka.html' avec les détails de la biographie spécifiée.
+
+    Raises:
+        404 Error: Si aucune biographie correspondant à l'ID spécifié n'est trouvée dans la base de données.
     """
     formcomment = CommentBiographyForm()
     formdislike = DislikeForm()

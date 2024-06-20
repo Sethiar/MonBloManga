@@ -12,10 +12,12 @@ from app.functional import functional_bp
 
 
 def generate_unique_id():
-    """Génère un identifiant unique pour les utilisateurs anonymes.
+    """
+    Génère un identifiant unique au format UUID pour les utilisateurs anonymes.
+
     Returns:
-        str: L'identifiant unique est généré.
-        """
+        str: Identifiant unique généré au format UUID.
+    """
     return str(uuid.uuid4())
 
 
@@ -26,10 +28,8 @@ def connexion_requise():
     Route affichant un message informant l'utilisateur qu'une connexion est requise
     pour accéder à la page demandée.
 
-    Cette route est utilisée pour informer l'utilisateur qu'une connexion est nécessaire
-    pour accéder à une certaine page. Lorsqu'un utilisateur tente d'accéder à une page
-    nécessitant une connexion mais n'est pas authentifié, il est redirigé vers cette page
-    où un message lui indique qu'il doit d'abord se connecter.
+    Cette route redirige les utilisateurs non authentifiés vers une page indiquant
+    qu'ils doivent se connecter pour accéder à la ressource demandée.
 
     Returns:
         Le template HTML de la page "connexion_requise".
@@ -41,7 +41,14 @@ def connexion_requise():
 @functional_bp.before_request
 def before_request():
     """
-    Ce code permet de gérer les connexions des utilisateurs et des anonymes.
+    Fonction exécutée avant chaque requête vers les routes de ce blueprint.
+
+    Gère les sessions utilisateur en fonction de leur statut d'authentification :
+    - Si l'utilisateur est authentifié, enregistre son pseudo dans la session.
+    - Si l'utilisateur n'est pas authentifié, génère un identifiant unique pour les utilisateurs anonymes
+      et l'enregistre dans la session.
+
+    Cette fonction assure la continuité de la session utilisateur à travers le site.
     """
     if current_user.is_authenticated:
         pseudo = current_user.pseudo
@@ -56,8 +63,8 @@ def politique():
     """
     Accès à la Politique de confidentialité du blog.
 
-    Returns :
-        Redirige vers la page de politique de confidentialité du blog.
+    Returns:
+        Template HTML de la page de politique de confidentialité du blog.
     """
     return render_template("Functional/politique.html")
 
@@ -67,8 +74,9 @@ def politique():
 def mentions():
     """
     Accès aux Mentions légales du blog.
-    Returns :
-        Redirige vers la page de politique de confidentialité du blog.
+
+    Returns:
+        Template HTML de la page de mentions légales du blog.
     """
     return render_template("Functional/mentions.html")
 

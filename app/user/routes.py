@@ -46,8 +46,14 @@ from app.Models.likes_comment_biography import CommentLikeBiography
 @user_bp.route("/enregistrement_membre", methods=['GET', 'POST'])
 def user_recording():
     """
+    Gère l'enregistrement d'un nouvel utilisateur. Cette fonction traite à la fois les
+    requêtes GET et POST. Lors d'une requête GET, elle affiche le formulaire
+    d'enregistrement. Lors d'une requête POST, elle traite les données soumises par
+    l'utilisateur, valide le formulaire, gère le fichier de photo de profil, redimensionne
+    l'image et enregistre les informations de l'utilisateur dans la base de données.
 
-    :return:
+    :return: Redirection vers la page de confirmation de l'email si l'inscription est réussie,
+             sinon redirection vers la page d'enregistrement avec un message d'erreur.
     """
     form = UserSaving()
 
@@ -60,16 +66,16 @@ def user_recording():
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password_hash.encode('utf-8'), salt)
 
-        # Vérifiez si le fichier a été soumis
+        # Vérification de la soumission du fichier.
         if 'profil_photo' not in request.files or request.files['profil_photo'].filename == '':
-            print("Aucune photo de profil fournie.", "error")
+            flash("Aucune photo de profil fournie.", "error")
             return redirect(url_for('user.user_recording'))
 
         profil_photo = request.files['profil_photo']
         if profil_photo and allowed_file(profil_photo.filename):
             photo_data = profil_photo.read()
 
-            # Utilisation de pillow pour redimensionner l'image.
+            # Redimensionnement de l'image avec Pillow
             try:
                 img = Image.open(BytesIO(photo_data))
                 img.thumbnail((75, 75))
@@ -78,16 +84,16 @@ def user_recording():
                 img.save(output, format=img_format)
                 photo_data_resized = output.getvalue()
             except Exception as e:
-                print(f"Erreur lors du redimensionnement de l'image : {str(e)}", "error")
+                flash(f"Erreur lors du redimensionnement de l'image : {str(e)}", "error")
                 return redirect(url_for("user.user_recording"))
 
             if len(photo_data_resized) > 5 * 1024 * 1024:  # 5 Mo
-                print("Le fichier est trop grand (maximum 5 Mo).", "error")
+                flash("Le fichier est trop grand (maximum 5 Mo).", "error")
                 return redirect(url_for('user.user_recording'))
 
             photo_data = profil_photo.read()  # Lire les données binaires de l'image
         else:
-            print("Type de fichier non autorisé.", "error")
+            flash("Type de fichier non autorisé.", "error")
             return redirect(url_for('user.user_recording'))
 
         new_user = User(
@@ -96,17 +102,18 @@ def user_recording():
             salt=salt,
             email=email,
             date_naissance=date_naissance,
-            profil_photo=photo_data_resized  # Stockez les données binaires de l'image
+            # Stockage des données binaires de l'image.
+            profil_photo=photo_data_resized
         )
 
         try:
             db.session.add(new_user)
             db.session.commit()
-            print("Inscription réussie! Vous pouvez maintenant vous connecter.")
+            flash("Inscription réussie! Vous pouvez maintenant vous connecter.")
             return redirect(url_for("mail.send_confirmation_email", email=email))
         except Exception as e:
             db.session.rollback()
-            print(f"Erreur lors de l'enregistrement de l'utilisateur: {str(e)}", "error")
+            flash(f"Erreur lors de l'enregistrement de l'utilisateur: {str(e)}", "error")
 
     return render_template("User/form_user.html", form=form)
 
@@ -114,9 +121,11 @@ def user_recording():
 @user_bp.route("/profil_photo/<int:user_id>")
 def profil_photo(user_id):
     """
+    Affiche la photo de profil d'un utilisateur.
 
-    :param user_id:
-    :return:
+    :param user_id : L'identifiant de l'utilisateur.
+
+    :return : L'image de la photo de profil en tant que réponse HTTP avec le type MIME approprié.
     """
     user = User.query.get_or_404(user_id)
     if user.profil_photo:
@@ -130,9 +139,11 @@ def profil_photo(user_id):
 @login_required
 def article_like(article_id):
     """
+    Permet à un utilisateur de liker un article.
 
-    :param article_id:
-    :return:
+    :param article_id : L'identifiant de l'article à liker.
+
+    :return: Redirige vers la page de l'article après avoir liké l'article.
     """
     # Instanciation des formulaires.
     formlike = LikeForm()
@@ -141,7 +152,7 @@ def article_like(article_id):
         # Récupération de l'article ou de l'error 404 si aucun article.
         article = Article.query.get_or_404(article_id)
 
-        # Vérifiez si l'utilisateur a déjà liké ou disliké cet article
+        # Vérification si l'utilisateur a déjà liké ou disliké cet article.
         existing_like = Likes.query.filter_by(user_id=current_user.id, article_id=article_id).first()
         existing_dislike = Dislikes.query.filter_by(user_id=current_user.id, article_id=article_id).first()
 
@@ -174,9 +185,13 @@ def article_like(article_id):
 @login_required
 def article_dislike(article_id):
     """
+    Permet à un utilisateur de disliker un article.
 
-    :param article_id:
-    :return:
+    Args:
+        article_id (int) : L'identifiant de l'article à disliker.
+
+    Returns :
+        redirect : Redirige vers la page de l'article après avoir disliké l'article.
     """
     # Instanciation des formulaires.
     formdislike = DislikeForm()
@@ -218,10 +233,10 @@ def article_dislike(article_id):
 @login_required
 def add_subject_forum():
     """
-    Permet de créer un nouveau sujet pour le forum.
+    Permet à un utilisateur de créer un nouveau sujet pour le forum.
 
     Returns :
-        Redirige vers la page du forum.
+        redirect : Redirige vers la page du forum après avoir ajouté le sujet.
     """
     # Création de l'instance du formulaire.
     formsubjectforum = NewSubjectForumForm()
@@ -245,13 +260,13 @@ def add_subject_forum():
 @login_required
 def comment_article(user_pseudo):
     """
-    Permet à uin utilisateur de laisser un commentaire sur un article.
+    Permet à un utilisateur de laisser un commentaire sur un article.
 
     Args:
-        user_pseudo(str): le pseudo de l'utilisateur.
+        user_pseudo (str) : Le pseudo de l'utilisateur.
 
-    Returns:
-         Redirige vers al page de l'article après avoir laissé un commentaire.
+    Returns :
+        redirect : Redirige vers la page de l'article après avoir laissé un commentaire.
     """
 
     if request.method == 'POST':
@@ -288,8 +303,20 @@ def comment_article(user_pseudo):
 @login_required
 def likes_comment_article():
     """
+    Permet à un utilisateur de liker ou disliker un commentaire d'un article.
 
-    :return:
+    Méthode HTTP :
+        POST
+
+    Données JSON en entrée :
+        {"comment_id": int, // L'identifiant du commentaire à liker ou disliker
+            "pseudo" : str // Le pseudo de l'utilisateur actuel}
+
+    Returns :
+        JSON : Un objet JSON contenant le statut de l'opération, le statut du like (liked),
+              le nombre total de likes (like_count), le pseudo de l'utilisateur,
+              et une liste des IDs des utilisateurs ayant liké le commentaire (liked_user_ids).
+              En cas d'erreur, retourne un message d'erreur avec le code HTTP approprié.
     """
     data = request.get_json()
     comment_id = data.get("comment_id")
@@ -341,12 +368,12 @@ def comment_replies_article(comment_article_id, user_pseudo):
     """
     Permet à un utilisateur de laisser une réponse à un commentaire d'un article.
 
-    Args:
-        comment_article_id(int): l'identifiant du commentaire.
-        user_pseudo(str): le pseudo de l'utilisateur.
+    Args :
+        comment_article_id (int) : L'identifiant du commentaire auquel répondre.
+        user_pseudo (str) : Le pseudo de l'utilisateur.
 
-    Returns:
-         Redirige vers la page de l'article après avoir laissé une réponse.
+    Returns :
+        redirect : Redirige vers la page de l'article après avoir laissé une réponse.
     """
     # Création de l'instance du formulaire.
     formarticlereply = ReplyArticleForm()
@@ -394,7 +421,14 @@ def comment_replies_article(comment_article_id, user_pseudo):
 @login_required
 def reply_form_article(comment_id, user_pseudo):
     """
-    Affiche le formulaire pour répondre à un commentaire.
+    Affiche le formulaire pour répondre à un commentaire sur un article.
+
+    Args:
+        comment_id (int) : L'identifiant du commentaire auquel répondre.
+        user_pseudo (str) : Le pseudo de l'utilisateur.
+
+    Returns :
+        render_template : Rend le template HTML du formulaire de réponse avec les données nécessaires.
     """
     # Création d'une instance du formulaire.
     formarticlereply = ReplyArticleForm()
@@ -414,10 +448,10 @@ def comment_subject(user_pseudo):
     Permet à un utilisateur de laisser un commentaire sur un sujet du forum.
 
     Args:
-        user_pseudo(str): le pseudo de l'utilisateur.
+        user_pseudo (str) : Le pseudo de l'utilisateur.
 
-    Returns:
-         Redirige vers la page du forum dédiée au sujet après avoir laissé un commentaire.
+    Returns :
+         redirect : Redirige vers la page du sujet du forum après avoir laissé un commentaire.
     """
     # Création de l'instance du formulaire.
     formcomment = CommentSubjectForm()
@@ -457,14 +491,15 @@ def comment_subject(user_pseudo):
 @login_required
 def comment_replies_subject(comment_subject_id, user_pseudo):
     """
-    Permet à un utilisateur de laisser une réponse à un commentaire à un sujet du forum.
+    Permet à un utilisateur de répondre à un commentaire sur un sujet du forum.
 
-    Args:
-        comment_subject_id(int): l'identifiant du commentaire.
-        user_pseudo(str): le pseudo de l'utilisateur.
+    Args :
+        comment_subject_id (int) : L'identifiant du commentaire auquel répondre.
+        user_pseudo (str) : Le pseudo de l'utilisateur.
 
-    Returns:
-         Redirige vers la page du forum après avoir laissé une réponse.
+    Returns :
+        redirect ou render_template : Redirige vers la page du forum après avoir ajouté une réponse,
+                                      ou affiche le formulaire de réponse si la méthode est GET.
     """
     # Création de l'instance du formulaire.
     formsubjectreply = ReplySubjectForm()
@@ -511,8 +546,10 @@ def comment_replies_subject(comment_subject_id, user_pseudo):
 @login_required
 def likes_comment_subject():
     """
+    Permet à un utilisateur de liker ou disliker un commentaire sur un sujet du forum.
 
-    :return:
+    Returns :
+        jsonify : Un objet JSON avec le statut de l'opération et les informations mises à jour sur le like.
     """
     data = request.get_json()
     comment_id = data.get("comment_id")
@@ -562,7 +599,14 @@ def likes_comment_subject():
 @login_required
 def reply_form_subject(comment_id, user_pseudo):
     """
-    Affiche le formulaire pour répondre à un commentaire.
+    Affiche le formulaire pour répondre à un commentaire sur un sujet.
+
+    Args:
+        comment_id (int) : L'identifiant du commentaire auquel répondre.
+        user_pseudo (str) : Le pseudo de l'utilisateur.
+
+    Returns :
+        render_template : Le template HTML pour afficher le formulaire de réponse.
     """
     # Création d'une instance du formulaire.
     formsubjectreply = ReplySubjectForm()
@@ -579,9 +623,13 @@ def reply_form_subject(comment_id, user_pseudo):
 @user_bp.route("/like_comment/<int:comment_id>", methods=['POST'])
 def comment_like(comment_id):
     """
+    Augmente le nombre de likes pour un commentaire spécifique.
 
-    :param comment_id:
-    :return:
+    Args:
+        comment_id (int) : L'identifiant du commentaire à liker.
+
+    Returns :
+        redirect : Redirige vers la page d'affichage de l'article après avoir liké le commentaire.
     """
     # Récupération des commentaires.
     comment = CommentArticle.query.get_or_404(comment_id)
@@ -597,9 +645,13 @@ def comment_like(comment_id):
 @user_bp.route("/dislike_comment/<int:comment_id>", methods=['POST'])
 def comment_dislike(comment_id):
     """
+    Augmente le nombre de dislikes pour un commentaire spécifique.
 
-    :param comment_id:
-    :return:
+    Args:
+        comment_id (int) : L'identifiant du commentaire à disliker.
+
+    Returns :
+        redirect : Redirige vers la page d'affichage de l'article après avoir disliké le commentaire.
     """
     # Récupération des commentaires.
     comment = CommentArticle.query.get_or_404(comment_id)
@@ -616,15 +668,15 @@ def comment_dislike(comment_id):
 @login_required
 def comment_biography(user_pseudo):
     """
-    Permet à uin utilisateur de laisser un commentaire sur une biographie.
+    Permet à un utilisateur connecté de laisser un commentaire sur une biographie.
 
     Args:
-        user_pseudo(str): le pseudo de l'utilisateur.
+        user_pseudo (str) : Le pseudo de l'utilisateur.
 
-    Returns:
-         Redirige vers la page de la biographie après avoir laissé un commentaire.
+    Returns :
+        Redirige vers la page de la biographie après avoir laissé un commentaire.
+        Redirige vers la page de connexion requise si l'utilisateur n'existe pas.
     """
-
     if request.method == 'POST':
         # Obtention de l'id de la biographie à partir de la requête POST.
         biography_mangaka_id = request.form.get("biography_mangaka_id")
@@ -635,10 +687,10 @@ def comment_biography(user_pseudo):
         # Vérification de l'existence de l'utilisateur et de la biography.
         if user and biography_mangaka_id:
             # Obtenir le contenu du commentaire à partir de la requête POST.
-            comment_content = request.form.get("comment_content")
+            comment_biography_content = request.form.get("comment_content")
 
             # Créer un nouvel objet de commentaire.
-            new_comment = CommentBiography(comment_content=comment_content, user_id=user.id, biography_mangaka_id=biography_mangaka_id)
+            new_comment = CommentBiography(comment_biography_content=comment_biography_content, user_id=user.id, biography_mangaka_id=biography_mangaka_id)
 
             # Ajouter le nouveau commentaire à la table de données.
             db.session.add(new_comment)
@@ -659,9 +711,14 @@ def comment_biography(user_pseudo):
 @login_required
 def biography_like(biography_mangaka_id):
     """
+    Permet à l'utilisateur connecté de liker une biographie spécifique.
 
-    :param biography_mangaka_id:
-    :return:
+    Args :
+        biography_mangaka_id (int) : L'identifiant de la biographie à liker.
+
+    Returns :
+        Redirige vers la page d'affichage de la biographie après l'interaction de liking.
+        Redirige vers la page d'affichage de la biographie en cas d'erreur lors de la soumission du formulaire.
     """
     # Instanciation des formulaires.
     formlike = LikeBiographyForm()
@@ -705,9 +762,14 @@ def biography_like(biography_mangaka_id):
 @login_required
 def biography_dislike(biography_mangaka_id):
     """
+    Permet à l'utilisateur connecté de disliker une biographie spécifique.
 
-    :param biography_mangaka_id:
-    :return:
+    Args :
+        biography_mangaka_id (int) : L'identifiant de la biographie à disliker.
+
+    Returns :
+        Redirige vers la page d'affichage de la biographie après l'interaction de disliking.
+        En cas d'erreur lors de la soumission du formulaire, redirige également avec un message d'erreur.
     """
     # Instanciation des formulaires.
     formdislike = DislikeBiographyForm()
@@ -751,8 +813,14 @@ def biography_dislike(biography_mangaka_id):
 @login_required
 def likes_comment_biography():
     """
+    Permet à l'utilisateur connecté de liker ou disliker un commentaire dans la section biographie.
 
-    :return:
+    Returns :
+        JSON contenant le statut de l'opération (succès ou erreur), l'état du like (liké ou non),
+        le nombre total de likes pour le commentaire, le pseudo de l'utilisateur et la liste des IDs
+        des utilisateurs ayant liké le commentaire.
+
+        En cas d'erreur ou de données invalides, retourne un message d'erreur approprié avec le code HTTP correspondant.
     """
     data = request.get_json()
     comment_id = data.get("comment_id")
@@ -802,14 +870,16 @@ def likes_comment_biography():
 @login_required
 def comment_replies_biography(comment_biography_id, user_pseudo):
     """
-    Permet à un utilisateur de laisser une réponse à un commentaire d'une biographie.
+    Permet à un utilisateur de répondre à un commentaire dans la section biographie.
 
-    Args:
-        comment_biography_id(int): l'identifiant du commentaire.
-        user_pseudo(str): le pseudo de l'utilisateur.
+    Args :
+        comment_biography_id (int) : L'identifiant unique du commentaire auquel l'utilisateur répond.
+        user_pseudo (str) : Le pseudo de l'utilisateur connecté.
 
-    Returns:
-         Redirige vers la page de l'article après avoir laissé une réponse.
+    Returns :
+        Redirige vers la page d'affichage de la biographie après avoir laissé une réponse.
+        Si l'utilisateur n'est pas authentifié, redirige vers la page de connexion requise.
+        Si le commentaire n'est pas trouvé, affiche un message d'erreur et redirige vers la biographie associée.
     """
     # Création de l'instance du formulaire.
     formbiographyreply = ReplyBiographyForm()
@@ -854,7 +924,14 @@ def comment_replies_biography(comment_biography_id, user_pseudo):
 @login_required
 def reply_form_biography(comment_id, user_pseudo):
     """
-    Affiche le formulaire pour répondre à un commentaire de la section biographie.
+    Affiche le formulaire pour répondre à un commentaire dans la section biographie.
+
+    Args:
+        comment_id (int): L'identifiant unique du commentaire auquel l'utilisateur souhaite répondre.
+        user_pseudo (str) : Le pseudo de l'utilisateur connecté.
+
+    Returns :
+        Template HTML affichant le formulaire de réponse pour le commentaire spécifié.
     """
     # Création d'une instance du formulaire.
     formbiographyreply = ReplyBiographyForm()

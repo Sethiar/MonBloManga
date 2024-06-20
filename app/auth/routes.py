@@ -6,8 +6,8 @@ from app.auth import auth_bp
 
 import bcrypt
 
-from flask import session, redirect, url_for, request, current_app, render_template
-from flask_login import logout_user, login_user, login_required
+from flask import session, redirect, url_for, request, current_app, render_template, flash
+from flask_login import logout_user, login_user, login_required, current_user
 
 from app.Models.forms import UserConnection
 from app.Models.forms import AdminConnection
@@ -28,7 +28,7 @@ def admin_connection():
     Description:
         Cette route affiche un formulaire de connexion spécifiquement conçu pour l'administrateur
         du système. Le formulaire permet à l'administrateur de saisir ses identifiants
-        (nom d'utilisateur et mot de passe) afin d'accéder à son espace administrateur
+        (identifiant et mot de passe) afin d'accéder à son espace administrateur
         et de bénéficier de fonctionnalités réservées aux administrateurs.
 
     Example:
@@ -45,23 +45,12 @@ def admin_connection():
 @auth_bp.route("/back_end_blog/admin_deconnexion", methods=['GET'])
 def admin_logout():
     """
-    Déconnecte l'administrateur actuellement authentifié et l'admin du système.
+    Déconnecte l'administrateur actuellement authentifié.
 
-    Cette fonction gère la déconnexion des administrateurs en supprimant les informations d'identification stockées
-    dans la session Flask.
+    Cette fonction supprime les informations d'identification de l'administrateur de la session Flask.
 
-     Les sessions Flask sont un mécanisme permettant de stocker des données spécifiques à un utilisateur entre
-     différentes requêtes HTTP. Dans ce cas, les informations d'identification telles que l'état de connexion,
-     l'identifiant de l'utilisateur et l'identifiant de session sont stockées dans la session Flask lorsqu'un
-     utilisateur se connecte avec succès. Cette fonction supprime ces informations de la session lorsqu'un
-     utilisateur se déconnecte.
-
-    Returns :
-        redirige l'administrateur vers la page accueil.html après la déconnexion.
-
-    Notes : La déconnexion est effectuée en supprimant les clés de session "logged_in", "identifiant" et "admin_id".
-    Si aucun utilisateur n'est connecté, cette fonction n'a aucun effet et redirige simplement vers la page
-    accueil.html.
+    Returns:
+        Redirige l'administrateur vers la page d'accueil après la déconnexion.
     """
     # Supprime les informations d'identification de l'utilisateur de la session.
     session.pop("logged_in", None)
@@ -143,8 +132,21 @@ def user_connection():
     """
     Permet à l'utilisateur d'accéder au formulaire de connexion afin de s'identifier.
 
-    Return :
-        Redirige vers le formulaire d'authentification utilisateur.
+    Returns:
+        Template HTML du formulaire d'authentification utilisateur.
+
+    Description:
+        Cette route affiche le formulaire permettant à l'utilisateur de saisir ses identifiants
+        (pseudo et mot de passe) pour se connecter. Si l'utilisateur est déjà authentifié,
+        il est redirigé vers la page d'accueil. Si l'utilisateur est banni, un message d'erreur
+        est affiché et il est redirigé vers la page d'accueil.
+
+    Example:
+        L'utilisateur accède à cette route via un navigateur web.
+        La fonction renvoie le template HTML 'User/user_connection.html' contenant le formulaire de connexion.
+        L'utilisateur saisit ses identifiants et soumet le formulaire pour se connecter à son compte.
+        En cas de succès, l'utilisateur est redirigé vers la page précédente ou la page d'accueil.
+        En cas d'échec (par exemple, mauvais identifiants), l'utilisateur reste sur la même page avec un message d'erreur.
     """
     next_url = request.referrer
     print(next_url)
@@ -157,10 +159,19 @@ def user_connection():
 @auth_bp.route("/connexion_utilisateur_formulaire_erreur", methods=['GET', 'POST'])
 def user_connection_error():
     """
-    Permet à l'utilisateur d'accéder au formulaire de connexion afin de s'identifier.
+    Permet à l'utilisateur d'accéder au formulaire de connexion en cas d'erreur de connexion précédente.
 
-    Return :
-        Redirige vers le formulaire d'authentification utilisateur.
+    Returns:
+        Template HTML du formulaire d'authentification utilisateur.
+
+    Description:
+        Cette route renvoie le formulaire d'authentification utilisateur pour permettre à l'utilisateur
+        de se connecter à nouveau après une tentative de connexion infructueuse.
+
+    Example:
+        L'utilisateur accède à cette route via un navigateur web.
+        La fonction renvoie le template HTML 'User/user_connection.html' contenant le formulaire de connexion.
+        L'utilisateur peut saisir à nouveau ses identifiants pour se connecter.
     """
     form = UserConnection()
     return render_template("User/user_connection.html", form=form)
@@ -171,23 +182,12 @@ def user_connection_error():
 @login_required
 def user_logout():
     """
-    Déconnecte l'utilisateur actuellement authentifié et l'admin du système.
+    Déconnecte l'utilisateur actuellement authentifié.
 
-    Cette fonction gère la déconnexion des utilisateurs en supprimant les informations d'identification stockées dans
-    la session Flask.
+    Cette fonction supprime les informations d'identification de l'utilisateur de la session Flask.
 
-     Les sessions Flask sont un mécanisme permettant de stocker des données spécifiques à un utilisateur entre
-     différentes requêtes HTTP. Dans ce cas, les informations d'identification telles que l'état de connexion,
-     l'identifiant de l'utilisateur et l'identifiant de session sont stockées dans la session Flask lorsqu'un
-     utilisateur se connecte avec succès. Cette fonction supprime ces informations de la session lorsqu'un
-     utilisateur se déconnecte.
-
-    Returns :
-        redirige l'utilisateur vers la page accueil.html après la déconnexion.
-
-    Notes : La déconnexion est effectuée en supprimant les clés de session "logged_in", "identifiant" et "user_id".
-    Si aucun utilisateur n'est connecté, cette fonction n'a aucun effet et redirige simplement vers la page
-    accueil.html.
+    Returns:
+        Redirige l'utilisateur vers la page d'accueil après la déconnexion.
     """
     # Supprime les informations d'identification de l'utilisateur de la session.
     session.pop("logged_in", None)
@@ -202,14 +202,31 @@ def user_logout():
 @auth_bp.route("/connexion_utilisateur", methods=['GET', 'POST'])
 def login():
     """
-    Gère l'authentification de l'utilisateur afin qu'il puisse laisser un commentaire ou
-    ajouter un sujet sur le forum.
+    Gère l'authentification de l'utilisateur.
+
+    Cette fonction valide les informations de connexion de l'utilisateur et l'authentifie s'il réussit.
+
     Returns:
-        Redirige l'utilisateur sur la page d'accueil avec son nom sur le fichier html.
+        Redirige l'utilisateur vers la page précédente ou la page d'accueil après une connexion réussie.
+
+    Description:
+        Cette route gère le processus d'authentification de l'utilisateur via le formulaire
+        d'authentification 'UserConnection'. Si les informations de connexion sont valides,
+        l'utilisateur est authentifié et ses informations sont stockées dans la session Flask.
+        Ensuite, il est redirigé vers la page précédente s'il existe, sinon vers la page d'accueil.
+        En cas d'échec d'authentification, l'utilisateur est redirigé vers la page de connexion avec un message d'erreur.
+        De plus, si l'utilisateur est banni, il est empêché de se connecter et reçoit un message d'erreur approprié.
+
+    Example:
+        L'utilisateur accède à la route '/connexion_utilisateur' via un navigateur web.
+        Il saisit ses informations d'identification (pseudo et mot de passe) dans le formulaire de connexion.
+        Après soumission du formulaire, l'application vérifie les informations et authentifie l'utilisateur.
+        Si l'authentification réussit, l'utilisateur est redirigé vers la page précédente ou la page d'accueil.
+        Si l'utilisateur est banni, il reçoit un message d'erreur et ne peut pas se connecter.
+        Sinon, en cas d'échec d'authentification, il est redirigé vers la page de connexion avec un message d'erreur.
     """
     # Récupère next_url depuis la session Flask
     next_url = session.get('next_url')
-    print(next_url)
 
     # Création de l'instance du formulaire.
     form = UserConnection()
@@ -221,23 +238,32 @@ def login():
 
             # Validation de la connexion.
             user = User.query.filter_by(pseudo=pseudo).first()
-            login_user(user)
             if user is not None and bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
+                if user.banned:
+                    print("Votre compte a été banni. Vous ne pouvez pas vous connecter.")
+                    return redirect(url_for('landing_page'))
+
                 # Authentification réussie
-                current_app.logger.info(f"L'utilisateur {user.pseudo} s'est bien connecté.")
                 # Connexion de l'utilisateur et stockage de ses informations dans la session.
+                login_user(user)
                 session["logged_in"] = True
                 session["pseudo"] = user.pseudo
                 session["user_id"] = user.id
+                current_app.logger.info(f"L'utilisateur {user.pseudo} s'est bien connecté.")
 
             if next_url:
                 return redirect(next_url)
             else:
                 return redirect(url_for('landing_page'))
 
-        else:
-            current_app.logger.warning(
-                f"Tentative de connexion échouée avec l'utilisateur {form.pseudo.data}.")
-            return redirect(url_for("auth.user_connection"))
 
+        else:
+
+            current_app.logger.warning(f"Tentative de connexion échouée avec l'utilisateur {form.pseudo.data}.")
+
+            flash("Identifiant ou mot de passe incorrect. Veuillez réessayer.", "error")
+
+            return redirect(url_for("auth.user_connection_error"))
+
+    return render_template("User/user_connection.html", form=form)
 

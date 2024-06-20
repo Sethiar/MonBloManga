@@ -1,0 +1,56 @@
+{% extends 'baseback.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page du backend afin d'afficher la liste des biographies et d'en supprimer les commentaires.">
+    <title>{% block title %}Page administrateur - Liste des utilisateurs et de leurs commentaires en fonction des biographies{% endblock %}</title>
+
+{% endblock %}
+
+{% block body_content %}
+<br><br>
+<br><br>
+
+
+<h5>Liste des Utilisateurs</h5>
+<!-- Section de recherche par lettre -->
+<div class="lettre-navigation">
+    <a href="{{ url_for('admin.users_biography_alpha_filter') }}">Tous</a>
+    <br>
+    {% for lettre in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+    <a href="{{ url_for('admin.users_biography_alpha_filter', lettre=lettre) }}" style="margin-right: 10px;color:orange;">{{ lettre }}</a>
+    {% endfor %}
+</div>
+<br><br>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Pseudo de l'utilisateur</th>
+                <th>Biographie commentée</th>
+                <th>Commentaires</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for user, comments in user_comments_biography.items() %}
+            {% for item in comments %}
+            <tr>
+                <td>{{ user }}</td>
+                <td>{{ item.subject }}</td>
+                <td>{{ item.comment_biography.comment_content }}</td>
+                <td>
+                    <form action="{{ url_for('admin.suppress_biography_comment', id=item.comment.id) }}" method="POST" class="btn_suppression">
+                        {{ suppressform.csrf_token }}
+                        <input type="hidden" name="comment_id" value="{{ item.comment.id }}">
+                        <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
