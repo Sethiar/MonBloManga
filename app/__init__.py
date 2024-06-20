@@ -24,7 +24,7 @@ from flask_migrate import Migrate
 from app.Models import db
 from login_manager import login_manager
 
-# Charger les variables d'environnement à partir du fichier .env
+# Chargement des variables d'environnement à partir du fichier .env.
 load_dotenv()
 
 
