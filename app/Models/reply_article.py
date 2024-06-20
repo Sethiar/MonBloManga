@@ -13,10 +13,10 @@ class ReplyArticle(db.Model):
 
     Attributes:
         id (int): Identifiant unique de la réponse.
-        reply_content (str): Contenu de la réponse.
-        reply_date (date): Date de la réponse.
-        comment_id (int): Identifiant du commentaire associé à la réponse.
-        user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
+        reply_content (str) : Contenu de la réponse.
+        reply_date (datetime) : Date et heure de la réponse (par défaut, date actuelle UTC).
+        comment_id (int) : Identifiant du commentaire associé à la réponse.
+        user_id (int) : Identifiant de l'utilisateur ayant posté la réponse.
     """
     __tablename__ = "reply_article"
     __table_args__ = {"extend_existing": True}
@@ -38,7 +38,7 @@ class ReplyArticle(db.Model):
         Représentation en chaîne de caractères de l'objet Reply.
 
         Returns :
-            str: Chaîne représentant l'objet Reply.
+            str : Chaîne représentant l'objet Reply.
         """
         return f"ReplyArticle(id={self.id}, comment_id={self.comment_id}, user_id={self.user_id}, " \
                f"date={self.reply_date}, like={self.reply_likes}, dislikes={self.reply_dislikes})"

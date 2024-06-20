@@ -9,8 +9,8 @@ class LikesBiography(db.Model):
     Modèle de données représentant la relation entre les utilisateurs et les biographies qu'ils aiment.
 
     Attributes:
-        user_id (int) : Identifiant de l'utilisateur.
-        biography_mangaka_id (int) : Identifiant de la biographie.
+        user_id (int) : Identifiant de l'utilisateur qui a aimé la biographie (clé primaire).
+        article_id (int): Identifiant de la biographie aimé (clé primaire).
     """
 
     __tablename__ = "likes_biography"
@@ -32,12 +32,12 @@ class LikesBiography(db.Model):
 # Table de liaison pour les dislikes de la section biographie.
 class DislikesBiography(db.Model):
     """
-        Modèle de données représentant la relation entre les utilisateurs et les biographies qu'ils n'aiment pas.
+    Modèle de données représentant la relation entre les utilisateurs et les biographies qu'ils n'aiment pas.
 
-        Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            biography_mangaka_id (int) : Identifiant de la biographie.
-        """
+    Attributes:
+        user_id (int) : Identifiant de l'utilisateur qui n'a pas aimé la biographie (clé primaire).
+        article_id (int) : Identifiant de la biographie désaimé (clé primaire).
+    """
     __tablename__ = "dislikes_biography"
     __table_args__ = {"extend_existing": True}
 

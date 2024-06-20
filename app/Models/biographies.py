@@ -8,15 +8,17 @@ from datetime import datetime
 # Table de données concernant les biographies des mangakas.
 class BiographyMangaka(db.Model):
     """
-    Table de données qui enregistre les biographies des mangakas.
+    Modèle de données représentant les biographies des mangakas.
 
-    Attributes :
-        id (int) : identifiant unique de la table.
-        biography_content (str) : Contenu de la biographie.
-        date_bio_mangaka (date) : Date d'édition de la biographie.
-        mangaka_name (str) : Nom du mangaka.
-        pseudo_author (str) : pseudo de l'auteur de la biographie.
-
+    Attributes:
+        id (int): Identifiant unique de la biographie.
+        biography_content (str) : Contenu de la biographie du mangaka.
+        date_bio_mangaka (datetime) : Date d'édition de la biographie.
+        mangaka_name (str) : Nom du mangaka concerné par la biographie.
+        author_id (int) : Identifiant de l'auteur de la biographie.
+        author (Author): Référence à l'objet Author associé à l'auteur de la biographie.
+        likes (int): Nombre de likes pour la biographie.
+        dislikes (int): Nombre de dislikes pour la biographie.
     """
     __tablename__ = "biography_mangaka"
     __table_args__ = {"extend_existing": True}

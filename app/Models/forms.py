@@ -15,11 +15,14 @@ class AdminConnection(FlaskForm):
     """
     Formulaire de connexion pour les administrateurs du site.
 
-    :param identifiant: Identifiant de l'administrateur.
-    :param password: Mot de passe de l'administrateur.
-    :param submit: Bouton de soumission du formulaire.
+    Attributes :
+        identifiant (StringField) : Champ pour l'identifiant de l'administrateur.
+        role (StringField): Champ pour le rôle de l'administrateur.
+        password (PasswordField) : Champ pour le mot de passe de l'administrateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
 
-    Exemple :
+    Example :
         form = AdminConnection()
     """
 
@@ -36,19 +39,21 @@ class AdminConnection(FlaskForm):
 # Formulaire permettant d'enregistrer un utilisateur.
 class UserSaving(FlaskForm):
     """
-        Formulaire de souscription pour les utilisateurs du site.
+    Formulaire d'inscription pour les utilisateurs du site.
 
-        :param email: Adresse e-mail de l'utilisateur.
-        :param pseudo: Pseudo unique de l'utilisateur.
-        :param password: Mot de passe de l'utilisateur.
-        :param password2: Vérification de la concordance avec le premier mot de passe donné.
-        :param profil_photo: Photo de l'utilisateur.
-        :param date_naissance: Date de naissance de l'utilisateur.
-        :param submit: Bouton de soumission du formulaire.
+    Attributes:
+        email (EmailField): Champ pour l'adresse e-mail de l'utilisateur.
+        pseudo (StringField) : Champ pour le pseudo unique de l'utilisateur.
+        password (PasswordField) : Champ pour le mot de passe de l'utilisateur.
+        password2 (PasswordField) : Champ pour la confirmation du mot de passe de l'utilisateur.
+        profil_photo (FileField) : Champ pour télécharger la photo de profil de l'utilisateur.
+        date_naissance (DateField) : Champ pour la date de naissance de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
 
-        Exemple :
-            form = UserSaving()
-          """
+    Example:
+        form = UserSaving()
+    """
 
     email = EmailField(
         "Email",
@@ -79,19 +84,33 @@ class UserSaving(FlaskForm):
 
     csrf_token = HiddenField()
 
+    # Fonction qui vérifie si le pseudo existe déjà.
     def validate_pseudo(self, pseudo):
         """
-         Cette fonction permet de valider le fait que le pseudo utilisé n'existe pas dans la base de données.
-        :param pseudo:
+        Valide que le pseudo choisi n'existe pas déjà dans la base de données des utilisateurs.
+
+        Args :
+            pseudo (StringField): Pseudo à valider.
+
+        Raises :
+            ValidationError : Si le pseudo est déjà utilisé.
+
         """
         user = User.query.filter_by(pseudo=pseudo.data).first()
         if user:
             raise ValidationError('Ce pseudo est déjà utilisé. Veuillez en choisir un autre.')
 
+    # Fonction qui vérifie si l'email existe déjà.
     def validate_email(self, email):
         """
-        Cette fonction permet de valider le fait que l'email n'existe pas dans la base de données.
-        :param email:
+        Valide que l'adresse e-mail n'existe pas déjà dans la base de données des utilisateurs.
+
+        Args :
+            email (EmailField): Adresse e-mail à valider.
+
+        Raises :
+            ValidationError : Si l'e-mail est déjà utilisé.
+
         """
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
@@ -106,12 +125,16 @@ class NewAuthor(FlaskForm):
     """
     Formulaire d'enregistrement d'un nouvel auteur.
 
-    :param nom: Nom de l'auteur.
-    :param prenom: Prénom de l'auteur.
-    :param pseudo de l'auteur.
-    :param submit: Bouton de soumission du formulaire.
-    """
+    Attributes :
+        nom (StringField) : Champ pour le nom de l'auteur.
+        prenom (StringField) : Champ pour le prénom de l'auteur.
+        pseudo (StringField) : Champ pour le pseudo de l'auteur.
+        submit (SubmitField) : Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
 
+    Example :
+        form = NewAuthor()
+    """
     nom = StringField("Nom", validators=[DataRequired()], render_kw={"placeholder": "Veuillez renseigner votre nom."})
     prenom = StringField("Prénom", validators=[DataRequired()],
                          render_kw={"placeholder": "Veuillez renseigner votre prénom."})
@@ -130,11 +153,13 @@ class UserConnection(FlaskForm):
     """
     Formulaire de connexion pour les utilisateurs du site.
 
-    :param pseudo: Pseudo de l'utilisateur.
-    :param password: Mot de passe de l'utilisateur.
-    :param submit: Bouton de soumission du formulaire.
+    Attributes :
+        pseudo (StringField) : Champ pour le pseudo de l'utilisateur.
+        password (PasswordField) : Champ pour le mot de passe de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
 
-    Exemple :
+    Example
         form = UserConnection()
     """
     pseudo = StringField("Pseudo", validators=[DataRequired()],
@@ -146,15 +171,53 @@ class UserConnection(FlaskForm):
     submit = SubmitField("se connecter")
 
 
+# Formulaire permettant de bannir un utilisateur.
+class BanUserForm(FlaskForm):
+    """
+    Formulaire permettant de bannir un utilisateur.
+
+    Attributes :
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+        submit (SubmitField): Bouton de soumission du formulaire.
+
+    Example:
+        form = BanUserForm()
+
+        """
+    csrf_token = HiddenField()
+
+    # Action de soumettre le formulaire.
+    submit = SubmitField('Bannir')
+
+
+# Formulaire permettant de bannir un utilisateur.
+class UnBanUserForm(FlaskForm):
+    """
+    Formulaire permettant de débannir un utilisateur.
+
+    Attributes :
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+        submit (SubmitField): Bouton de soumission du formulaire.
+
+    Example:
+        form = UnBanUserForm()
+    """
+    csrf_token = HiddenField()
+
+    # Action de soumettre le formulaire.
+    submit = SubmitField('Débannir')
+
+
 # Formulaire permettant la création d'une nouvelle catégorie d'article.
 class NewCategorieForm(FlaskForm):
     """
-    Formulaire pour ajouter une nouvelle catégorie.
+    Formulaire pour ajouter une nouvelle catégorie d'article.
 
-    :param nom: Nom de la catégorie.
+    Attributes:
+        nom (StringField) : Champ pour le nom de la catégorie.
 
-    Exemple :
-        form=NouvelleCategorieForm()
+    Example :
+        form = NewCategorieForm()
     """
     nom = StringField("Nom de la catégorie", validators=[DataRequired()],
                       render_kw={'placeholder': "Saisir la nouvelle catégorie"})
@@ -166,12 +229,13 @@ class NewCategorieForm(FlaskForm):
 # Formulaire permettant la création d'un nouveau sujet sur le forum.
 class NewSubjectForumForm(FlaskForm):
     """
-    Formulaire pour ajouter un nouveau sujet pour le forum.
+    Formulaire pour ajouter un nouveau sujet sur le forum.
 
-    :param nom: Nom du sujet pour le forum.
+    Attributes:
+        nom (StringField) : Champ pour le nom du sujet pour le forum.
 
-    Exemple :
-        form=NewSubjectForumForm()
+    Example :
+        form = NewSubjectForumForm()
     """
     # Nom du sujet.
     nom = StringField("Nom du sujet", validators=[DataRequired()],
@@ -185,15 +249,17 @@ class NewSubjectForumForm(FlaskForm):
 # Formulaire permettant la création d'un nouvel article.
 class ArticleForm(FlaskForm):
     """
-    Formulaire pour ajouter un article.
+    Formulaire pour ajouter un nouvel article.
 
-    :param titre: Titre de l'article.
-    :param pseudo_auteur: Pseudo de l'auteur.
-    :param contenu_article: Le contenu max 1000 caractères.
-    :param date_edition: La date d'édition de l'article.
+    Attributes:
+        title (StringField) : Champ pour le titre de l'article.
+        pseudo_author (StringField) : Champ pour le pseudo de l'auteur de l'article.
+        article_content (TextAreaField) : Champ pour le contenu de l'article.
+        resume (StringField) : Champ pour le résumé de l'article.
+        date_edition (StringField) : Champ pour la date d'édition de l'article.
 
-    Exemple :
-        from=ArticleForm()
+    Example:
+        form = ArticleForm()
     """
 
     # Titre de l'article.
@@ -224,6 +290,13 @@ class ArticleForm(FlaskForm):
 class CommentArticleForm(FlaskForm):
     """
     Formulaire pour ajouter un commentaire à un article.
+
+    Attributes :
+        comment_content (TextAreaField) : Champ pour le contenu du commentaire.
+        user_pseudo (StringField) : Champ pour le pseudo de l'utilisateur.
+
+    Example :
+        form = CommentArticleForm()
     """
 
     # Le contenu du commentaire.
@@ -243,7 +316,14 @@ class CommentArticleForm(FlaskForm):
 # Formulaire permettant à un utilisateur de créer un commentaire pour la section forum.
 class CommentSubjectForm(FlaskForm):
     """
-    Formulaire pour ajouter un commentaire à un article.
+    Formulaire pour ajouter un commentaire à un sujet du forum.
+
+    Attributes :
+        comment_content (TextAreaField) : Champ pour le contenu du commentaire.
+        user_pseudo (StringField) : Champ pour le pseudo de l'utilisateur.
+
+    Example :
+        form = CommentSubjectForm()
     """
 
     # Le contenu du commentaire.
@@ -263,7 +343,10 @@ class CommentSubjectForm(FlaskForm):
 # Formulaire permettant de liker un article.
 class LikeForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter un like à un article ou à un commentaire.
+    Formulaire permettant de liker un article ou un commentaire.
+
+    Example:
+        form = LikeForm()
     """
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
@@ -273,7 +356,10 @@ class LikeForm(FlaskForm):
 # Formulaire permettant de disliker un article
 class DislikeForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter un dislike à un article ou à un commentaire.
+    Formulaire permettant de disliker un article ou un commentaire.
+
+    Example:
+        form = DislikeForm()
     """
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
@@ -282,6 +368,12 @@ class DislikeForm(FlaskForm):
 
 # Formulaire permettant de liker un commentaire dans la section article.
 class CommentLike(FlaskForm):
+    """
+    Formulaire permettant de liker un commentaire.
+
+    Example:
+        form = CommentLike()
+    """
     csrf_token = HiddenField()
     submit = SubmitField()
 
@@ -289,7 +381,12 @@ class CommentLike(FlaskForm):
 # Formulaire permettant de répondre à un commentaire dans la section article.
 class ReplyArticleForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter une réponse à un commentaire.
+    Formulaire permettant d'ajouter une réponse à un commentaire dans la section article.
+
+    Attributes :
+        reply_content (TextAreaField) : Champ de texte pour la réponse au commentaire.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
     """
     csrf_token = HiddenField()
 
@@ -304,7 +401,13 @@ class ReplyArticleForm(FlaskForm):
 # Formulaire permettant de répondre à un commentaire dans la section forum.
 class ReplySubjectForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter une réponse à un commentaire dans la section du forum.
+    Formulaire permettant d'ajouter une réponse à un commentaire dans la section forum.
+
+    Attributes :
+        reply_content (TextAreaField) : Champ de texte pour la réponse au commentaire.
+        comment_id (HiddenField) : Champ caché pour l'ID du commentaire parent.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
     """
     csrf_token = HiddenField()
     # Le contenu de la réponse.
@@ -320,6 +423,10 @@ class ReplySubjectForm(FlaskForm):
 class FilterForm(FlaskForm):
     """
     Formulaire permettant de filtrer les articles par catégories.
+
+    Attributes :
+        category (SelectField) : Champ de sélection pour choisir la catégorie.
+        submit (SubmitField) : Bouton de soumission du formulaire.
     """
     category = SelectField('Categorie', choices=[])
     submit = SubmitField()
@@ -329,6 +436,10 @@ class FilterForm(FlaskForm):
 class SuppressCommentSubjectForm(FlaskForm):
     """
     Formulaire pour supprimer un commentaire de la section forum.
+
+    Attributes :
+        comment_id (HiddenField) : Champ caché pour l'ID du commentaire à supprimer.
+        submit (SubmitField): Bouton de soumission du formulaire.
     """
     comment_id = HiddenField('Comment_id', validators=[DataRequired()])
     submit = SubmitField('Supprimer')
@@ -338,6 +449,14 @@ class SuppressCommentSubjectForm(FlaskForm):
 class CreateMangakaForm(FlaskForm):
     """
     Formulaire pour créer une biographie de mangaka.
+
+    Attributes :
+        mangaka_name (StringField) : Champ de texte pour le nom du mangaka.
+        biography_content (TextAreaField) : Champ de texte pour le contenu de la biographie.
+        date_bio_mangaka (StringField) : Champ de texte pour la date d'édition de la biographie.
+        pseudo_author (StringField) : Champ de texte pour le pseudo de l'auteur de la biographie.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
     """
     # Nom du mangaka.
     mangaka_name = StringField(validators=[DataRequired()],
@@ -363,6 +482,12 @@ class CreateMangakaForm(FlaskForm):
 class CommentBiographyForm(FlaskForm):
     """
     Formulaire pour ajouter un commentaire à une biographie.
+
+    Attributes :
+        comment_content (TextAreaField) : Champ de texte pour le contenu du commentaire.
+        user_pseudo (StringField) : Champ de texte pour le pseudo de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
     """
 
     # Le contenu du commentaire.
@@ -382,7 +507,11 @@ class CommentBiographyForm(FlaskForm):
 # Formulaire permettant de liker une biographie.
 class LikeBiographyForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter un like à un article ou à un commentaire.
+    Formulaire permettant d'ajouter un like à une biographie.
+
+    Attributes :
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+        submit (SubmitField): Bouton de soumission du formulaire (like).
     """
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
@@ -392,7 +521,11 @@ class LikeBiographyForm(FlaskForm):
 # Formulaire permettant de disliker une biographie.
 class DislikeBiographyForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter un dislike à une biographie ou à un commentaire.
+    Formulaire permettant d'ajouter un dislike à une biographie.
+
+    Attributes :
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+        submit (SubmitField): Bouton de soumission du formulaire (dislike).
     """
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
@@ -401,7 +534,13 @@ class DislikeBiographyForm(FlaskForm):
 
 # Formulaire permettant de disliker une biographie.
 class CommentBiographyLike(FlaskForm):
+    """
+    Formulaire permettant de liker un commentaire dans la section biographie.
 
+    Attributes :
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+        submit (SubmitField): Bouton de soumission du formulaire.
+    """
     csrf_token = HiddenField()
     # Action de soumettre le formulaire.
     submit = SubmitField()
@@ -410,7 +549,12 @@ class CommentBiographyLike(FlaskForm):
 # Formulaire permettant de laisser une réponse à un commentaire dans la section biographie.
 class ReplyBiographyForm(FlaskForm):
     """
-    Formulaire permettant d'ajouter une réponse à un commentaire.
+    Formulaire permettant d'ajouter une réponse à un commentaire dans la section biographie.
+
+    Attributes :
+        reply_content (TextAreaField) : Champ de texte pour la réponse au commentaire.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
     """
     csrf_token = HiddenField()
 
@@ -426,6 +570,10 @@ class ReplyBiographyForm(FlaskForm):
 class SuppressCommentBiographyForm(FlaskForm):
     """
     Formulaire pour supprimer un commentaire de la section biographie.
+
+    Attributes :
+        comment_id (HiddenField) : Champ caché pour l'ID du commentaire à supprimer.
+        submit (SubmitField): Bouton de soumission du formulaire pour supprimer le commentaire.
     """
     comment_id = HiddenField('Comment_id', validators=[DataRequired()])
     submit = SubmitField('Supprimer')
@@ -433,4 +581,10 @@ class SuppressCommentBiographyForm(FlaskForm):
 
 # Formulaire permettant de supprimer une biographie.
 class DeleteBiographyForm(FlaskForm):
+    """
+    Formulaire permettant de supprimer une biographie.
+
+    Attributes :
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
     csrf_token = HiddenField()

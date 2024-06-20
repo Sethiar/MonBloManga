@@ -9,13 +9,14 @@ class User(db.Model, UserMixin):
     Modèle de données représentant un utilisateur de l'application.
 
     Attributes:
-        id (int): Identifiant unique de l'utilisateur.
-        pseudo (str): Pseudo unique de l'utilisateur.
-        password_hash (bytes): Mot de passe hashé de l'utilisateur.
-        salt (bytes): Salage du mot de passe.
-        email (str): Adresse e-mail de l'utilisateur.
-        date_naissance (datetime.date): Date de naissance de l'utilisateur.
-        banned (bool): Indique si l'utilisateur est banni (par défaut False).
+        id (int) : Identifiant unique de l'utilisateur.
+        pseudo (str) : Pseudo unique de l'utilisateur.
+        password_hash (bytes) : Mot de passe hashé de l'utilisateur.
+        salt (bytes) : Salage du mot de passe.
+        email (str) : Adresse e-mail de l'utilisateur.
+        date_naissance (datetime.date) : Date de naissance de l'utilisateur.
+        profil_photo (bytes) : Photo de profil de l'utilisateur en format binaire.
+        banned (bool) : Indique si l'utilisateur est banni (par défaut False).
     """
 
     __tablename__ = "user"
@@ -45,7 +46,7 @@ class User(db.Model, UserMixin):
         Indique si l'utilisateur est actif.
 
         Returns :
-            bool : False car l'utilisateur n'est pas banni par défault.
+            bool: True si l'utilisateur n'est pas banni, False sinon.
         """
         return not self.banned
 
@@ -66,4 +67,18 @@ class User(db.Model, UserMixin):
             str : L'identifiant de l'utilisateur.
         """
         return str(self.id)
+
+    def ban_user(self):
+        """
+        Bannit l'utilisateur en définissant banned à True.
+        """
+        self.banned = True
+        db.session.commit()
+
+    def unban_user(self):
+        """
+        Débannit l'utilisateur en définissant banned à False.
+        """
+        self.banned = False
+        db.session.commit()
 

@@ -9,7 +9,7 @@ class Author(db.Model):
 
     Attributes:
         id (int): Identifiant unique de l'auteur.
-        nom (str) : Nom de l'auteur.
+        nom (str): Nom de famille de l'auteur.
         prenom (str): Prénom de l'auteur.
         pseudo (str): Pseudo unique de l'auteur.
     """
@@ -29,4 +29,4 @@ class Author(db.Model):
         Returns :
             str : Chaîne représentant l'objet Author.
         """
-        return f"Author(Pseudo='{self.pseudo}')"
+        return f"Author(id={self.id}, pseudo='{self.pseudo}')"

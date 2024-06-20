@@ -7,11 +7,11 @@ from . import db
 class CommentLikeBiography(db.Model):
     """
     Modèle de données représentant la relation entre les utilisateurs et les commentaires
-    qu'ils aiment de la section biographie.
+    qu'ils aiment dans la section biographie.
 
     Attributes:
-        user_id (int) : Identifiant de l'utilisateur.
-        comment_id (int) : Identifiant du commentaire.
+        user_id (int) : Identifiant de l'utilisateur qui a aimé le commentaire (clé primaire).
+        comment_id (int): Identifiant du commentaire aimé (clé primaire).
     """
     __tablename__ = "likes_comment_biography"
     __table_args__ = {"extend_existing": True}

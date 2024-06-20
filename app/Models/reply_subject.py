@@ -12,11 +12,11 @@ class ReplySubject(db.Model):
     Représente une réponse à un commentaire sur un sujet du forum.
 
     Attributes:
-        id (int): Identifiant unique de la réponse.
-        reply_content (str): Contenu de la réponse.
-        reply_date (date): Date de la réponse.
-        comment_id (int): Identifiant du commentaire associé à la réponse.
-        user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
+        id (int) : Identifiant unique de la réponse.
+        reply_content (str) : Contenu de la réponse.
+        reply_date (datetime) : Date et heure de la réponse (par défaut, date actuelle UTC).
+        comment_id (int) : Identifiant du commentaire associé à la réponse.
+        user_id (int) : Identifiant de l'utilisateur ayant posté la réponse.
     """
     __tablename__ = "reply_subject"
     __table_args__ = {"extend_existing": True}

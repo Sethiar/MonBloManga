@@ -9,8 +9,8 @@ class Likes(db.Model):
     Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils aiment.
 
     Attributes:
-        user_id (int) : Identifiant de l'utilisateur.
-        article_id (int) : Identifiant de l'article.
+        user_id (int) : Identifiant de l'utilisateur qui a aimé l'article (clé primaire).
+        article_id (int): Identifiant de l'article aimé (clé primaire).
     """
 
     __tablename__ = "likes"
@@ -32,12 +32,12 @@ class Likes(db.Model):
 # Table de liaison pour les dislikes
 class Dislikes(db.Model):
     """
-        Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
+    Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
 
-        Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            article_id (int) : Identifiant de l'article.
-        """
+    Attributes:
+        user_id (int) : Identifiant de l'utilisateur qui n'a pas aimé l'article (clé primaire).
+        article_id (int): Identifiant de l'article désaimé (clé primaire).
+    """
     __tablename__ = "dislikes"
     __table_args__ = {"extend_existing": True}
 

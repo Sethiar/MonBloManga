@@ -29,7 +29,7 @@ class Admin(db.Model, UserMixin):
 
     def __repr__(self):
         """
-        Représentation en chaîne de caractères de l'objet Administrateur.
+        Renvoie une chaîne représentant l'objet Administrateur.
 
         Returns :
             str: Chaîne représentant l'objet Administrateur.
@@ -55,7 +55,7 @@ class Admin(db.Model, UserMixin):
         Indique si l'administrateur est actif.
 
         Returns :
-            bool : True si l'administrateur est actif, False sinon.
+            bool : Toujours True car les administrateurs sont toujours actifs.
         """
         print("is_active method called")
         logging.debug("is_active method called")

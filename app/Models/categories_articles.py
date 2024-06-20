@@ -25,4 +25,4 @@ class Categorie(db.Model):
         Returns :
             str: Chaîne représentant l'objet Catégorie.
         """
-        return f"Categorie(nom='{self.nom}')"
+        return f"Categorie(id={self.id}, nom='{self.nom}')"

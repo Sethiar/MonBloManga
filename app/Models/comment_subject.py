@@ -11,12 +11,12 @@ class CommentSubject(db.Model):
     """
     Représente un commentaire pour un sujet du forum.
 
-    Attributes:
+    ttributes:
         id (int): Identifiant unique du commentaire.
-        comment_content (str): Contenu du commentaire.
-        comment_date (date): Date du commentaire.
-        subject_id (int): Identifiant de l'article associé au commentaire.
-        user_id (int): Identifiant de l'utilisateur enregistré.
+        comment_content (str) : Contenu du commentaire.
+        comment_date (datetime) : Date et heure du commentaire.
+        subject_id (int): Identifiant du sujet associé au commentaire.
+        user_id (int) : Identifiant de l'utilisateur qui a écrit le commentaire.
     """
     __tablename__ = "comment_subject"
     __table_args__ = {"extend_existing": True}
@@ -42,10 +42,10 @@ class CommentSubject(db.Model):
 
     def __repr__(self):
         """
-        Représentation en chaîne de caractères de l'objet Comment.
+        Représentation en chaîne de caractères de l'objet CommentSubject.
 
         Returns :
-            str: Chaîne représentant l'objet Comment.
+            str: Chaîne représentant l'objet CommentSubject.
         """
         return f"CommentSubject(id={self.id}, subject_id={self.subject_id}, user_id={self.user_id}, " \
-               f"date={self.comment_date})"
+               f"comment_date={self.comment_date})"
