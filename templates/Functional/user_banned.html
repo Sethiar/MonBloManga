@@ -1,10 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base2.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page renseignant l'état de bannissement d'un utilisateur.">
+    <title>{% block title %}Bannissement de {{ user.pseudo }}{% endblock %}</title>
+{% endblock %}
+
+{% block main_content %}
+
+<h2 class="ban_title">Bonjour, nous sommes au regret de vous annoncer que vous, {{ user.pseudo }}, avez été banni jusqu'au {{ date_ban_end }}</h2>
+<br>
+<p>Date du bannissement : {{ date_banned }}</p>
+<div class="separation">
+
+</div>
+<br>
+<div id="container_politique">
+    <div id="politique">
+        <p class="intro">Conformément aux dispositions des règles établies par l'administrateur de ce blog,
+            tout manquement aux devoirs d'un utilisateur entraînera une période de bannissement de 7 jours.</p>
+        <p>La connexion et la navigation sur le site ([URL du site]) par l’utilisateur se limitera à la lecture, mais
+        il ne sera plus en mesure de laisser des commentaires ou de se connecter.</p>
+    </div>
+    <br>
+    <h3>1. Informations sur le bannissement.</h3>
+    <br>
+    <p>Pour toute réclamation concernant cette décision, nous vous invitons à nous écrire à l'adresse suivante :</p>
+    <ul>
+        <li>E-mail : <a href="mailto:alefetey123@gmail.com">alefetey123@gmail.com</a></li>
+    </ul>
+    <p>Après un délai de sept jours, l'utilisateur pourra se connecter de nouveau et laisser des commentaires.</p>
+    <p>Cependant, si un deuxième bannissement devait être établi, l'utilisateur se verrait définitivement fermé l'accès au blog.</p>
+    <br>
+</div>
+
+{% endblock %}
+{% block footer_content %}
+{% endblock %}
