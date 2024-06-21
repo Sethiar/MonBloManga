@@ -1,9 +1,12 @@
 """
-Ce fichier définit les modèles de données SQLAlchemy pour l'application, y compris les tables pour enregistrer les informations des utilisateurs, des administrateurs, des articles et des catégories.
+Ce fichier définit les modèles de données SQLAlchemy pour l'application, y compris les tables pour enregistrer
+les informations des utilisateurs, des administrateurs, des articles et des catégories.
 
 Classes de modèles de données :
-    - Admin : Représente un administrateur de l'application avec un identifiant unique, un rôle, un identifiant et un mot de passe hashé.
-    - User : Représente un utilisateur de l'application avec un identifiant unique, un nom, un prénom, une adresse e-mail, une date de naissance et un genre.
+    - Admin : Représente un administrateur de l'application avec un identifiant unique, un rôle,
+    un identifiant et un mot de passe hashé.
+    - User : Représente un utilisateur de l'application avec un identifiant unique, un nom, un prénom,
+    une adresse e-mail, une date de naissance et un genre.
     - Author : Représente un auteur avec un identifiant unique, un nom, un prénom et un pseudo unique.
     - Article : Représente un article avec un identifiant unique, un titre, un nom d'auteur, un contenu et une date d'édition.
     - Categorie : Représente une catégorie avec un identifiant unique et un nom.
