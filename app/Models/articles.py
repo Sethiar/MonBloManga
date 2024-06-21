@@ -11,22 +11,17 @@ class Article(db.Model):
     Attributes:
         id (int): Identifiant unique de l'article.
         title (str): Titre de l'article.
-        resume (str): Résumé de l'article (100 caractères max).
-        article_content (str) : Contenu principal de l'article.
+        author_id (int): Identifiant de l'auteur de l'article.
+        resume: (str): Résumé de l'article (100 caractères max).
+        article_content (str) : Contenu de l'article.
         date_edition (datetime) : Date d'édition de l'article.
-        author_id (int) : Identifiant de l'auteur de l'article.
-        author (Author): Référence à l'objet Author associé à l'article.
         categorie_id (int) : Identifiant de la catégorie associée à l'article.
         categorie (Categorie) : Référence à l'objet Categorie associé à l'article.
-        likes (int) : Nombre de likes de l'article.
-        dislikes (int) : Nombre de dislikes de l'article.
-        comments (list) : Liste des commentaires associés à l'article.
-        likes_rel (list) : Relation avec les likes associés à l'article.
-        dislikes_rel (list) : Relation avec les dislikes associés à l'article.
+        likes (int) : Nombre de likes.
+        dislikes (int) : Nombre de dislikes.
     """
 
     __tablename__ = "article"
-    __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), unique=True, nullable=False)
@@ -57,7 +52,6 @@ class Article(db.Model):
         Returns :
             str: Chaîne représentant l'objet Article.
         """
-        return f"Article(id={self.id}, title='{self.title}', author='{self.author.pseudo}', " \
-               f"resume='{self.resume[:50]}...', date_edition='{self.date_edition}', " \
-               f"likes={self.likes}, dislikes={self.dislikes})"
+        return f"Article(Titre='{self.title}', Auteur='{self.author.pseudo}', Résumé='{self.resume}', " \
+               f"Date d'édition='{self.date_edition}', like='{self.likes}', dislikes='{self.dislikes}')"
 

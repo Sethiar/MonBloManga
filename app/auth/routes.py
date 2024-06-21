@@ -241,7 +241,7 @@ def login():
             if user is not None and bcrypt.checkpw(password.encode('utf-8'), user.password_hash):
                 if user.banned:
                     print("Votre compte a été banni. Vous ne pouvez pas vous connecter.")
-                    return redirect(url_for('landing_page'))
+                    return redirect(url_for('auth.user_banned', user_id=user.id))
 
                 # Authentification réussie
                 # Connexion de l'utilisateur et stockage de ses informations dans la session.
@@ -266,4 +266,24 @@ def login():
             return redirect(url_for("auth.user_connection_error"))
 
     return render_template("User/user_connection.html", form=form)
+
+
+# Route permettant de renseigner l'utilisateur qu'il a été banni.
+@auth_bp.route("/utilisateur_banni,<int:user_id>", methods=['GET', 'POST'])
+def user_banned(user_id):
+    """
+    Route pour informer l'utilisateur qu'il a été banni.
+
+    :param user_id: ID de l'utilisateur
+    :return: Template de l'utilisateur banni
+    """
+    # Récupération de l'id de l'utilisateur.
+    user = User.query.get(user_id)
+    if user is None:
+        return "Utilisateur non trouvé", 404
+        # Formater les dates sans les secondes et microsecondes.
+    date_ban_end = user.date_ban_end.strftime("%Y-%m-%d %H:%M")
+    date_banned = user.date_banned.strftime("%Y-%m-%d %H:%M")
+
+    return render_template("Functional/user_banned.html", user=user, date_ban_end=date_ban_end, date_banned=date_banned)
 

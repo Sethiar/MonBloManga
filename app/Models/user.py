@@ -1,5 +1,7 @@
 """Modèle de la classe Utilisateur."""
 
+from datetime import datetime, timedelta
+
 from . import db
 from flask_login import UserMixin
 
@@ -17,6 +19,8 @@ class User(db.Model, UserMixin):
         date_naissance (datetime.date) : Date de naissance de l'utilisateur.
         profil_photo (bytes) : Photo de profil de l'utilisateur en format binaire.
         banned (bool) : Indique si l'utilisateur est banni (par défaut False).
+        date_banned : Indique la date de début du bannissement.
+        date_ban_end : Permet de définir la date de fin du bannissement.
     """
 
     __tablename__ = "user"
@@ -30,6 +34,8 @@ class User(db.Model, UserMixin):
     date_naissance = db.Column(db.Date, nullable=False)
     profil_photo = db.Column(db.LargeBinary, nullable=False)
     banned = db.Column(db.Boolean, default=False)
+    date_banned = db.Column(db.DateTime, nullable=True)
+    date_ban_end = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
         """
@@ -39,7 +45,8 @@ class User(db.Model, UserMixin):
             str: Chaîne représentant l'objet Utilisateur.
         """
         return f"User(pseudo='{self.pseudo}', email='{self.email}', date_naissance='{self.date_naissance}', " \
-               f"chemin_photo='{self.chemin_photo}, banned='{self.banned}')"
+               f"chemin_photo='{self.chemin_photo}, banned='{self.banned}', date_banned='{self.date_banned}'" \
+               f"date_ban_end='{self.date_ban_end}')"
 
     def is_active(self):
         """
@@ -73,6 +80,8 @@ class User(db.Model, UserMixin):
         Bannit l'utilisateur en définissant banned à True.
         """
         self.banned = True
+        self.date_banned = datetime.now()
+        self.date_ban_end = datetime.now() + timedelta(days=7)
         db.session.commit()
 
     def unban_user(self):
@@ -80,5 +89,15 @@ class User(db.Model, UserMixin):
         Débannit l'utilisateur en définissant banned à False.
         """
         self.banned = False
+        self.date_banned = None
+        self.date_ban_end = None
         db.session.commit()
+
+    def is_banned(self):
+        """
+        Vérifie si l'utilisateur est actuellement banni.
+        """
+        if self.banned and self.date_ban_end:
+            return datetime.now() < self.date_ban_end
+        return False
 
