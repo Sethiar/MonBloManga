@@ -5,6 +5,7 @@ from datetime import datetime
 from app import create_app
 
 from flask import render_template, redirect, url_for
+from calendar import month_name
 
 
 from app.Models.author import Author
@@ -65,9 +66,38 @@ def landing_page():
     current_date = datetime.now().strftime("%d-%m-%Y")
 
     # Récupération de tous les articles et des auteurs depuis la base de données.
-    articles = Article.query.all()
+    articles = Article.query.order_by(Article.date_edition.desc()).all()
     authors = Author.query.all()
-    return render_template("Presentation/accueil.html", articles=articles, authors=authors, current_date=current_date)
+
+    # Division des articles en new_articles et other_articles.
+    new_articles = articles[:2]
+    other_articles = articles[2:8]
+
+    # Générer la liste des mois d'archive
+    archive_months = []
+
+    # Définir la date de début pour les archives
+    start_year = 2024
+    start_month = 4
+
+    # Récupérer la date actuelle
+    current_year = datetime.now().year
+    current_month = datetime.now().month
+
+    # Boucle pour générer les années
+    for year in range(start_year, current_year + 1):
+        # Boucle pour générer les mois
+        # Si l'année est celle en cours, arrêter au mois actuel
+        if year == current_year:
+            end_month = current_month
+        else:
+            end_month = 12  # Sinon, générer jusqu'à décembre
+        for month in range(start_month, end_month + 1):
+            archive_months.append((year, month, month_name[month]))
+
+    return render_template(
+        "Presentation/accueil.html", new_articles=new_articles, other_articles=other_articles,
+        archive_months=archive_months, current_date=current_date)
 
 
 if __name__ == '__main__':
