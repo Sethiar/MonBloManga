@@ -217,12 +217,12 @@ h1 {
   margin-bottom: 5px;
 }
 
-#info_article2 {
+.info_article2 {
   display: flex;
   flex-direction: column;
 }
 
-#info_article2 p {
+.info_article2 p {
   margin-left: 30%;
 }
 
