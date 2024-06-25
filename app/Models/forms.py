@@ -588,3 +588,29 @@ class DeleteBiographyForm(FlaskForm):
         csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
     """
     csrf_token = HiddenField()
+
+
+# Formulaire pour mot de passe oublié.
+class ForgetPassword(FlaskForm):
+    """
+    Formulaire permettant de réinitialiser le mot de passe.
+
+    Attributes :
+        email(EmailField) : Email de l'utilisateur voulant réinitialiser son mot de passe.
+        new_password (PasswordField) : Nouveau mot de passe.
+        csrf_token (HiddenFields) : Jeton CSRF pour la sécurité du formulaire.
+    """
+    email = EmailField(
+        "Email",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Entrez votre email"})
+    new_password = PasswordField(
+        "Nouveau mot de passe utilisateur",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Veuiller renseigner votre nouveau mot de passe Utilisateur."})
+    new_password2 = PasswordField(
+        "Confirmer le nouveau mot de passe",
+        validators=[DataRequired(), EqualTo('password', message='Les mots de passe doivent correspondre.')],
+        render_kw={"placeholder": "Veuillez confirmer votre nouveau mot de passe utilisateur."})
+    csrf_token = HiddenField()
+

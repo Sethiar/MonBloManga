@@ -5,7 +5,7 @@ from app.frontend import frontend_bp
 
 from flask import render_template, url_for, redirect, request, abort
 from flask_login import login_required, current_user
-
+from datetime import datetime
 
 from app.Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
     NewSubjectForumForm, CommentLike, CommentBiographyForm, CommentBiographyLike, DislikeBiographyForm,\
@@ -123,6 +123,31 @@ def show_article(article_id):
     return render_template("Presentation/article.html", article=article, article_id=article_id, comments=comments,
                            formcomment=formcomment, formlike=formlike, formdislike=formdislike,
                            formlikecomment=formlikecomment, comment_likes_data=comment_likes_data)
+
+
+# Route permettant d'archiver les articles selon leur mois d'édition.
+@frontend_bp.route("/archive/<int:year>/<int:month>")
+def archive(year, month):
+    """
+        Afficher les articles archivés pour un mois donné.
+
+        Args:
+            year (int): L'année des articles à afficher.
+            month (int): Le mois des articles à afficher.
+
+        Returns:
+            La page des archives avec les articles pour le mois spécifié.
+    """
+    # Récupérer les articles pour le mois et l'année spécifiés
+    start_date = datetime(year, month, 1)
+    if month < 12:
+        end_date = datetime(year, month + 1, 1)
+    else:
+        end_date = datetime(year + 1, 1, 1)
+
+    articles = Article.query.filter(Article.date_edition >= start_date, Article.date_edition < end_date).all()
+
+    return render_template("Presentation/archive.html", articles=articles, year=year, month=month)
 
 
 # Route permettant d'accéder à la page forum du blog.

@@ -2,10 +2,10 @@
 Code source qui permet d'initialiser les extensions.
 """
 
+# Fonctions vérifiant les extensions des imports.
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 
-# Fonctions vérifiant les extensions des imports.
 def allowed_file(filename):
     """
     Vérifie si l'extension d'un fichier est autorisée en fonction de la liste ALLOWED_EXTENSIONS.
@@ -15,4 +15,5 @@ def allowed_file(filename):
     """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
