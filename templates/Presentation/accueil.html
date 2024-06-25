@@ -33,23 +33,21 @@
     </div>
 </div>
 <br><br>
-<div class="separation">
-
-</div>
+<div class="separation"></div>
 <br><br>
 <div id="container">
     <div id="space-before">
     </div>
     <div id="principle">
         <section class="new-articles">
-            <h2>Actualités de la semaine</l></h2>
-            {% for article in articles %}
+            <h2>Actualités de la semaine</h2>
+            {% for article in new_articles %}
             <div class="article">
                 <div id="info_article">
                     <img src="../static/Images/images_accueil/vegM2.jpg" alt="Image de {{ article.title }}">
                     Par {{ article.author.pseudo }}
                 </div>
-                <div id="info_article2">
+                <div class="info_article2">
                     <p><a href="{{ url_for('frontend.show_article', article_id=article.id) }}">{{ article.title }}</a></p>
                     <p>{{ article.resume }}</p>
                 </div>
@@ -58,30 +56,30 @@
         </section>
 
         <section class="other-articles">
+            <h2>Autres articles</h2>
+            {% for article in other_articles %}
             <div class="article">
-                <h3>Titre de l'article 3</h3>
-                <p>Description de l'article 3...</p>
+                <img src="../static/Images/images_accueil/vegM2.jpg" alt="Image de {{ article.title }}">
+                    Par {{ article.author.pseudo }}
             </div>
-        </section>
-        <section class="other-articles">
-            <div class="article">
-                <h3>Titre de l'article 4</h3>
-                <p>Description de l'article 4...</p>
+            <div class="info_article2">
+                <p><a href="{{ url_for('frontend.show_article', article_id=article.id) }}">{{ article.title }}</a></p>
+                <p>{{ article.resume }}</p>
             </div>
+            {% endfor %}
         </section>
     </div>
-    <div id="space-after">
-    </div>
+    <div id="space-after"></div>
+
     <aside id="aside">
-        <h2>Archive des articles</h2>
-        <br>
-        <ul>
-            <li>Mai 2024</li>
-            <li>Juin 2024</li>
-            <li>Juillet 2024</li>
-            <!-- Ajoutez d'autres mois si nécessaire -->
-        </ul>
-    </aside>
+    <h2>Archive des articles</h2>
+    <br>
+    <ul>
+        {% for year, month, month_name in archive_months %}
+        <li><a href="{{ url_for('frontend.archive', year=year, month=month) }}">{{ month_name }} {{ year }}</a></li>
+        {% endfor %}
+    </ul>
+</aside>
 </div>
 <br>
 <div class="separation">
