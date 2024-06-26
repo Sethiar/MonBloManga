@@ -1,10 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'baseform.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Page invitant à patienter">
+    <title>{% block title %}Attendez, s'il vous plaît...{% endblock %}</title>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='CSS/wait.css') }}">
+{% endblock %}
+
+{% block header_content %}
+
+{% endblock %}
+{% block body_content %}
+<div class="container">
+    <h1>Merci de patienter</h1>
+    <p>Nous vous avons envoyé un lien de réinitialisation de mot de passe. Veuillez vérifier votre boîte mail.</p>
+   <img class="anim" src="{{ url_for('static', filename='Images/icons_blog/gif_sanzor.gif') }}" alt="Chargement en cours">
+</div>
+
+{% endblock %}
+
+{% block footer_content %}
+{% endblock %}
