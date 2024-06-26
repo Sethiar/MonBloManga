@@ -1,4 +1,5 @@
 """Modèle de la classe Utilisateur."""
+import bcrypt
 
 from datetime import datetime, timedelta
 
@@ -47,6 +48,17 @@ class User(db.Model, UserMixin):
         return f"User(pseudo='{self.pseudo}', email='{self.email}', date_naissance='{self.date_naissance}', " \
                f"chemin_photo='{self.chemin_photo}, banned='{self.banned}', date_banned='{self.date_banned}'" \
                f"date_ban_end='{self.date_ban_end}')"
+
+    def set_password(self, new_password):
+        """
+        Redéfinit le mot de passe de l'utilisateur.
+
+        Args:
+            new_password (str) : Le nouveau mot de passe de l'utilisateur.
+        """
+        self.password_hash = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt())
+        db.session.add(self)
+        db.session.commit()
 
     def is_active(self):
         """
