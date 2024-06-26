@@ -9,11 +9,12 @@ import bcrypt
 from flask import session, redirect, url_for, request, current_app, render_template, flash
 from flask_login import logout_user, login_user, login_required
 
-from app.Models.forms import UserConnection, AdminConnection, ForgetPassword
+from app.Models.forms import UserConnection, AdminConnection, ForgetPassword, RenamePassword
 
 from app.Models.user import User
 from app.Models.admin import Admin
 
+from app.mail.routes import reset_password_mail, password_reset_success_email
 
 
 # Route permettant à l'administrateur de joindre le formulaire de connexion.
@@ -177,9 +178,9 @@ def user_connection_error():
     return render_template("User/user_connection.html", form=form)
 
 
-# Route permettant d'accéder à la route de réinitialisation de son mot de passe.
+# Route permettant de réinitialiser le mot de passe utilisateur.
 @auth_bp.route("/forgot_password", methods=['GET', 'POST'])
-def password_reinitialise():
+def password_reset():
     """
     Réinitialise le mot de passe utilisateur.
 
@@ -187,44 +188,74 @@ def password_reinitialise():
     lien envoyé et arrive sur le formulaire de réinitialisation.
     S'il n'est pas à l'origine de la réinitialisation, un mail est envoyé à l'administrateur automatiquement.
 
-    :param user_id:
+    :param email(str) : email de l'utilisateur (si nécessaire)
     """
     # Création de l'instance du formulaire.
     form = ForgetPassword()
     if form.validate_on_submit():
         email = form.email.data
-        user = User.query.filter_by(amail=email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
             serializer = current_app.config['serializer']
             token = serializer.dumps(email, salt='password-reset-salt')
-            #reset_url = ('auth.recording_new_password', token=token, _external=True)
+            reset_url = url_for('auth.recording_new_password', token=token, _external=True)
 
-    render_template('functional/reinitiate-password.html', form=form)
+            # Redirection vers la page wait.html avec le token
+            return redirect(url_for('auth.wait', token=token, email=email))
+
+    return render_template('functional/reset_password.html', form=form)
 
 
-# Route permettant de réinitialiser osn mot de passe.
-@auth_bp.route("/enregistrement_nouveau_mot_de_passe", methods=['GET', 'POST'])
+# Route renvoyant une page d'attente.
+@auth_bp.route("/patience")
+def wait():
+    """
+    Affiche une page d'attente pendant l'envoi du lien réinitialisant le mot de passe.
+
+    :param token : Jeton de réinitialisation du mot de passe.
+    :param email : Email de l'utilisateur.
+    """
+    token = request.args.get('token')
+    email = request.args.get('email')
+
+    if not token or not email:
+        flash('Lien invalide ou expiré.', 'danger')
+        return redirect(url_for('auth.password_reset'))
+
+    # Appel direct de la fonction d'envoi d'email.
+    reset_url = url_for('auth.recording_new_password', token=token, _external=True)
+    reset_password_mail(email, reset_url)
+
+    return render_template('functional/wait.html')
+
+
+# Route permettant de réinitialiser son mot de passe.
+@auth_bp.route("/enregistrement_nouveau_mot_de_passe/<token>", methods=['GET', 'POST'])
 def recording_new_password(token):
     """
+    Route permettant de réinitialiser son mot de passe.
 
-    :param token:
+    :param token: Jeton de réinitialisation du mot de passe.
+    :return: Redirige vers la page de connexion après la réinitialisation du mot de passe.
     """
-    serializer = current_app.config['serializer']
     try:
-        email = serializer.loads(token, salt='password-reset-salt', max_age=3600)
-    except:
-        flash("Le token d'identification a expiré.", "Attention")
-        return redirect(url_for("auth.forgot_password"))
+        email = current_app.config['serializer'].loads(token, salt='password-reset-salt', max_age=3600)
+    except Exception:
+        flash('Le lien de réinitialisation du mot de passe est invalide ou a expiré.', 'danger')
+        return redirect(url_for('landing_page'))
 
-    form = ForgetPassword()
-    if form.validate_on_submit():
-        user = User.query.filter_by(emaiul=email).first()
+    formpassword = RenamePassword()
+
+    if formpassword.validate_on_submit():
+        user = User.query.filter_by(email=email).first()
         if user:
-            user.set_password(form.new_password.data)
-            db.session.commit
-            flash("Le mot de passe a bien été lis à jour.")
-            return redirect(url_for("auth.login"))
-    return render_template('functional/reinitiate-password.html', form=form)
+            user.set_password(formpassword.new_password.data)
+            password_reset_success_email(user)
+            print("Le mot de passe a bien été mis à jour.")
+        return redirect(url_for("auth.login"))
+
+    return render_template('functional/recording_password.html', formpassword=formpassword, token=token)
+
 
 
 # Route permettant à l'utilisateur de se déconnecter.

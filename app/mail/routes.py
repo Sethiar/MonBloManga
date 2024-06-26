@@ -12,9 +12,11 @@ from flask_mail import Message
 from app.Models.user import User
 from app.Models import db
 
+
 from datetime import date
 
 
+# Méthode qui permet d'envoyer un mail de test.
 @mail_bp.route("/send_mail")
 def send_email():
     """
@@ -28,6 +30,7 @@ def send_email():
     return "Email envoyé !"
 
 
+# Méthode qui envoie un mail de confirmation d'inscription."
 @mail_bp.route("/send_confirmation_email/<string:email>")
 def send_confirmation_email(email):
     """
@@ -46,6 +49,7 @@ def send_confirmation_email(email):
     return redirect(url_for('landing_page'))
 
 
+# Méthode qui permet de souhaiter un bon anniversaire à un utilisateur.
 def mail_birthday():
     """
     Envoie des e-mails de souhaits d'anniversaire aux utilisateurs dont c'est l'anniversaire aujourd'hui.
@@ -57,6 +61,7 @@ def mail_birthday():
         send_birthday_email(user)
 
 
+# Méthode qui renvoie le mail de bon anniversaire à l'utilisateur.
 def send_birthday_email(user):
     """
     Envoie un e-mail de souhaits d'anniversaire à un utilisateur spécifique.
@@ -69,6 +74,7 @@ def send_birthday_email(user):
     current_app.extensions['mail'].send(msg)
 
 
+# Méthode qui avertit l'utilisateur de son bannissement pendant 7 jours.
 def mail_banned_user(user):
     """
     Envoie un e-mail informant un utilisateur de son bannissement temporaire pour non-respect des règles.
@@ -84,6 +90,7 @@ def mail_banned_user(user):
     current_app.extensions['mail'].send(msg)
 
 
+# Méthode qui permet de bannir définitivement un utilisateur.
 def definitive_banned(user):
     """
     Envoie un e-mail informant un utilisateur de son bannissement définitif du blog pour récidive dans le non-respect des règles.
@@ -100,3 +107,39 @@ def definitive_banned(user):
                f"Cordialement, L'équipe du blog."
     current_app.extensions['mail'].send(msg)
 
+
+# Méthode qui envoie le lien permettant de faire le changement du mot de passe.
+def reset_password_mail(email, reset_url):
+    """
+    Envoie un mail afin de cliquer sur un lien permettant la réinitialisation du mot de passe.
+    Si l'utilisateur n'est pas à l'origine de cette action, le mail inclut un lien d'alerte pour l'administrateur.
+
+    :param reset_url: URL pour réinitialiser le mot de passe
+    :param email: Adresse email du destinataire
+    :return: None
+    """
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        flash("Utilisateur non trouvé.", "attention")
+        return redirect(url_for('landing_page'))
+    msg = Message('Réinitialisation de votre mot de passe',
+                  sender='noreply@yourapp.com',
+                  recipients=[email])
+    msg.body = f'Bonjour {user.pseudo},\n' \
+               f' pour réinitialiser votre mot de passe, cliquez sur le lien suivant : {reset_url}'
+    current_app.extensions['mail'].send(msg)
+
+
+# Méthode qui envoie un mail assurant le succès de la réinitialisation du mail.
+def password_reset_success_email(user):
+    """
+    Envoie un e-mail de confirmation de réinitialisation de mot de passe à l'utilisateur.
+
+    :param user: Instance de l'utilisateur.
+    """
+    msg = Message('Confirmation de réinitialisation de mot de passe',
+                  sender='noreply@yourapp.com',
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo},\n\nVotre mot de passe a été réinitialisé avec succès.\n\nCordialement," \
+               f"\nVotre équipe de support."
+    current_app.extensions['mail'].send(msg)
