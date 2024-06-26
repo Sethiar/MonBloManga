@@ -1,0 +1,19 @@
+* {
+  font-family: 'Comic Sans MS', cursive;
+  box-sizing: border-box;
+  background-color: black;
+  color: white;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+}
+
+.anim {
+    margin-top: 20px;
+    max-width: 200px;
+}
