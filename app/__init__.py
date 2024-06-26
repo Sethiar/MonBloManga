@@ -3,7 +3,6 @@ Instanciation de l'application flask
 """
 import logging
 import os
-import sys
 
 import secrets
 
@@ -23,6 +22,9 @@ from app.Models import db
 from login_manager import login_manager
 
 from dotenv import load_dotenv
+
+
+from itsdangerous import URLSafeTimedSerializer
 
 # Chargement des variables d'environnement à partir du fichier .env.
 load_dotenv()
@@ -90,6 +92,9 @@ def create_app():
 
     # Définition de la clé secrète pour les cookies.
     app.secret_key = secrets.token_hex(16)
+
+    # Configuration du serializer.
+    app.config['serializer'] = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
     # Initialisation de la base de données.
     db.init_app(app)
