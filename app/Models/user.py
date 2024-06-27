@@ -37,6 +37,7 @@ class User(db.Model, UserMixin):
     banned = db.Column(db.Boolean, default=False)
     date_banned = db.Column(db.DateTime, nullable=True)
     date_ban_end = db.Column(db.DateTime, nullable=True)
+    count_ban = db.Column(db.Integer, default=0)
 
     def __repr__(self):
         """
@@ -47,7 +48,7 @@ class User(db.Model, UserMixin):
         """
         return f"User(pseudo='{self.pseudo}', email='{self.email}', date_naissance='{self.date_naissance}', " \
                f"chemin_photo='{self.chemin_photo}, banned='{self.banned}', date_banned='{self.date_banned}'" \
-               f"date_ban_end='{self.date_ban_end}')"
+               f"date_ban_end='{self.date_ban_end}', count_ban='{self.count_ban})"
 
     def set_password(self, new_password):
         """
@@ -91,10 +92,19 @@ class User(db.Model, UserMixin):
         """
         Bannit l'utilisateur en définissant banned à True.
         """
-        self.banned = True
-        self.date_banned = datetime.now()
-        self.date_ban_end = datetime.now() + timedelta(days=7)
-        db.session.commit()
+        if self.count_ban is None:
+            self.count_ban = 0
+        # Incrémentation de count_ban.
+        self.count_ban += 1
+
+        if self.count_ban >= 3:
+            self.permanent_ban()
+
+        else:
+            self.banned = True
+            self.date_banned = datetime.now()
+            self.date_ban_end = datetime.now() + timedelta(days=7)
+            db.session.commit()
 
     def unban_user(self):
         """
@@ -104,6 +114,19 @@ class User(db.Model, UserMixin):
         self.date_banned = None
         self.date_ban_end = None
         db.session.commit()
+
+    def permanent_ban(self):
+        """
+        Bannit définitivement l'utilisateur.
+        """
+        self.banned = True
+        self.date_banned = datetime.now()
+        self.date_ban_end = None
+        db.session.commit()
+
+        # Appel de la fonction d'envoi de mail du bannissement définitif.
+        from app.mail.routes import definitive_banned
+        definitive_banned(self.email)
 
     def is_banned(self):
         """

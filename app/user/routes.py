@@ -1,7 +1,6 @@
 """
 Code permettant à l'utilisateur d'utiliser le blog.
 """
-import os.path
 
 from app.user import user_bp
 
@@ -58,6 +57,7 @@ def user_recording():
     form = UserSaving()
 
     if form.validate_on_submit():
+        # Assainissement des données.
         pseudo = form.pseudo.data
         password_hash = form.password.data
         email = form.email.data

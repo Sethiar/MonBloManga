@@ -27,6 +27,8 @@ from app.Models.comment_biography import CommentBiography
 from app.Models.comment_subject import CommentSubject
 from app.Models.subjects_forum import SubjectForum
 
+from app.mail.routes import mail_banned_user, mail_deban_user, mail_edit_article
+
 
 # Route utilisée pour accéder au back_end du blog.
 @admin_bp.route("/back_end")
@@ -65,7 +67,6 @@ def back_end():
         formauthor = NewAuthor()
         formcomment = CommentArticleForm()
         formuser = UserSaving()
-        formban = BanUserForm()
 
         # Permet l'affichage des catégories, des articles de la liste des auteurs ainsi que les sujets du forum dans
         # le back_end.
@@ -183,11 +184,11 @@ def users_list():
     formban = BanUserForm()
     formunban = UnBanUserForm()
 
-    users = db.session.query(User.id, User.pseudo, User.email, User.banned).all()
+    users = db.session.query(User.id, User.pseudo, User.email, User.banned, User.count_ban).all()
 
     user_data = [
-        {'id': user_id, 'pseudo': pseudo, 'email': email, 'banned': banned}
-        for user_id, pseudo, email, banned in users
+        {'id': user_id, 'pseudo': pseudo, 'email': email, 'banned': banned, 'count_ban': count_ban}
+        for user_id, pseudo, email, banned, count_ban in users
     ]
 
     return render_template("Admin/users_list.html", users=user_data, formuser=formuser,
@@ -240,7 +241,6 @@ def banning_user(id):
     """
     # Instanciation du formulaire de bannissement.
     formban = BanUserForm()
-
     # Récupération de l'utilisateur à bannir par son identifiant.
     user = User.query.get(id)
 
@@ -249,11 +249,11 @@ def banning_user(id):
         user.ban_user()
         # Récupération de l'email de l'utilisateur.
         email = user.email
+        mail_banned_user(email)
 
-        print("l'utilisateur est banni du blog.")
-        return redirect(url_for("mail.mail_banned_user", email=email))
+        flash("l'utilisateur est banni du blog.")
     else:
-        print("L'utilisateur n'a pas été trouvé.", "error")
+        flash("L'utilisateur n'a pas été trouvé.", "error")
 
     return redirect(url_for('admin.back_end', formban=formban))
 
@@ -287,11 +287,11 @@ def unbanning_user(id):
         user.unban_user()
         # Récupération de l'email de l'utilisateur.
         email = user.email
+        mail_deban_user(email)
 
-        print("l'utilisateur est réintégré au blog.")
-        return redirect(url_for("mail.mail_unbanned_user", email=email))
+        flash("l'utilisateur est réintégré au blog.")
     else:
-        print("L'utilisateur n'a pas été trouvé.", "error")
+        flash("L'utilisateur n'a pas été trouvé.", "error")
 
     return redirect(url_for('admin.back_end', formban=formban, formunban=formunban))
 
@@ -440,11 +440,23 @@ def add_new_article():
         article = Article(title=title, resume=resume, article_content=article_content, date_edition=date_edition,
                           author=author, categorie=categorie)
 
-        # Enregistrement de l'article dans la base de données.
-        db.session.add(article)
-        db.session.commit()
+        try:
+            # Enregistrement de l'article dans la base de données.
+            db.session.add(article)
+            db.session.commit()
 
-    flash("L'article a bien été ajouté " + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
+            # Envoi d'un mail pour la publication d'un article.
+            users = User.query.all()
+            for user in users:
+                mail_edit_article(user.email, article)
+
+            flash("L'article a bien été ajouté " + " " + datetime.now().strftime(" le %d-%m-%Y à %H:%M:%S"))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Erreur lors de la création de l'article: {str(e)}")
+
+        return redirect(url_for("admin.back_end"))
+
     return redirect(url_for("admin.back_end"))
 
 

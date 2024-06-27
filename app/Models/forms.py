@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, HiddenField, \
     EmailField, DateField, SubmitField, TextAreaField, SelectField, FileField
 
-from wtforms.validators import DataRequired, EqualTo, ValidationError
+from wtforms.validators import DataRequired, EqualTo, ValidationError, Length, Email
 from flask_wtf.file import FileAllowed, FileRequired
 from app.Models.user import User
 
@@ -57,11 +57,11 @@ class UserSaving(FlaskForm):
 
     email = EmailField(
         "Email",
-        validators=[DataRequired()],
+        validators=[DataRequired(), Email()],
         render_kw={"placeholder": "Entrez votre email"})
     pseudo = StringField(
         "Pseudo",
-        validators=[DataRequired()],
+        validators=[DataRequired(), Length(min=2, max=30)],
         render_kw={"placeholder": "Entrez votre pseudo personnel"})
     password = PasswordField(
         "Mot de passe Utilisateur",

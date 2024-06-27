@@ -257,7 +257,6 @@ def recording_new_password(token):
     return render_template('functional/recording_password.html', formpassword=formpassword, token=token)
 
 
-
 # Route permettant à l'utilisateur de se déconnecter.
 @auth_bp.route("/deconnexion", methods=["GET"])
 @login_required
@@ -336,14 +335,9 @@ def login():
                 return redirect(next_url)
             else:
                 return redirect(url_for('landing_page'))
-
-
         else:
-
             current_app.logger.warning(f"Tentative de connexion échouée avec l'utilisateur {form.pseudo.data}.")
-
             flash("Identifiant ou mot de passe incorrect. Veuillez réessayer.", "error")
-
             return redirect(url_for("auth.user_connection_error"))
 
     return render_template("User/user_connection.html", form=form)
