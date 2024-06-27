@@ -18,6 +18,7 @@
                 <th>Pseudo de l'utilisateur</th>
                 <th>Email de l'utilisateur</th>
                 <th>Statut du bannissement</th>
+                <th>Nombre de bannissement</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -27,6 +28,7 @@
                 <td>{{ user.pseudo }}</td>
                 <td>{{ user.email }}</td>
                 <td>{{ user.banned }}</td>
+                <td>{{ user.count_ban }}</td>
                 <td>
                     <form action="{{ url_for('admin.suppress_user', id=user.id) }}" method="POST" class="btn_suppression">
                         {{ formuser.csrf_token }}
