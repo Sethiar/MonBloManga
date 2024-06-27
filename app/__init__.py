@@ -2,7 +2,12 @@
 Instanciation de l'application flask
 """
 import logging
+
 import os
+import sys
+
+project_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.join(project_dir, '..'))
 
 import secrets
 
@@ -12,13 +17,13 @@ from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 from datetime import timedelta
 
+from app.Models import db
+
 from config import config
 from config.config import Config
 
 from flask_migrate import Migrate
 
-
-from app.Models import db
 from login_manager import login_manager
 
 from dotenv import load_dotenv
