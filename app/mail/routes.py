@@ -3,12 +3,12 @@ Code permettant de définir les routes concernant le mailing du blog.
 """
 
 from app.mail import mail_bp
-
 from flask import redirect, url_for, flash, current_app
 
 from flask_mail import Message
 
 from app.Models.user import User
+from app.email_utils import send_email_in_background
 
 
 # Méthode qui permet d'envoyer un mail de test.
@@ -263,7 +263,7 @@ def mail_like_comment_article(user, article_title):
                f"concernant l'article : {article_title}.\n" \
                f"Mangament,\n" \
                f"Votre équipe de support."
-    current_app.extensions['mail'].send(msg)
+    send_email_in_background(current_app._get_current_object(), msg)
 
 
 # Méthode qui envoie un mail à utilisateur en cas de like de son commentaire à la section forum.
@@ -282,7 +282,7 @@ def mail_like_comment_subject(user, subject):
                f"concernant le sujet suivant : {subject.nom}.\n" \
                f"Mangament,\n" \
                f"Votre équipe de support."
-    current_app.extensions['mail'].send(msg)
+    send_email_in_background(current_app._get_current_object(), msg)
 
 
 # Méthode qui envoie un mail à utilisateur en cas de like de son commentaire à la section forum.
@@ -301,6 +301,6 @@ def mail_like_comment_biography(user, biography):
                f"concernant la biographie de : {biography.mangaka_name}\n" \
                f"Mangament, \n" \
                f"Votre équipe de support."
-    current_app.extensions['mail'].send(msg)
+    send_email_in_background(current_app._get_current_object(), msg)
 
 

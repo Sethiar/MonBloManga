@@ -23,12 +23,8 @@ from config import config
 from config.config import Config
 
 from flask_migrate import Migrate
-
 from login_manager import login_manager
-
 from dotenv import load_dotenv
-
-
 from itsdangerous import URLSafeTimedSerializer
 
 # Chargement des variables d'environnement à partir du fichier .env.

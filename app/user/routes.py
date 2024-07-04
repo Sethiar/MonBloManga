@@ -352,6 +352,9 @@ def likes_comment_article():
             db.session.commit()
             liked = True
 
+            # Envoi d'un mail si le commentaire de la section article est liké.
+            mail_like_comment_article(comment.user, comment.article.title)
+
         # Comptage du nombre de likes pour le commentaire des articles.
         like_count = CommentLikeArticle.query.filter_by(comment_id=comment_id).count()
         # Obtention des IDs des utilisateurs ayant liké le commentaire des articles.
@@ -365,9 +368,6 @@ def likes_comment_article():
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
-
-
-
 
 
 # Route permettant de répondre à un commentaire de la section article une fois connecté.
@@ -596,6 +596,9 @@ def likes_comment_subject():
             db.session.add(new_like)
             db.session.commit()
             liked = True
+
+            # Envoi d'un mail si le commentaire de la section forum est liké.
+            mail_like_comment_subject(comment.user, comment.subject)
 
         # Comptage du nombre de likes pour le commentaire.
         like_count = CommentLikeSubject.query.filter_by(comment_id=comment_id).count()
@@ -868,6 +871,9 @@ def likes_comment_biography():
             db.session.add(new_like)
             db.session.commit()
             liked = True
+
+            biography = BiographyMangaka.query.get(comment.biography_mangaka_id)
+            mail_like_comment_biography(comment.user, biography)
 
         # Comptage du nombre de likes pour le commentaire des biographies.
         like_count = CommentLikeBiography.query.filter_by(comment_id=comment_id).count()
