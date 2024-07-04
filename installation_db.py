@@ -58,6 +58,7 @@ with app.app_context():
             date_naissance (date): Date de naissance de l'utilisateur.
             profil_photo (string): url de récupération des photos utilisateurs du blog.
             banned (bool): renseigne sur l'état de bannissement de l'utilisateur.
+            count_ban : Visualise le nombre de ban de l'utilisateur.
         """
         __tablename__ = "user"
         __table_args__ = {"extend_existing": True}
@@ -70,6 +71,9 @@ with app.app_context():
         date_naissance = db.Column(db.Date, nullable=False)
         profil_photo = db.Column(db.LargeBinary, nullable=False)
         banned = db.Column(db.Boolean, default=False)
+        date_banned = db.Column(db.DateTime, nullable=True)
+        date_ban_end = db.Column(db.DateTime, nullable=True)
+        count_ban = db.Column(db.Integer, default=0)
 
     # Modèle de la classe Author.
     class Author(db.Model):
@@ -89,6 +93,8 @@ with app.app_context():
         nom = db.Column(db.String(30), nullable=False)
         prenom = db.Column(db.String(30), nullable=False)
         pseudo = db.Column(db.String(30), unique=True, nullable=False)
+        # Relation avec la classe BiographyMangaka.
+        biographies = db.relationship('BiographyMangaka', backref='author_biographies', lazy=True)
 
     # Modèle de la classe Article.
     class Article(db.Model):
@@ -137,15 +143,17 @@ with app.app_context():
     # Table de données concernant les biographies des mangakas.
     class BiographyMangaka(db.Model):
         """
-        Table de données qui enregistre les biographies des mangakas.
+        Modèle de données représentant les biographies des mangakas.
 
-        Attributes :
-            id (int) : identifiant unique de la table.
-            biography_content (str) : Contenu de la biographie.
-            date_bio_mangaka (date) : Date d'édition de la biographie.
-            mangaka_name (str) : Nom du mangaka.
-            pseudo_author (str) : pseudo de l'auteur de la biographie.
-
+        Attributes:
+            id (int): Identifiant unique de la biographie.
+            biography_content (str) : Contenu de la biographie du mangaka.
+            date_bio_mangaka (datetime) : Date d'édition de la biographie.
+            mangaka_name (str) : Nom du mangaka concerné par la biographie.
+            author_id (int) : Identifiant de l'auteur de la biographie.
+            author (Author): Référence à l'objet Author associé à l'auteur de la biographie.
+            likes (int): Nombre de likes pour la biographie.
+            dislikes (int): Nombre de dislikes pour la biographie.
         """
         __tablename__ = "biography_mangaka"
         __table_args__ = {"extend_existing": True}
@@ -182,22 +190,24 @@ with app.app_context():
 
         Attributes:
             id (int): Identifiant unique de la catégorie.
-            nom (str): Nom de la catégorie.
+            name (str): Nom de la catégorie.
         """
         __tablename__ = "categorie"
         __table_args__ = {"extend_existing": True}
 
         id = db.Column(db.Integer, primary_key=True)
-        nom = db.Column(db.String(50), nullable=False)
+        name = db.Column(db.String(50), nullable=False)
+
+        article = db.relationship('Article', back_populates='categorie')
 
     # Modèle de la classe sujet pour le forum.
     class SubjectForum(db.Model):
         """
-        Représente un sujet.
+        Modèle de données représentant un sujet pour le forum.
 
         Attributes:
-            id (int): Identifiant unique du sujet du forum.
-            nom (str): Nom du sujet.
+            id (int): Identifiant unique du sujet pour le forum.
+            nom (str): Nom du sujet du forum (limité à 50 caractères).
         """
         __tablename__ = "subject_forum"
         __table_args__ = {"extend_existing": True}
@@ -227,7 +237,7 @@ with app.app_context():
 
         # Relation avec la classe Article.
         article_id = db.Column(db.Integer, db.ForeignKey('article.id'), nullable=False)
-        article = db.relationship('Article', backref=db.backref('article_comments', lazy=True))
+        article = db.relationship('Article', backref=db.backref('comment_article', lazy=True))
 
         # Relation avec la classe User.
         user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -276,7 +286,7 @@ with app.app_context():
         likes_suppress_subject = db.relationship('CommentLikeSubject', backref='comment_like_subject',
                                                  cascade='all, delete-orphan')
 
-
+    # Modèle de la classe Comment de la section biographie.
     class CommentBiography(db.Model):
         """
         Représente un commentaire sur une biographie.
@@ -313,14 +323,14 @@ with app.app_context():
         likes_suppress_biography = db.relationship('CommentLikeBiography', backref='comment_like_biography',
                                                    cascade='all, delete-orphan')
 
-    # Table de liaison pour les likes
+    # Table de liaison pour les likes.
     class Likes(db.Model):
         """
         Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils aiment.
 
         Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            article_id (int) : Identifiant de l'article.
+            user_id (int) : Identifiant de l'utilisateur qui a aimé l'article (clé primaire).
+            article_id (int): Identifiant de l'article aimé (clé primaire).
         """
 
         __tablename__ = "likes"
@@ -329,16 +339,15 @@ with app.app_context():
         user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
         article_id = db.Column(db.Integer, db.ForeignKey("article.id", ondelete="CASCADE"), primary_key=True)
 
-    # Table de liaison pour les dislikes
-    # Table de liaison pour les dislikes
+    # Table de liaison pour les dislikes.
     class Dislikes(db.Model):
         """
             Modèle de données représentant la relation entre les utilisateurs et les articles qu'ils n'aiment pas.
 
             Attributes:
-                user_id (int) : Identifiant de l'utilisateur.
-                article_id (int) : Identifiant de l'article.
-            """
+                user_id (int) : Identifiant de l'utilisateur qui n'a pas aimé l'article (clé primaire).
+                article_id (int): Identifiant de l'article désaimé (clé primaire).
+        """
         __tablename__ = "dislikes"
         __table_args__ = {"extend_existing": True}
 
@@ -351,8 +360,8 @@ with app.app_context():
         Modèle de données représentant la relation entre les utilisateurs et les biographies qu'ils aiment.
 
         Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            biography_mangaka_id (int) : Identifiant de la biographie.
+            user_id (int) : Identifiant de l'utilisateur qui a aimé la biographie (clé primaire).
+            article_id (int): Identifiant de la biographie aimé (clé primaire).
         """
 
         __tablename__ = "likes_biography"
@@ -361,7 +370,6 @@ with app.app_context():
         user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
         biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"),
                                          primary_key=True)
-
 
     # Table de liaison pour les dislikes de la section biographie.
     class DislikesBiography(db.Model):
@@ -383,11 +391,11 @@ with app.app_context():
     class CommentLikeArticle(db.Model):
         """
         Modèle de données représentant la relation entre les utilisateurs et les commentaires
-        qu'ils aiment de la section article.
+        qu'ils aiment dans la section article.
 
         Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            comment_id (int) : Identifiant du commentaire.
+            user_id (int) : Identifiant de l'utilisateur qui a aimé le commentaire (clé primaire).
+            comment_id (int): Identifiant du commentaire aimé (clé primaire).
         """
         __tablename__ = "likes_comment_article"
         __table_args__ = {"extend_existing": True}
@@ -399,11 +407,11 @@ with app.app_context():
     class CommentLikeSubject(db.Model):
         """
         Modèle de données représentant la relation entre les utilisateurs et les commentaires
-        qu'ils aiment de la section forum.
+        qu'ils aiment dans la section forum.
 
         Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            comment_id (int) : Identifiant du commentaire.
+            user_id (int) : Identifiant de l'utilisateur qui a aimé le commentaire (clé primaire).
+            comment_id (int): Identifiant du commentaire aimé (clé primaire).
         """
         __tablename__ = "likes_comment_subject"
         __table_args__ = {"extend_existing": True}
@@ -415,11 +423,11 @@ with app.app_context():
     class CommentLikeBiography(db.Model):
         """
         Modèle de données représentant la relation entre les utilisateurs et les commentaires
-        qu'ils aiment de la section biographie.
+        qu'ils aiment dans la section biographie.
 
         Attributes:
-            user_id (int) : Identifiant de l'utilisateur.
-            comment_id (int) : Identifiant du commentaire.
+            user_id (int) : Identifiant de l'utilisateur qui a aimé le commentaire (clé primaire).
+            comment_id (int): Identifiant du commentaire aimé (clé primaire).
         """
         __tablename__ = "likes_comment_biography"
         __table_args__ = {"extend_existing": True}
@@ -491,7 +499,7 @@ with app.app_context():
             reply_content (str): Contenu de la réponse.
             reply_date (date): Date de la réponse.
             comment_id (int): Identifiant du commentaire associé à la réponse.
-            user_id (int): Identifiant de l'utilisateur ayant posté la réponse.
+            user_id (int) : Identifiant de l'utilisateur ayant posté la réponse.
         """
         __tablename__ = "reply_biography"
         __table_args__ = {"extend_existing": True}
