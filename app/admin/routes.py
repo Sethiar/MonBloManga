@@ -102,9 +102,9 @@ def articles_list():
     formarticles = ArticleForm()
     formfiltercategorie = FilterForm()
 
-    # Récupération de toutes les catégories depuis les articles
+    # Récupération de toutes les catégories depuis les articles.
     categories = Categorie.query.all()
-    formfiltercategorie.category.choices = [(cat.nom, cat.nom) for cat in categories]
+    formfiltercategorie.category.choices = [(cat.name, cat.name) for cat in categories]
 
     # Récupération de tous les articles.
     articles = Article.query.all()
@@ -141,7 +141,7 @@ def article_filter():
 
         if category_name:
             # Récupération de l'id de la catégorie sélectionnée.
-            category = Categorie.query.filter_by(nom=category_name).first()
+            category = Categorie.query.filter_by(name=category_name).first()
             print(f"Catégorie récupérée : {category}")
 
             if category:
@@ -312,8 +312,8 @@ def add_new_categorie():
     """
     if request.method == "POST":
         # Saisie du nom de la catégorie.
-        nom_categorie = escape(request.form.get("nom"))
-        categorie = Categorie(nom=nom_categorie)
+        name_categorie = escape(request.form.get("name"))
+        categorie = Categorie(name=name_categorie)
 
         # Enregistrement dans la base de données.
         db.session.add(categorie)

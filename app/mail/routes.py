@@ -9,16 +9,11 @@ from flask import redirect, url_for, flash, current_app
 from flask_mail import Message
 
 from app.Models.user import User
-from app.Models.articles import Article
-
-from app.Models import db
-
-from datetime import date
 
 
 # Méthode qui permet d'envoyer un mail de test.
 @mail_bp.route("/send_mail")
-def send_email():
+def send_email_test():
     """
     Envoie un e-mail de test à une adresse prédéfinie pour vérifier la configuration de Flask-Mail.
     """
@@ -44,7 +39,10 @@ def send_confirmation_email(email):
     msg = Message("Confirmation d'inscription", sender=current_app.config['MAIL_DEFAULT_SENDER'], recipients=[email])
     msg.body = f"Merci de vous être inscrit sur notre site. Votre inscription a été confirmée avec succès.\n" \
                f"Nous espérons que nous vous retrouverons bientôt afin d'entendre votre voix sur notre blog.\n" \
-               f"Merci {user.pseudo} de votre confiance."
+               f"Merci {user.pseudo} de votre confiance. \n" \
+               f"Mangament, \n" \
+               f"L'équipe du blog."
+
     current_app.extensions['mail'].send(msg)
     return redirect(url_for('landing_page'))
 
@@ -59,6 +57,7 @@ def mail_edit_article(email, article):
                   sender=current_app.config['MAIL_DEFAULT_SENDER'], recipients=[email])
     msg.body = f"Un nouvel article a été publié : {article.title}." \
                f"Venez donner votre avis sur le blog.\n" \
+               f"Mangament,\n" \
                f"L'équipe du blog."
 
     try:
@@ -77,7 +76,8 @@ def send_birthday_email(email):
                   sender=current_app.config['MAIL_DEFAULT_SENDER'],
                   recipients=[email])
     msg.body = f"Bonjour {user.pseudo},\n\nNous vous souhaitons un très joyeux anniversaire !\n" \
-               f"\nCordialement,\nL'équipe du blog."
+               f"\nMangament,\n" \
+               f"L'équipe du blog."
     current_app.extensions['mail'].send(msg)
 
 
@@ -97,7 +97,8 @@ def mail_banned_user(email):
                f"Suite à la tenue des règles en vigueur sur le blog, vous avez été banni " \
                f"pendant une semaine. J'espère que vous comprenez notre démarche. Si vous ne respectez pas " \
                f"à nouveau les règles du blog, vous serez banni définitivement.\n" \
-               f"Cordialement, L'équipe du blog."
+               f"Cordialement,\n" \
+               f"L'équipe du blog."
     current_app.extensions['mail'].send(msg)
 
 
@@ -115,7 +116,10 @@ def mail_deban_user(email):
     msg.body = f"Bonjour {user.pseudo}, \n" \
                f"Nous vous informons que vous n'êtes plus banni du blog. \n" \
                f"Nous espérons vous revoir très vite. \n" \
-               f"À bientôt."
+               f"À bientôt.\n"\
+               f"Cordialement, \n" \
+               f"L'équipe du blog."
+
     current_app.extensions['mail'].send(msg)
 
 
@@ -135,7 +139,8 @@ def definitive_banned(email):
                f"nos bases de données. Le fait que vous receviez ce mail signifie que vous avez été effacé de notre " \
                f"base de données. Nous regrettons cette décision, mais nous ne pouvons tolérer ce manquement aux " \
                f"règles établies.\n" \
-               f"Cordialement, L'équipe du blog."
+               f"Cordialement,\n" \
+               f"L'équipe du blog."
     current_app.extensions['mail'].send(msg)
 
 
@@ -171,6 +176,131 @@ def password_reset_success_email(user):
     msg = Message('Confirmation de réinitialisation de mot de passe',
                   sender='noreply@yourapp.com',
                   recipients=[user.email])
-    msg.body = f"Bonjour {user.pseudo},\n\nVotre mot de passe a été réinitialisé avec succès.\n\nCordialement," \
-               f"\nVotre équipe de support."
+    msg.body = f"Bonjour {user.pseudo},\n" \
+               f"Votre mot de passe a été réinitialisé avec succès.\n" \
+               f"Mangament,\n" \
+               f"Votre équipe de support."
     current_app.extensions['mail'].send(msg)
+
+
+# Méthode qui permet d'envoyer un mail à un utilisateur si quelqu'un a
+# répondu à son commentaire dans la section article.
+def mail_reply_comment_article(email, article_title):
+    """
+    Envoie un mail à l'auteur du commentaire en cas de réponse à celui-ci.
+    :param email : email de l'utilisateur qui a commenté l'article.
+    :param article_id : id de l'article qui a été commenté.
+    :param article_title : titre de l'article qui a été commenté.
+    """
+    user = User.query.filter_by(email=email).first()
+
+    msg = Message("Quelqu'un a répondu à votre commentaire de la section article.",
+                  sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo},\n" \
+               f"Un utilisateur a répondu à votre commentaire de la section article " \
+               f"à l'article suivant : '{article_title}'\n" \
+               f"Veuillez cliquer sur ce lien pour découvrir la réponse.\n" \
+               f"Mangament,\n" \
+               f"Votre équipe de support."
+    current_app.extensions['mail'].send(msg)
+
+
+# Méthode qui permet d'envoyer un mail à un utilisateur si quelqu'un a
+# répondu à son commentaire dans la section forum.
+def mail_reply_forum_comment(email, subject_nom):
+    """
+    Envoie un mail à l'auteur du commentaire en cas de réponse à celui-ci.
+    :param email: email de l'utilisateur qui a commenté le sujet du forum.
+    :param subject_nom : nom du sujet du forum commenté.
+    """
+    user = User.query.filter_by(email=email).first()
+
+    msg = Message("Quelqu'un a répondu à votre commentaire de la section forum.",
+                  sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo},\n" \
+               f"Un utilisateur a répondu à votre commentaire de la section forum dont le sujet est {subject_nom}.\n" \
+               f"Mangament,\n" \
+               f"Votre équipe de support."
+    current_app.extensions['mail'].send(msg)
+
+
+# Méthode qui permet d'envoyer un mail à un utilisateur si quelqu'un a
+# répondu à son commentaire dans la section biographie.
+def mail_reply_comment_biography(email, biography_mangaka_name):
+    """
+    Envoie un mail à l'auteur du commentaire en cas de réponse à celui-ci.
+    :param email: email de l'utilisateur qui a commenté la biographie.
+    :param biography_mangaka_name : biographie à laquelle l'utilisateur a répondu.
+    """
+
+    user = User.query.filter_by(email=email).first()
+
+    msg = Message("Quelqu'un a répondu à votre commentaire de la section biographie.",
+                  sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo},\n" \
+               f"Un utilisateur a répondu à votre commentaire de la biographie de {biography_mangaka_name}.\n" \
+               f"Mangament,\n" \
+               f"Votre équipe de support."
+    current_app.extensions['mail'].send(msg)
+
+
+# Méthode qui envoie un mail à utilisateur en cas de like de son commentaire à la section article.
+def mail_like_comment_article(user, article_title):
+    """
+    Envoie un mail à l'auteur du commentaire de la section article afin de l'avertir
+    qu'un utilisateur a aimé son commentaire.
+    :param user: utilisateur qui a posté le commentaire.
+    :param article_title : titre de l'article qui a été commenté.
+    """
+    msg = Message("Quelqu'un a aimé votre commentaire de la section article.",
+                  sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo},\n" \
+               f"Un utilisateur a aimé votre commentaire de la section article " \
+               f"concernant l'article : {article_title}.\n" \
+               f"Mangament,\n" \
+               f"Votre équipe de support."
+    current_app.extensions['mail'].send(msg)
+
+
+# Méthode qui envoie un mail à utilisateur en cas de like de son commentaire à la section forum.
+def mail_like_comment_subject(user, subject):
+    """
+    Envoie un mail à l'auteur du commentaire de la section forum afin de l'avertir
+    qu'un utilisateur a aimé son commentaire.
+    :param user: utilisateur qui a posté le commentaire.
+    :param subject: sujet dont le commentaire a été liké.
+    """
+    msg = Message("Quelqu'un a aimé votre commentaire de la section forum.",
+                  sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo},\n" \
+               f"Un utilisateur a aimé votre commentaire de la section forum " \
+               f"concernant le sujet suivant : {subject.nom}.\n" \
+               f"Mangament,\n" \
+               f"Votre équipe de support."
+    current_app.extensions['mail'].send(msg)
+
+
+# Méthode qui envoie un mail à utilisateur en cas de like de son commentaire à la section forum.
+def mail_like_comment_biography(user, biography):
+    """
+    Envoie un mail à l'auteur du commentaire de la section biographie afin de l'avertir
+    qu'un utilisateur a aimé son commentaire.
+    :param user: utilisateur qui a posté le commentaire.
+    :param biography : biography dont le commentaire a été liké.
+    """
+    msg = Message("Quelqu'un a aimé votre commentaire de la section biographie.",
+                  sender=current_app.config['MAIL_DEFAULT_SENDER'],
+                  recipients=[user.email])
+    msg.body = f"Bonjour {user.pseudo},\n" \
+               f"Un utilisateur a aimé votre commentaire de la section biographie " \
+               f"concernant la biographie de : {biography.mangaka_name}\n" \
+               f"Mangament, \n" \
+               f"Votre équipe de support."
+    current_app.extensions['mail'].send(msg)
+
+

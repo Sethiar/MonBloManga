@@ -41,6 +41,10 @@ from app.Models.likes_comment_subject import CommentLikeSubject
 from app.Models.likes_comment_biography import CommentLikeBiography
 
 
+from app.mail.routes import mail_like_comment_article, mail_like_comment_subject, mail_like_comment_biography, \
+    mail_reply_comment_article, mail_reply_forum_comment, mail_reply_comment_biography
+
+
 # Route permettant à un nouvel utilisateur de s'inscrire.
 @user_bp.route("/enregistrement_membre", methods=['GET', 'POST'])
 def user_recording():
@@ -288,6 +292,8 @@ def comment_article(user_pseudo):
             db.session.add(new_comment)
             db.session.commit()
 
+            flash('Le commentaire a bien été posté.')
+
             # Récupération de tous les commentaires de l'article après ajout du commentaire.
             comment_content = CommentArticle.query.filter_by(article_id=article_id).first()
 
@@ -361,6 +367,9 @@ def likes_comment_article():
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+
+
+
 # Route permettant de répondre à un commentaire de la section article une fois connecté.
 @user_bp.route("/<string:user_pseudo>/comment<int:comment_article_id>/reply_article", methods=['GET', 'POST'])
 @login_required
@@ -405,7 +414,13 @@ def comment_replies_article(comment_article_id, user_pseudo):
             # Ajouter le nouveau commentaire à la table de données.
             db.session.add(new_reply)
             db.session.commit()
-            print('la réponse au commentaire à bien été enregistrée.')
+            flash('la réponse au commentaire à bien été enregistrée.')
+
+            # Récupération de l'article associé au commentaire
+            article = Article.query.get(comment.article_id)
+
+            # Envoi du mail de réponse à un commentaire de la section article.
+            mail_reply_comment_article(comment.user.email, article.title)
 
             # Redirection sur la page d'affichage des articles.
             return redirect(url_for("frontend.show_article", article_id=comment.article_id))
@@ -413,7 +428,7 @@ def comment_replies_article(comment_article_id, user_pseudo):
             # Redirection vers une autre page si l'utilisateur n'existe pas.
             return redirect(url_for("functional.connection_requise"))
 
-    return redirect(url_for('frontend.show_article', article_id=comment.article_id, reply=reply))
+    return redirect(url_for('frontend.show_article', article_id=comment.article_id))
 
 
 # Route permettant de joindre le formulaire afin de poster une réponse à un commentaire.
@@ -532,7 +547,10 @@ def comment_replies_subject(comment_subject_id, user_pseudo):
         db.session.add(new_reply)
         db.session.commit()
 
+        subject = SubjectForum.query.get(comment.subject_id)
+
         flash("La réponse au commentaire a bien été enregistrée.", "success")
+        mail_reply_forum_comment(comment.user.email, subject.nom)
 
         # Redirection vers la page du sujet du forum
         return redirect(url_for("frontend.forum_subject", subject_id=comment.subject_id))
@@ -695,6 +713,7 @@ def comment_biography(user_pseudo):
             # Ajouter le nouveau commentaire à la table de données.
             db.session.add(new_comment)
             db.session.commit()
+            flash('La biographie a bien été commentée.')
 
             # Récupération de tous les commentaires de l'article après ajout du commentaire.
             comment_content = CommentBiography.query.filter_by(biography_mangaka_id=biography_mangaka_id).first()
@@ -908,7 +927,11 @@ def comment_replies_biography(comment_biography_id, user_pseudo):
             # Ajouter le nouveau commentaire à la table de données.
             db.session.add(new_reply)
             db.session.commit()
-            print('la réponse au commentaire à bien été enregistrée.')
+
+            flash('la réponse au commentaire à bien été enregistrée.')
+
+            biography = BiographyMangaka.query.get(comment.biography_mangaka_id)
+            mail_reply_comment_biography(comment.user.email, biography.mangaka_name)
 
             # Redirection sur la page d'affichage des biographies.
             return redirect(url_for("frontend.show_biography", biography_mangaka_id=comment.biography_mangaka_id))
@@ -941,3 +964,36 @@ def reply_form_biography(comment_id, user_pseudo):
     user = User.query.filter_by(pseudo=user_pseudo).first()
 
     return render_template("User/reply_form_biography.html", form=formbiographyreply, comment=comment, user=user)
+
+
+# Route permettant de chercher une biographie selon le nom du mangaka.
+@user_bp.route("/filtrage_utilisateur_catégorie_article_recherche", methods=['GET', 'POST'])
+def articles_search():
+    """
+    Rechercher des articles selon leur catégorie.
+
+    Cette route permet aux utilisateurs de rechercher des articles en utilisant la catégorie de l'article.
+    Les résultats de la recherche sont affichés par ordre alphabétique.
+
+    Args:
+        None
+
+    Returns:
+        Response: Une page HTML avec les résultats de la recherche et les formulaires associés.
+
+    Templates:
+        presentation/articles.html: Le modèle utilisé pour rendre la page de recherche.
+
+    Context:
+        article (list) : Liste de tous les articles disponibles.
+        """
+    search_query = request.args.get('search_query', type=str)
+    if search_query:
+        articles = Article.query.filter(
+            Article.categorie.has(name=search_query)
+        ).order_by(Article.categorie_id.asc()).all()
+    else:
+        articles = Article.query.order_by(Article.categorie_id.asc()).all()
+
+    return render_template('presentation/articles.html', articles=articles)
+
