@@ -11,7 +11,7 @@ class CommentSubject(db.Model):
     """
     Représente un commentaire pour un sujet du forum.
 
-    ttributes:
+    Attributes:
         id (int): Identifiant unique du commentaire.
         comment_content (str) : Contenu du commentaire.
         comment_date (datetime) : Date et heure du commentaire.
@@ -34,7 +34,8 @@ class CommentSubject(db.Model):
     user = db.relationship('User', backref=db.backref('user_subject_comments', lazy=True))
 
     # Relation avec la classe ReplySubject avec suppression en cascade.
-    replies_suppress_subject = db.relationship('ReplySubject', backref='parent_comment', cascade='all, delete-orphan')
+    replies_suppress_subject = db.relationship('ReplySubject', backref='parent_comment',
+                                               cascade='all, delete-orphan')
 
     # Relation avec la classe LikeCommentSubject avec suppression en cascade.
     likes_suppress_subject = db.relationship('CommentLikeSubject', backref='comment_like_subject',

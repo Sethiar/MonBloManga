@@ -22,6 +22,7 @@ class Article(db.Model):
     """
 
     __tablename__ = "article"
+    __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(50), unique=True, nullable=False)
@@ -53,5 +54,5 @@ class Article(db.Model):
             str: Chaîne représentant l'objet Article.
         """
         return f"Article(Titre='{self.title}', Auteur='{self.author.pseudo}', Résumé='{self.resume}', " \
-               f"Date d'édition='{self.date_edition}', like='{self.likes}', dislikes='{self.dislikes}')"
+               f"Catégorie='{self.categorie}', Date d'édition='{self.date_edition}', like='{self.likes}', dislikes='{self.dislikes}')"
 

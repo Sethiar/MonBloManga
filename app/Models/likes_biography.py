@@ -17,7 +17,8 @@ class LikesBiography(db.Model):
     __table_args__ = {"extend_existing": True}
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"),  primary_key=True)
-    biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"), primary_key=True)
+    biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"),
+                                     primary_key=True)
 
     def __repr__(self):
         """
@@ -42,7 +43,8 @@ class DislikesBiography(db.Model):
     __table_args__ = {"extend_existing": True}
 
     user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), primary_key=True)
-    biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"), primary_key=True)
+    biography_mangaka_id = db.Column(db.Integer, db.ForeignKey("biography_mangaka.id", ondelete="CASCADE"),
+                                     primary_key=True)
 
     def __repr__(self):
         return f"DislikesBiography(user_id='{self.user_id}', biography_mangaka_id='{self.biography_mangaka_id}')"

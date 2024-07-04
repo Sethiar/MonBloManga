@@ -22,6 +22,7 @@ class User(db.Model, UserMixin):
         banned (bool) : Indique si l'utilisateur est banni (par défaut False).
         date_banned : Indique la date de début du bannissement.
         date_ban_end : Permet de définir la date de fin du bannissement.
+        count_ban : Visualise le nombre de ban de l'utilisateur.
     """
 
     __tablename__ = "user"

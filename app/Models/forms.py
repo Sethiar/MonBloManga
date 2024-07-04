@@ -219,8 +219,8 @@ class NewCategorieForm(FlaskForm):
     Example :
         form = NewCategorieForm()
     """
-    nom = StringField("Nom de la catégorie", validators=[DataRequired()],
-                      render_kw={'placeholder': "Saisir la nouvelle catégorie"})
+    name = StringField("Nom de la catégorie", validators=[DataRequired()],
+                       render_kw={'placeholder': "Saisir la nouvelle catégorie"})
     # Action de soumettre le formulaire.
     submit = SubmitField("Ajouter une catégorie")
     csrf_token = HiddenField()

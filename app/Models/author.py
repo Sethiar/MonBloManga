@@ -21,6 +21,8 @@ class Author(db.Model):
     nom = db.Column(db.String(30), nullable=False)
     prenom = db.Column(db.String(30), nullable=False)
     pseudo = db.Column(db.String(30), unique=True, nullable=False)
+    # Relation avec la classe BiographyMangaka.
+    biographies = db.relationship('BiographyMangaka', backref='author_biographies', lazy=True)
 
     def __repr__(self):
         """

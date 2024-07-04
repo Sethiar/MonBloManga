@@ -29,7 +29,7 @@ class CommentBiography(db.Model):
 
     # Relation avec la classe BiographyMangaka.
     biography_mangaka_id = db.Column(db.Integer, db.ForeignKey('biography_mangaka.id'), nullable=False)
-    biography_mangaka = db.relationship('BiographyMangaka', backref=db.backref('comment_biography', lazy=True))
+    biography_mangaka = db.relationship('BiographyMangaka', backref=db.backref('biography_comments', lazy=True))
 
     # Relation avec la classe User.
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
