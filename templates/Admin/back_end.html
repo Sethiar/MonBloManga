@@ -3,6 +3,7 @@
 {% block head_content %}
     <meta name="description" content="Page du backend afin d'ajouter une catégorie, un auteur et un article.">
     <title>{% block title %}Page administrateur du blog{% endblock %}</title>
+
 {% endblock %}
 
 {% block body_content %}
@@ -12,7 +13,7 @@
         <h4>Ajouter une catégorie d'articles</h4>
         <form method="POST" action="{{ url_for('admin.add_new_categorie') }}">
             {{ formcategories.csrf_token }}
-            {{ formcategories.nom.label }} {{ formcategories.nom(size=20) }}
+            {{ formcategories.name.label }} {{ formcategories.name(size=20) }}
             {{ formcategories.submit() }}
         </form>
 
@@ -22,7 +23,7 @@
             <ul>
                 {% for categorie in categories %}
                 <li>
-                    {{ categorie.nom }}
+                    {{ categorie.name }}
                     <form method="POST" action="{{ url_for('admin.suppress_categorie', id=categorie.id) }}" class="btn_suppression">
                     {{ formcategories.csrf_token }}
                         <button type="submit" class="btn_suppression"><i class="fas fa-trash"></i></button>
@@ -64,7 +65,8 @@
     <div class="article">
         <h4>Ajouter un article</h4>
         <form method="post" action="{{ url_for('admin.add_new_article') }}" enctype="multipart/form-data">
-        {{ formarticles.csrf_token }}
+            {{ formarticles.csrf_token }}
+
             <label for="title">Titre de l'article :</label>
             <input type="text" id="title" class="title" name="title" value="{{ title }}" required><br><br>
 
@@ -93,7 +95,7 @@
                 <option class="bouton_article_categorie" value="categorie_id" disabled selected hidden>Sélectionnez une catégorie</option>
 
                 {% for categorie in categories %}
-                    <option value="{{ categorie.id }}">{{ categorie.nom }}</option>
+                    <option value="{{ categorie.id }}">{{ categorie.name }}</option>
                 {% endfor %}
             </select>
             <br><br>
@@ -102,4 +104,7 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block footer_content %}
 {% endblock %}

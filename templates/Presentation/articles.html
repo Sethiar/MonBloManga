@@ -22,16 +22,32 @@
 <div id="pics_articles3">
 </div>
 <br><br>
-
+<div id="search">
+    <h5>Rechercher des articles</h5>
+            <form method="get" action="{{ url_for('user.articles_search') }}">
+                <label for="search_query">Catégorie de l'article :</label>
+                <input type="text" id="search_query" name="search_query">
+                <button type="submit">Lancer la recherche</button>
+            </form>
+            <div>
+                {% if articles %}
+                <p>Articles trouvés :</p>
+                {% else %}
+                <p>Aucun résultat ne satisfait la requête.</p>
+                {% endif %}
+            </div>
+        </div>
+</div>
 <div id="container_article">
     <br>
     <table id="articles">
         <thead>
         <tr>
-            <th>Titres des articles</th>
-            <th>Pseudos des auteurs</th>
-            <th>Résumés</th>
-            <th>Dates d'édition</th>
+            <th>Titre de l'article</th>
+            <th>Catégorie de l'article</th>
+            <th>Pseudo de l'auteur</th>
+            <th>Résumé</th>
+            <th>Date d'édition</th>
             <th>Nombre de likes</th>
             <th>Nombre de dislikes</th>
         </thead>
@@ -42,6 +58,9 @@
                 <div id="article_title">
                     <a href="{{ url_for('frontend.show_article', article_id=article.id) }}">{{ article.title }}</a>
                 </div>
+            </td>
+            <td id="article_categorie">
+                {{ article.categorie.name }}
             </td>
             <td>
                 <div id="article_pseudo">
@@ -73,9 +92,6 @@
         {% endfor %}
         </tbody>
     </table>
-    <div id="icon">
-        <i class="fi fi-sr-thumbs-up"></i>
-    </div>
 </div>
 <div id="separation">
 

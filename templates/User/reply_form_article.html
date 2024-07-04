@@ -15,7 +15,7 @@
 </div>
 <form method="POST" action="{{ url_for('user.comment_replies_article', comment_article_id=comment.id, user_pseudo=current_user.pseudo) }}">
     <div class="imgcontainer">
-        <img src="../static/Images/images_articles/city_hunter1.jpeg" alt="Avatar" class="avatar">
+        <img src="../static/Images/images_articles/city_hunter1.jpg" alt="Avatar" class="avatar">
     </div>
     <h3>Réponse au commentaire</h3>
     {{ form.csrf_token }}
