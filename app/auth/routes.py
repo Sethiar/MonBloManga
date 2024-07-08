@@ -6,10 +6,17 @@ from app.auth import auth_bp
 
 import bcrypt
 
+from PIL import Image
+from io import BytesIO
+
+from app.extensions import allowed_file
+
+from app.Models import db
+
 from flask import session, redirect, url_for, request, current_app, render_template, flash
 from flask_login import logout_user, login_user, login_required
 
-from app.Models.forms import UserConnection, AdminConnection, ForgetPassword, RenamePassword
+from app.Models.forms import UserConnection, AdminConnection, ForgetPassword, RenamePassword, AdminRecording
 
 from app.Models.user import User
 from app.Models.admin import Admin
@@ -96,35 +103,109 @@ def login_admin():
 
     if request.method == 'POST':
         if form.validate_on_submit():
-            identifiant = form.identifiant.data
+            pseudo = form.pseudo.data
             password = form.password.data
             role = form.role.data
 
             # Validation de la connexion.
-            admin = Admin.query.filter_by(identifiant=identifiant).first()
+            admin = Admin.query.filter_by(pseudo=pseudo).first()
             if admin is not None and bcrypt.checkpw(password.encode('utf-8'), admin.password_hash):
 
                 # Authentification réussie.
                 if role == "SuperAdmin":
-                    current_app.logger.info(f"L'administrateur {admin.identifiant} s'est bien connecté.")
+                    current_app.logger.info(f"L'administrateur {admin.pseudo} s'est bien connecté.")
 
                     # Connexion de l'admin et stockage de ses informations dans la session.
                     session["logged_in"] = True
-                    session["identifiant"] = admin.identifiant
+                    session["pseudo"] = admin.pseudo
                     session["user_id"] = admin.id
 
                     return redirect(url_for("admin.back_end"))
                 else:
                     current_app.logger.warning(
-                        f"L'administrateur {admin.identifiant} n'a pas le rôle de SuperAdmin, ses possibilités sont "
+                        f"L'administrateur {admin.pseudo} n'a pas le rôle de SuperAdmin, ses possibilités sont "
                         f"restreintes.")
             else:
                 current_app.logger.warning(
-                    f"Tentative de connexion échouée avec l'identifiant {identifiant}. Veuillez réessayer avec un "
-                    f"autre identifiant.")
+                    f"Tentative de connexion échouée avec le pseudo {pseudo}. Veuillez réessayer avec un "
+                    f"autre pseudo.")
                 return redirect(url_for("auth.admin_connection"))
 
     return render_template("Admin/admin_connection.html", form=form)
+
+
+# Route permettant de créer un utilisateur administrateur.
+@auth_bp.route("/creation_utilisateur_admin", methods=['GET', 'POST'])
+def create_admin():
+    """
+    Gère l'enregistrement d'un nouvel utilisateur avec le rôle administrateur.
+    """
+    formadmin = AdminRecording()
+
+    if formadmin.validate_on_submit():
+        # Assainissement des données.
+        nom = formadmin.nom.data
+        prenom = formadmin.prenom.data
+        pseudo = formadmin.pseudo.data
+        role = formadmin.role.data
+        email = formadmin.email.data
+        password_hash = formadmin.password.data
+
+        salt = bcrypt.gensalt()
+        password_hash = bcrypt.hashpw(password_hash.encode('utf-8'), salt)
+
+        # Vérification de la soumission du fichier.
+        if 'profil_photo' not in request.files or request.files['profil_photo'].filename == '':
+            flash("Aucune photo de profil fournie.", "error")
+            return redirect(url_for('auth.create_admin'))
+
+        profil_photo = request.files['profil_photo']
+        if profil_photo and allowed_file(profil_photo.filename):
+            photo_data = profil_photo.read()
+
+            # Redimensionnement de l'image avec Pillow
+            try:
+                img = Image.open(BytesIO(photo_data))
+                img.thumbnail((75, 75))
+                img_format = img.format if img.format else 'JPEG'
+                output = BytesIO()
+                img.save(output, format=img_format)
+                photo_data_resized = output.getvalue()
+            except Exception as e:
+                flash(f"Erreur lors du redimensionnement de l'image : {str(e)}", "error")
+                return redirect(url_for("auth.create_admin"))
+
+            if len(photo_data_resized) > 5 * 1024 * 1024:  # 5 Mo
+                flash("Le fichier est trop grand (maximum 5 Mo).", "error")
+                return redirect(url_for('auth.create_admin'))
+
+            photo_data = profil_photo.read()  # Lire les données binaires de l'image
+        else:
+            flash("Type de fichier non autorisé.", "error")
+            return redirect(url_for('auth.create_admin'))
+
+        new_admin = Admin(
+            nom=nom,
+            prenom=prenom,
+            role=role,
+            pseudo=pseudo,
+            email=email,
+            password_hash=password_hash,
+            salt=salt,
+            # Stockage des données binaires de l'image.
+            profil_photo=photo_data_resized
+        )
+
+        try:
+            db.session.add(new_admin)
+            db.session.commit()
+            flash("Inscription réussie! Vous pouvez maintenant vous connecter.")
+            return redirect(url_for("mail.send_confirmation_email", email=email))
+        except Exception as e:
+            db.session.rollback()
+            flash(f"Erreur lors de l'enregistrement de l'utilisateur: {str(e)}", "error")
+
+    return render_template("User/form_useradmin.html", formadmin=formadmin)
 
 
 # Route permettant à l'utilisateur de joindre le formulaire de connexion.
