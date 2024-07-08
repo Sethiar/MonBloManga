@@ -30,8 +30,10 @@ with app.app_context():
 
         Attributes:
             id (int): Identifiant unique de l'administrateur.
+            nom (str): Nom de l'administrateur.
+            prenom (str): Prénom de l'administrateur.
+            pseudo (str): Pseudo de l'administrateur.
             role (str): Rôle de l'administrateur.
-            identifiant (str): Identifiant de connexion de l'administrateur.
             password_hash (str): Mot de passe hashé de l'administrateur.
             salt (str): Salage du mot de passe.
         """
@@ -39,8 +41,12 @@ with app.app_context():
         __table_args__ = {"extend_existing": True}
 
         id = db.Column(db.Integer, primary_key=True)
+        nom = db.Column(db.String(30), nullable=False)
+        prenom = db.Column(db.String(30), nullable=False)
+        pseudo = db.Column(db.String(30), nullable=False)
         role = db.Column(db.String(20), nullable=False)
-        identifiant = db.Column(db.String(30), nullable=False)
+        email = db.Column(db.String(255), nullable=True)
+        profil_photo = db.Column(db.LargeBinary, nullable=True)
         password_hash = db.Column(db.LargeBinary(255), nullable=False)
         salt = db.Column(db.LargeBinary(254), nullable=False)
 
@@ -70,6 +76,7 @@ with app.app_context():
         email = db.Column(db.String(255), nullable=False)
         date_naissance = db.Column(db.Date, nullable=False)
         profil_photo = db.Column(db.LargeBinary, nullable=False)
+        role = db.Column(db.String(30), default='Utilisateur')
         banned = db.Column(db.Boolean, default=False)
         date_banned = db.Column(db.DateTime, nullable=True)
         date_ban_end = db.Column(db.DateTime, nullable=True)
