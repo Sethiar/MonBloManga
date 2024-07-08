@@ -19,6 +19,7 @@ class User(db.Model, UserMixin):
         email (str) : Adresse e-mail de l'utilisateur.
         date_naissance (datetime.date) : Date de naissance de l'utilisateur.
         profil_photo (bytes) : Photo de profil de l'utilisateur en format binaire.
+        role (str) : Par défault c'est utilisateur.
         banned (bool) : Indique si l'utilisateur est banni (par défaut False).
         date_banned : Indique la date de début du bannissement.
         date_ban_end : Permet de définir la date de fin du bannissement.
@@ -35,6 +36,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False)
     date_naissance = db.Column(db.Date, nullable=False)
     profil_photo = db.Column(db.LargeBinary, nullable=False)
+    role = db.Column(db.String(30), default='Utilisateur')
     banned = db.Column(db.Boolean, default=False)
     date_banned = db.Column(db.DateTime, nullable=True)
     date_ban_end = db.Column(db.DateTime, nullable=True)
@@ -48,8 +50,8 @@ class User(db.Model, UserMixin):
             str: Chaîne représentant l'objet Utilisateur.
         """
         return f"User(pseudo='{self.pseudo}', email='{self.email}', date_naissance='{self.date_naissance}', " \
-               f"chemin_photo='{self.chemin_photo}, banned='{self.banned}', date_banned='{self.date_banned}'" \
-               f"date_ban_end='{self.date_ban_end}', count_ban='{self.count_ban})"
+               f"chemin_photo='{self.chemin_photo}, role='{self.role}', banned='{self.banned}', " \
+               f"date_banned='{self.date_banned}', date_ban_end='{self.date_ban_end}', count_ban='{self.count_ban})"
 
     def set_password(self, new_password):
         """

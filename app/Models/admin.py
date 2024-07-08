@@ -12,18 +12,24 @@ class Admin(db.Model, UserMixin):
 
     Attributes:
         id (int): Identifiant unique de l'administrateur.
-        role (str) : Rôle de l'administrateur.
-        identifiant (str): Identifiant de connexion de l'administrateur.
-        password_hash (bytes) : Mot de passe hashé de l'administrateur.
-        salt (bytes) : Salage du mot de passe.
+            nom (str): Nom de l'administrateur.
+            prenom (str): Prénom de l'administrateur.
+            pseudo (str): Pseudo de l'administrateur.
+            role (str): Rôle de l'administrateur.
+            password_hash (str): Mot de passe hashé de l'administrateur.
+            salt (str): Salage du mot de passe.
     """
 
     __tablename__ = "admin"
     __table_args__ = {"extend_existing": True}
 
     id = db.Column(db.Integer, primary_key=True)
+    nom = db.Column(db.String(30), nullable=False)
+    prenom = db.Column(db.String(30), nullable=False)
+    pseudo = db.Column(db.String(30), nullable=False)
     role = db.Column(db.String(20), nullable=False)
-    identifiant = db.Column(db.String(30), nullable=False)
+    email = db.Column(db.String(255), nullable=True)
+    profil_photo = db.Column(db.LargeBinary, nullable=True)
     password_hash = db.Column(db.LargeBinary(255), nullable=False)
     salt = db.Column(db.LargeBinary(254), nullable=False)
 
@@ -34,7 +40,9 @@ class Admin(db.Model, UserMixin):
         Returns :
             str: Chaîne représentant l'objet Administrateur.
         """
-        return f"Admin(id='{self.id}', role='{self.role}', identifiant='{self.identifiant}', salt='{self.salt}', password_hash='{self.password_hash}')"
+        return f"Admin(id='{self.id}', nom='{self.nom}', prenom='{self.prenom}', pseudo='{self.pseudo}'," \
+               f"role='{self.role}', chemin_photo='{self.chemin_photo}, salt='{self.salt}'," \
+               f"password_hash='{self.password_hash}')"
 
     def is_authorized(self, role):
         """

@@ -26,8 +26,8 @@ class AdminConnection(FlaskForm):
         form = AdminConnection()
     """
 
-    identifiant = StringField("Identifiant Administrateur", validators=[DataRequired()],
-                              render_kw={"placeholder": "Veuillez renseigner votre identifiant Administrateur."})
+    pseudo = StringField("Pseudo Administrateur", validators=[DataRequired()],
+                              render_kw={"placeholder": "Veuillez renseigner votre pseudo Administrateur."})
     role = StringField("Rôle Administrateur", validators=[DataRequired()],
                        render_kw={"placeholder": "Veuillez renseigner votre rôle Administrateur."})
     password = PasswordField("Mot de passe Administrateur", validators=[DataRequired()],
@@ -118,6 +118,57 @@ class UserSaving(FlaskForm):
 
     def __repr__(self):
         return f"UserSaving(pseudo='{self.pseudo}', email='{self.email.data}', date de naissance='{self.date_naissance}')"
+
+
+# Formulaire permettant de créer un utilisateur administrateur.
+class AdminRecording(FlaskForm):
+    """
+    Formulaire d'enregistrement d'un utilisateur administrateur.
+
+    Attributes :
+        nom (StringField) : Champ pour le nom de l'utilisateur administrateur.
+        prenom (StringField) : Champ pour le prénom de l'utilisateur administrateur.
+        pseudo (StringField) : Champ pour le pseudo de l'utilisateur administrateur.
+        password (PasswordField) : Champ pour le mot de passe de l'utilisateur administrateur.
+        password2 (PasswordField) : Champ pour la confirmation du mot de passe de l'utilisateur administrateur.
+        profil_photo (FileField) : Champ pour télécharger la photo de profil de l'utilisateur administrateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+    nom = StringField(
+        "Nom",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Veuillez renseigner votre nom."})
+    prenom = StringField(
+        "Prénom",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Veuillez renseigner votre prénom."})
+    pseudo = StringField(
+        "Pseudo",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Veuillez renseigner votre pseudo."})
+    role = StringField(
+        "Rôle",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Veuillez renseigner votre rôle."})
+    email = EmailField(
+        "Email",
+        validators=[DataRequired(), Email()],
+        render_kw={"placeholder": "Entrez votre email"})
+    password = PasswordField(
+        "Mot de passe Utilisateur",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Veuillez renseigner votre mot de passe Utilisateur."})
+    password2 = PasswordField(
+        "Confirmer le mot de passe",
+        validators=[DataRequired(), EqualTo('password', message='Les mots de passe doivent correspondre.')],
+        render_kw={"placeholder": "Veuillez confirmer votre mot de passe utilisateur."})
+    profil_photo = FileField(
+        "Photo de profil souhaitée :",
+        validators=[FileRequired(), FileAllowed(['jpg', 'jpeg', 'png'], "Images only !!")])
+    submit = SubmitField(
+        "Souscrire aux conditions générales du blog.")
+    csrf_token = HiddenField()
 
 
 # Formulaire permettant l'enregistrement d'un auteur.
