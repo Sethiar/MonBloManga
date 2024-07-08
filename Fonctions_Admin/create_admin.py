@@ -21,11 +21,13 @@ parent_dir = os.path.abspath(os.path.join(current_dir, os.pardir))
 sys.path.append(parent_dir)
 
 
-# Importer la fonction conn() depuis db_monblogmanga .py
+# Importer la fonction conn() depuis db_monblogmanga.py
 from database_config.db_monblogmanga import conn
 
-# Si vous voulez changer votre identifiant et votre mot de passe, c'est ici'
-identifiant = "SuperAdmin1"
+# Si vous voulez changer votre identifiant et votre mot de passe, c'est ici.
+nom = 'Doe'
+prenom = 'John'
+pseudo = "No One"
 password = "#12345six"
 role = "Admin"
 
@@ -42,8 +44,8 @@ cur = conn.cursor()
 
 # Insertion de l'identifiant et du mot de passe hashé dans la base de données.
 cur.execute(
-    "INSERT INTO admin (role, identifiant, password_hash, salt) VALUES (%s, %s, %s, %s)",
-    (role, identifiant, password_hash, salt)
+    "INSERT INTO admin (nom, prenom, role, pseudo, password_hash, salt) VALUES (%s, %s, %s, %s, %s, %s)",
+    (nom, prenom, role, pseudo, password_hash, salt)
 )
 print("Les identifiants et le rôle de l'administrateur ont bien été enregistrés dans la base de données.")
 
