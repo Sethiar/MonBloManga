@@ -1,10 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'baseform.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Formulaire qui permet à un utilisateur de s'inscrire en tant qu'administrateur.">
+    <title>{% block title %}Formulaire d'adhésion pour s'inscrire en tant qu'administrateur.{% endblock %}</title>
+    {% endblock %}
+
+{% block body_content %}
+    <header>
+    </header>
+
+    <form method="POST" action="{{ url_for('auth.create_admin') }}" enctype="multipart/form-data">
+    <div class="imgcontainer">
+        <img src="../static/Images/images_formulaire/greetings.jpg" alt="Avatar" class="avatar">
+    </div>
+
+    <h3>Enregistrement Utilisateur Administrateur</h3>
+    {{ formadmin.csrf_token }}
+    <div class="container">
+        {{ formadmin.nom.label }} {{ formadmin.nom() }}
+        {{ formadmin.prenom.label }} {{ formadmin.prenom() }}
+        {{ formadmin.pseudo.label }} {{ formadmin.pseudo() }}
+        {% if formadmin.pseudo.errors %}
+            <ul>
+                {% for error in formadmin.pseudo.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        {{ formadmin.role.label }} {{ formadmin.role() }}
+        {{ formadmin.email.label }} {{ formadmin.email() }}
+        {% if formadmin.email.errors %}
+            <ul>
+                {% for error in formadmin.email.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        {{ formadmin.password.label }} {{ formadmin.password() }}
+        {% if formadmin.password.errors %}
+            <ul>
+                {% for error in formadmin.password.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        {{ formadmin.password2.label }} {{ formadmin.password2() }}
+        {% if formadmin.password2.errors %}
+            <ul>
+                {% for error in formadmin.password2.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br><br>
+        <ul>
+            {{ formadmin.profil_photo.label }}
+            {{ formadmin.profil_photo }}
+        </ul>
+        <br><br>
+    </div>
+        <div class="separation"></div>
+    <div class="container" style="background-color:black">
+        <button type="submit" class="validatedbtn">Validation de la souscription</button>
+        <button type="button" class="cancelledbtn"><a href="{{ url_for('landing_page') }}">Annulation de la souscription et retour à l'accueil</a></button>
+    </div>
+</form>
+
+{% endblock %}

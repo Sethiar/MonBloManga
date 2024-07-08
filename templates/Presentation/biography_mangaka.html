@@ -67,6 +67,9 @@
         <div class="comment">
             <strong>{{ comment.user.pseudo }}</strong> a commenté :
         </div>
+        <div class="comment">
+            <i>{{ comment.user.role }}</i>
+        </div>
         <div class="date_comment">
             <small>Le {{ comment.comment_biography_date.strftime('%d-%m-%Y à %H:%M') }}</small>
         </div>
@@ -113,6 +116,9 @@
                 <img src="{{ url_for('user.profil_photo', user_id=reply.user_id) }}" alt="Photo de profil" class="profile-picture">
                 <div class="reply-details">
                     <strong><i>{{ reply.user.pseudo }}</i></strong> a répondu :
+                </div>
+                <div class="reply-detail">
+                    <i>{{ reply.user.role }}</i>
                 </div>
                 <div class="reply-date">
                     <small>Le {{ reply.reply_date.strftime('%d-%m-%Y à %H:%M') }}</small>

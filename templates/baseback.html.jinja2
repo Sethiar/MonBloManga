@@ -32,12 +32,13 @@
         <h2>Bienvenue sur la page administrateur du blog</h2>
         <a class="retour_frontend" href="{{ url_for('landing_page') }}">Aller sur la page d'accueil du blog</a>
 
+        <button><a href="{{ url_for('auth.create_admin') }}">Créer un utilisateur administrateur</a></button>
         <button><a href="{{ url_for('admin.articles_list') }}">Aller à la liste des articles</a></button>
         <button><a href="{{ url_for('admin.users_list') }}">Aller à la liste des utilisateurs</a></button>
         <button><a href="{{ url_for('admin.users_comments') }}">Aller sur la liste des commentaires des articles des utilisateurs</a></button>
         <button><a href="{{ url_for('admin.users_comments_subject') }}">Aller sur la liste des commentaires aux sujets du forum</a></button>
-        <button><a href="{{ url_for('admin.create_mangaka') }}">Aller sur la page d'article sur les mangakas</a></button>
-        <button><a href="{{ url_for('admin.users_comments_biography') }}">Aller sur la pge des commentaires des biographies</a></button>
+        <button><a href="{{ url_for('admin.create_mangaka') }}">Aller sur la page de création des biographies des mangakas</a></button>
+        <button><a href="{{ url_for('admin.users_comments_biography') }}">Aller sur la page des commentaires des biographies</a></button>
         <button><a href="{{ url_for('admin.back_end') }}">Aller à la page de création d'article</a></button>
         <button><a href="{{ url_for('auth.admin_logout') }}">Se déconnecter du back end</a></button>
 
