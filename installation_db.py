@@ -41,8 +41,6 @@ with app.app_context():
         __table_args__ = {"extend_existing": True}
 
         id = db.Column(db.Integer, primary_key=True)
-        nom = db.Column(db.String(30), nullable=False)
-        prenom = db.Column(db.String(30), nullable=False)
         pseudo = db.Column(db.String(30), nullable=False)
         role = db.Column(db.String(20), nullable=False)
         email = db.Column(db.String(255), nullable=True)
