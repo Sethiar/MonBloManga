@@ -32,9 +32,8 @@
                     <p><button><a href="{{ url_for('auth.user_logout') }}">Se déconnecter</a></button></p>
                 <!-- Afficher d'autres contenus de la page pour les utilisateurs connectés -->
                     {% else %}
-                    <p>Vous n'êtes pas connecté. Veuillez vous connecter pour accéder aux fonctionnalités des membres.</p>
+                    <p>Vous n'êtes pas connecté. Veuillez vous connecter pour accéder aux fonctionnalités réservées aux membres.</p>
                     <button><a href="{{ url_for('auth.user_connection') }}">Se connecter en tant qu'utilisateur</a></button>
-                <!-- Afficher un formulaire de connexion ou un lien vers la page de connexion -->
                     {% endif %}
                 </div>
             </ul>
@@ -53,7 +52,7 @@
                     <h3>Informations</h3>
                     <br>
                     <p><i><a href="mailto:alefetey123@gmail.com">Email : alefetey123@gmail.com</a></i></p>
-                    <p>Adresse, Caen, Calvados, France</p>
+                    <p>Adresse : Caen, Calvados, France</p>
                 </div>
                 <div class="col-md-3">
                     <h3>Liens Utiles</h3>

@@ -17,8 +17,6 @@
     <h3>Enregistrement Utilisateur Administrateur</h3>
     {{ formadmin.csrf_token }}
     <div class="container">
-        {{ formadmin.nom.label }} {{ formadmin.nom() }}
-        {{ formadmin.prenom.label }} {{ formadmin.prenom() }}
         {{ formadmin.pseudo.label }} {{ formadmin.pseudo() }}
         {% if formadmin.pseudo.errors %}
             <ul>
@@ -29,6 +27,7 @@
         {% endif %}
         <br><br>
         {{ formadmin.role.label }} {{ formadmin.role() }}
+        {{ formadmin.date_naissance.label }} {{ formadmin.date_naissance() }}
         {{ formadmin.email.label }} {{ formadmin.email() }}
         {% if formadmin.email.errors %}
             <ul>
