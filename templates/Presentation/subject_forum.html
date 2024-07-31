@@ -49,6 +49,15 @@
             <div class="content_comment">
                 {{ comment.comment_content | replace('\n', '<br>') | safe }}
             </div>
+            <div class="change-comment">
+                {% if comment.user_id == current_user.id %}
+                <a href="{{ url_for('user.change_comment', id=comment.id) }}">Modifier</a>
+                <form action="{{ url_for('user.delete_comment', id=comment.id) }}" method="POST" style="display:inline;">
+                    {{ formsuppress.csrf_token }}
+                    <input class="suppress_button" type="submit" value="Supprimer le commentaire" onclick="return confirm('Êtes vous certain de vouoloir supprimer votre commentaire ?');">
+                </form>
+                {% endif %}
+            </div>
         </div>
         <div class="reply-button-container">
             <a href="{{ url_for('user.reply_form_subject', comment_id=comment.id, user_pseudo=current_user.pseudo) }}" class="reply-button">Répondre</a>
@@ -98,6 +107,15 @@
                 </div>
                 <div class="content-reply">
                     {{ reply.reply_content | replace('\n', '<br>') | safe }}
+                </div>
+                <div class="change-reply">
+                {% if reply.user_id == current_user.id %}
+                    <a href="{{ url_for('user.change_reply', id=reply.id) }}">Modifier</a>
+                    <form action="{{ url_for('user.delete_reply', id=reply.id) }}" method="POST" style="display:inline;">
+                    {{ formsuppressreply.csrf_token }}
+                        <input class="suppress_button" type="submit" value="Supprimer la réponse" onclick="return confirm('Êtes vous certain de vouloir supprimer votre réponse ?');">
+                    </form>
+                {% endif %}
                 </div>
             </div>
             {% endfor %}

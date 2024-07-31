@@ -27,15 +27,24 @@
 
     <br><br><br><br><br><br>
 
+    <div class="categorie">
+        <h4>Ajouter un sujet sur le forum</h4>
+        <br>
+        <form method="POST" action="{{ url_for('user.add_subject_forum') }}">
+            {{ formsubjectforum.csrf_token }}
+            {{ formsubjectforum.nom.label }}
+            <label class="label">{{ formsubjectforum.nom(size=20) }}</label>
+            {{ formsubjectforum.submit() }}
+        </form>
+        <br>
+    </div>
+    <br>
+    <div class="separation"></div>
+    <br>
     <div id="container_subject">
-        <h2>Sujets</h2>
+        <h4>Sujets</h4>
         <br>
         <table id="subject">
-            <thead>
-            <tr>
-                <th>Sujets</th>
-            </tr>
-            </thead>
             <tbody>
             {% for subject in subjects %}
             <tr>
@@ -46,19 +55,10 @@
             </tbody>
         </table>
     </div>
-    <div class="categorie">
-        <h4>Ajouter un sujet sur le forum</h4>
-        <form method="POST" action="{{ url_for('user.add_subject_forum') }}">
-            {{ formsubjectforum.csrf_token }}
-            {{ formsubjectforum.nom.label }} {{ formsubjectforum.nom(size=20) }}
-            {{ formsubjectforum.submit() }}
-        </form>
-    </div>
-<div class="separation">
-
-</div>
+<div class="separation"></div>
 </section>
 
     {% endblock %}
+
     {% block footer_content %}
     {% endblock %}
