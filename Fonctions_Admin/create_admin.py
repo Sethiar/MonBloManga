@@ -25,9 +25,7 @@ sys.path.append(parent_dir)
 from database_config.db_monblogmanga import conn
 
 # Si vous voulez changer votre identifiant et votre mot de passe, c'est ici.
-nom = 'Doe'
-prenom = 'John'
-pseudo = "No One"
+pseudo = "JohnDoe"
 password = "#12345six"
 role = "Admin"
 
@@ -44,8 +42,8 @@ cur = conn.cursor()
 
 # Insertion de l'identifiant et du mot de passe hashé dans la base de données.
 cur.execute(
-    "INSERT INTO admin (nom, prenom, role, pseudo, password_hash, salt) VALUES (%s, %s, %s, %s, %s, %s)",
-    (nom, prenom, role, pseudo, password_hash, salt)
+    "INSERT INTO admin (role, pseudo, password_hash, salt) VALUES (%s, %s, %s, %s)",
+    (role, pseudo, password_hash, salt)
 )
 print("Les identifiants et le rôle de l'administrateur ont bien été enregistrés dans la base de données.")
 
