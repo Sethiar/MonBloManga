@@ -10,7 +10,7 @@ function toggleLike(element, commentId, userPseudo) {
     // Envoi d'une requête AJAX à Flask pour enregistrer l'utilisateur qui a aimé
     $.ajax({
         type: 'POST',
-        url: '/user/likes_comment_biographie',
+        url: '/user/likes-commentaire-biographie',
         data: JSON.stringify({ comment_id: commentId, user_pseudo: userPseudo }),
         contentType: 'application/json',
         headers: {
