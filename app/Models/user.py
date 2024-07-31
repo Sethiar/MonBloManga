@@ -19,7 +19,7 @@ class User(db.Model, UserMixin):
         email (str) : Adresse e-mail de l'utilisateur.
         date_naissance (datetime.date) : Date de naissance de l'utilisateur.
         profil_photo (bytes) : Photo de profil de l'utilisateur en format binaire.
-        role (str) : Par défault c'est utilisateur.
+        role (str) : Par défault c'est utilisateur si enregistrement via le frontend.
         banned (bool) : Indique si l'utilisateur est banni (par défaut False).
         date_banned : Indique la date de début du bannissement.
         date_ban_end : Permet de définir la date de fin du bannissement.
@@ -31,12 +31,12 @@ class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     pseudo = db.Column(db.String(30), nullable=False, unique=True)
+    role = db.Column(db.String(30), default='Utilisateur')
     password_hash = db.Column(db.LargeBinary(255), nullable=False)
     salt = db.Column(db.LargeBinary(254), nullable=False)
     email = db.Column(db.String(255), nullable=False)
     date_naissance = db.Column(db.Date, nullable=False)
     profil_photo = db.Column(db.LargeBinary, nullable=False)
-    role = db.Column(db.String(30), default='Utilisateur')
     banned = db.Column(db.Boolean, default=False)
     date_banned = db.Column(db.DateTime, nullable=True)
     date_ban_end = db.Column(db.DateTime, nullable=True)

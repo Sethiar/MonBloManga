@@ -1,4 +1,6 @@
-"""Permet de créer et d'enregistrer un nouveau sujet pour le forum."""
+"""
+Classe permettant de créer l'objet "sujet" du forum.
+"""
 
 from . import db
 

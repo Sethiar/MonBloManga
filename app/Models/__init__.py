@@ -8,5 +8,6 @@ avec les tables de données définies par les modèles SQLAlchemy.
 
 from flask_sqlalchemy import SQLAlchemy
 
+# Instanciation de la base de données.
 db = SQLAlchemy()
 
