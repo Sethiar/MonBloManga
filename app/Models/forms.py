@@ -16,7 +16,7 @@ class AdminConnection(FlaskForm):
     Formulaire de connexion pour les administrateurs du site.
 
     Attributes :
-        identifiant (StringField) : Champ pour l'identifiant de l'administrateur.
+        pseudo (StringField) : Champ pour le pseudo de l'administrateur.
         role (StringField): Champ pour le rôle de l'administrateur.
         password (PasswordField) : Champ pour le mot de passe de l'administrateur.
         submit (SubmitField): Bouton de soumission du formulaire.
@@ -31,7 +31,7 @@ class AdminConnection(FlaskForm):
     role = StringField("Rôle Administrateur", validators=[DataRequired()],
                        render_kw={"placeholder": "Veuillez renseigner votre rôle Administrateur."})
     password = PasswordField("Mot de passe Administrateur", validators=[DataRequired()],
-                             render_kw={"placeholder": "Veuiller renseigner votre mot de passe Administrateur."})
+                             render_kw={"placeholder": "Veuillez renseigner votre mot de passe Administrateur."})
     submit = SubmitField("Se connecter")
     csrf_token = HiddenField()
 
@@ -126,23 +126,15 @@ class AdminRecording(FlaskForm):
     Formulaire d'enregistrement d'un utilisateur administrateur.
 
     Attributes :
-        nom (StringField) : Champ pour le nom de l'utilisateur administrateur.
-        prenom (StringField) : Champ pour le prénom de l'utilisateur administrateur.
         pseudo (StringField) : Champ pour le pseudo de l'utilisateur administrateur.
+        rôle (StringFields) : Champ pour le rôle de l'utilisateur administrateur.
+        date_naissance ( DateField) : Date de naissance de l'utilisateur administrateur.
         password (PasswordField) : Champ pour le mot de passe de l'utilisateur administrateur.
         password2 (PasswordField) : Champ pour la confirmation du mot de passe de l'utilisateur administrateur.
         profil_photo (FileField) : Champ pour télécharger la photo de profil de l'utilisateur administrateur.
         submit (SubmitField): Bouton de soumission du formulaire.
         csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
     """
-    nom = StringField(
-        "Nom",
-        validators=[DataRequired()],
-        render_kw={"placeholder": "Veuillez renseigner votre nom."})
-    prenom = StringField(
-        "Prénom",
-        validators=[DataRequired()],
-        render_kw={"placeholder": "Veuillez renseigner votre prénom."})
     pseudo = StringField(
         "Pseudo",
         validators=[DataRequired()],
@@ -151,6 +143,9 @@ class AdminRecording(FlaskForm):
         "Rôle",
         validators=[DataRequired()],
         render_kw={"placeholder": "Veuillez renseigner votre rôle."})
+    date_naissance = DateField(
+        "Date de naissance",
+        validators=[DataRequired()])
     email = EmailField(
         "Email",
         validators=[DataRequired(), Email()],
@@ -391,6 +386,34 @@ class CommentSubjectForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant à un utilisateur de modifier son commentaire pour la section forum.
+class ChangeCommentSubjectForm(FlaskForm):
+    """
+    Formulaire permettant de supprimer un commentaire par l'utilisateur.
+    Attributes :
+        comment_content : Contenu du commentaire de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+
+    comment_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                    render_kw={"placeholder": "Veuillez entrer votre commentaire."})
+    submit = SubmitField("Soumettre le commentaire")
+    csrf_token = HiddenField()
+
+
+# Formulaire permettant à un utilisateur de supprimer son commentaire pour la section forum.
+class SuppressCommentForm(FlaskForm):
+    """
+    Formulaire permettant de supprimer un commentaire par l'utilisateur.
+    Attributes :
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+    submit = SubmitField('Supprimer le commentaire')
+    csrf_token = HiddenField()
+
+
 # Formulaire permettant de liker un article.
 class LikeForm(FlaskForm):
     """
@@ -468,6 +491,35 @@ class ReplySubjectForm(FlaskForm):
     comment_id = HiddenField('ID du commentaire')
     # Action de soumettre le formulaire.
     submit = SubmitField()
+
+
+# Formulaire permettant à un utilisateur de modifier sa réponse à un commentaire dans la section forum.
+class ChangeReplySubject(FlaskForm):
+    """
+    Formulaire permettant de modifier une réponse par l'utilisateur.
+    Attributes :
+        reply_content : Contenu du commentaire de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+
+    reply_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                  render_kw={"placeholder": "Veuillez entrer votre réponse."})
+    submit = SubmitField("Soumettre la réponse.")
+    csrf_token = HiddenField()
+
+
+# Formulaire permettant à un utilisateur de supprimer sa réponse à un commentaire dans la section forum.
+class SuppressReplySubject(FlaskForm):
+    """
+    Formulaire permettant à un utilisateur de supprimer sa réponse à un commentaire de la section forum.
+
+    Attributes :
+        comment_id (HiddenField) : Champ caché pour l'ID de la réponse à supprimer.
+        submit (SubmitField): Bouton de soumission du formulaire.
+    """
+    reply_id = HiddenField('reply_id', validators=[DataRequired()])
+    submit = SubmitField('Supprimer')
 
 
 # Formulaire permettant de filtrer les articles par catégorie.
