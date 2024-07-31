@@ -1,3 +1,6 @@
+"""
+Code permettant d'envoyer des mails en arrière-plan.
+"""
 from threading import Thread
 
 
