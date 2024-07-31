@@ -22,7 +22,7 @@ def generate_unique_id():
 
 
 # Route permettant à l'utilisateur de bien se connecter au blog.
-@functional_bp.route("/connexion_requise")
+@functional_bp.route("/connexion-requise")
 def connexion_requise():
     """
     Route affichant un message informant l'utilisateur qu'une connexion est requise
@@ -58,7 +58,7 @@ def before_request():
 
 
 #  Route permettant d'accéder à la politique de confidentialité.
-@functional_bp.route("/Politique_de_confidentialité")
+@functional_bp.route("/Politique-de-confidentialité")
 def politique():
     """
     Accès à la Politique de confidentialité du blog.
@@ -70,7 +70,7 @@ def politique():
 
 
 #  Route permettant d'accéder aux mentions légales.
-@functional_bp.route("/mentions_légales")
+@functional_bp.route("/mentions-légales")
 def mentions():
     """
     Accès aux Mentions légales du blog.

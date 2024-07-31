@@ -12,7 +12,7 @@ from app.email_utils import send_email_in_background
 
 
 # Méthode qui permet d'envoyer un mail de test.
-@mail_bp.route("/send_mail")
+@mail_bp.route("/send-mail")
 def send_email_test():
     """
     Envoie un e-mail de test à une adresse prédéfinie pour vérifier la configuration de Flask-Mail.
@@ -26,7 +26,7 @@ def send_email_test():
 
 
 # Méthode qui envoie un mail de confirmation d'inscription."
-@mail_bp.route("/send_confirmation_email/<string:email>")
+@mail_bp.route("/send-confirmation-email/<string:email>")
 def send_confirmation_email(email):
     """
     Envoie un e-mail de confirmation d'inscription à un nouvel utilisateur.

@@ -17,8 +17,9 @@ from app.extensions import allowed_file
 
 from app.Models import db
 
-from app.Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm,\
-    CommentSubjectForm, ReplyArticleForm, ReplySubjectForm, LikeBiographyForm, DislikeBiographyForm, ReplyBiographyForm
+from app.Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm, CommentSubjectForm, \
+    ChangeCommentSubjectForm, SuppressCommentForm, ReplyArticleForm, ReplySubjectForm, SuppressReplySubject, \
+    ChangeReplySubject, LikeBiographyForm, DislikeBiographyForm, ReplyBiographyForm
 
 from app.Models.articles import Article
 from app.Models.comment_article import CommentArticle
@@ -46,7 +47,7 @@ from app.mail.routes import mail_like_comment_article, mail_like_comment_subject
 
 
 # Route permettant à un nouvel utilisateur de s'inscrire.
-@user_bp.route("/enregistrement_membre", methods=['GET', 'POST'])
+@user_bp.route("/enregistrement-membre", methods=['GET', 'POST'])
 def user_recording():
     """
     Gère l'enregistrement d'un nouvel utilisateur. Cette fonction traite à la fois les
@@ -122,7 +123,8 @@ def user_recording():
     return render_template("User/form_user.html", form=form)
 
 
-@user_bp.route("/profil_photo/<int:user_id>")
+# Méthode permettant de visualiser la photo de l'utilisateur.
+@user_bp.route("/profil-photo/<int:user_id>")
 def profil_photo(user_id):
     """
     Affiche la photo de profil d'un utilisateur.
@@ -233,7 +235,7 @@ def article_dislike(article_id):
 
 
 # Route permettant d'ajouter un sujet au forum une fois connecté.
-@user_bp.route("/forum/ajouter_sujet", methods=['POST'])
+@user_bp.route("/forum/ajouter-sujet", methods=['POST'])
 @login_required
 def add_subject_forum():
     """
@@ -305,7 +307,7 @@ def comment_article(user_pseudo):
 
 
 # Route permettant de liker un commentaire de la section article.
-@user_bp.route("/likes_comment_article", methods=['POST'])
+@user_bp.route("/likes-commentaire-article", methods=['POST'])
 @login_required
 def likes_comment_article():
     """
@@ -501,6 +503,65 @@ def comment_subject(user_pseudo):
             return redirect(url_for("functional.connection_requise"))
 
 
+# Route permettant à un utilisateur de modifier son commentaire.
+@user_bp.route('/modification-commentaire-utilisateur/<int:id>', methods=['GET', 'POST'])
+@login_required
+def change_comment(id):
+    """
+    Permet à un utilisateur de modifier son commentaire.
+
+    Args:
+        id (int): L'id du commentaire à modifier.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après modification du commentaire.
+    """
+    comment = CommentSubject.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if comment.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à modifier ce commentaire.')
+        return redirect(url_for('frontend.forum_subject', subject_id=comment.subject_id))
+
+    formchange = ChangeCommentSubjectForm(obj=comment)
+
+    if formchange.validate_on_submit():
+        comment.comment_content = formchange.comment_content.data
+        db.session.commit()
+        flash('Commentaire modifié avec succès.')
+        return redirect(url_for('frontend.forum_subject', subject_id=comment.subject_id))
+    else:
+        flash('Erreur lors de la validation du commentaire.')
+
+    return render_template('user/edit_comment.html', formchange=formchange, comment=comment)
+
+
+@user_bp.route('/suppression-commentaire-utilisateur/<int:id>', methods=['POST'])
+@login_required
+def delete_comment(id):
+    """
+    Permet à un utilisateur de supprimer son commentaire.
+
+    Args:
+        id (int): L'id du commentaire à supprimer.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après suppression du commentaire.
+    """
+    formsuppress = SuppressCommentForm()
+    comment = CommentSubject.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if comment.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à supprimer ce commentaire.')
+        return redirect(url_for('frontend.forum_subject', subject_id=comment.subject_id))
+
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Commentaire supprimé avec succès.')
+    return redirect(url_for('frontend.forum_subject', subject_id=comment.subject_id))
+
+
 # Route permettant de répondre à un commentaire une fois connecté.
 @user_bp.route("/<string:user_pseudo>/comment<int:comment_subject_id>/reply_subject", methods=['GET', 'POST'])
 @login_required
@@ -560,7 +621,7 @@ def comment_replies_subject(comment_subject_id, user_pseudo):
 
 
 # Route permettant de liker un commentaire dans la section forum.
-@user_bp.route("/likes_comment_subject", methods=['POST'])
+@user_bp.route("/likes-commentaire-sujet", methods=['POST'])
 @login_required
 def likes_comment_subject():
     """
@@ -640,8 +701,72 @@ def reply_form_subject(comment_id, user_pseudo):
                            comment=comment, user=user)
 
 
+# Route permettant à un utilisateur de modifier sa réponse à un commentaire de la section forum.
+@user_bp.route('/modification-reponse-utilisateur/<int:id>', methods=['GET', 'POST'])
+@login_required
+def change_reply(id):
+    """
+    Permet à un utilisateur de modifier sa réponse à un commentaire.
+
+    Args:
+        id (int): L'id de la réponse à modifier.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après modification de la réponse
+    """
+    reply = ReplySubject.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if reply.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à modifier cette réponse.')
+        return redirect(url_for('frontend.forum_subject', subject_id=reply.comment.subject_id))
+
+    formchangereply = ChangeReplySubject(obj=reply)
+
+    if formchangereply.validate_on_submit():
+        reply.reply_content = formchangereply.reply_content.data
+        db.session.commit()
+        flash('Réponse modifiée avec succès.')
+        return redirect(url_for('frontend.forum_subject', subject_id=reply.comment.subject_id))
+    else:
+        flash('Erreur lors de la validation du commentaire.')
+
+    return render_template('user/edit_reply.html', formchangereply=formchangereply, reply=reply)
+
+
+# Route permettant à un utilisateur de supprimer sa réponse à un commentaire.
+@user_bp.route('/suppression-reponse-utilisateur/<int:id>', methods=['POST'])
+@login_required
+def delete_reply(id):
+    """
+    Permet à un utilisateur de supprimer sa réponse à un commentaire.
+
+    Args:
+        id (int): L'id de la réponse à supprimer.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après suppression de la réponse.
+    """
+    formsuppressreply = SuppressReplySubject()
+    reply = ReplySubject.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if reply.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à supprimer cette réponse.')
+        return redirect(url_for('frontend.forum_subject', subject_id=reply.comment.subject_id))
+
+    # Obtenir le subject_id avant de supprimer la réponse
+    subject_id = reply.comment.subject_id
+
+    db.session.delete(reply)
+    db.session.commit()
+    flash('Réponse supprimée avec succès.')
+
+    return redirect(url_for('frontend.forum_subject', subject_id=subject_id))
+
+
 # Route permettant de liker un commentaire une fois connecté.
-@user_bp.route("/like_comment/<int:comment_id>", methods=['POST'])
+@user_bp.route("/like-comment/<int:comment_id>", methods=['POST'])
 def comment_like(comment_id):
     """
     Augmente le nombre de likes pour un commentaire spécifique.
@@ -663,7 +788,7 @@ def comment_like(comment_id):
 
 
 # Route permettant de disliker un commentaire une fois connecté.
-@user_bp.route("/dislike_comment/<int:comment_id>", methods=['POST'])
+@user_bp.route("/dislike-comment/<int:comment_id>", methods=['POST'])
 def comment_dislike(comment_id):
     """
     Augmente le nombre de dislikes pour un commentaire spécifique.
@@ -831,7 +956,7 @@ def biography_dislike(biography_mangaka_id):
 
 
 # Route permettant de liker un commentaire de la section article.
-@user_bp.route("/likes_comment_biographie", methods=['POST'])
+@user_bp.route("/likes-commentaire-biographie", methods=['POST'])
 @login_required
 def likes_comment_biography():
     """
@@ -973,7 +1098,7 @@ def reply_form_biography(comment_id, user_pseudo):
 
 
 # Route permettant de chercher une biographie selon le nom du mangaka.
-@user_bp.route("/filtrage_utilisateur_catégorie_article_recherche", methods=['GET', 'POST'])
+@user_bp.route("/filtrage-utilisateur-catégorie-article-recherche", methods=['GET', 'POST'])
 def articles_search():
     """
     Rechercher des articles selon leur catégorie.

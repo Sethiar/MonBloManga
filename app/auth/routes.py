@@ -25,7 +25,7 @@ from app.mail.routes import reset_password_mail, password_reset_success_email
 
 
 # Route permettant à l'administrateur de joindre le formulaire de connexion.
-@auth_bp.route("/connexion_admin_form", methods=['GET', 'POST'])
+@auth_bp.route("/connexion-admin-form", methods=['GET', 'POST'])
 def admin_connection():
     """
     Route permettant d'accéder au formulaire de connexion pour l'administrateur.
@@ -50,7 +50,7 @@ def admin_connection():
 
 
 # Route permettant à l'admin de se déconnecter.
-@auth_bp.route("/back_end_blog/admin_deconnexion", methods=['GET'])
+@auth_bp.route("/back-end-blog/admin-deconnexion", methods=['GET'])
 def admin_logout():
     """
     Déconnecte l'administrateur actuellement authentifié.
@@ -71,7 +71,7 @@ def admin_logout():
 
 
 # Route permettant à l'administrateur de se connecter.
-@auth_bp.route("/connexion_admin", methods=['GET', 'POST'])
+@auth_bp.route("/connexion-admin", methods=['GET', 'POST'])
 def login_admin():
     """
     Gère l'authentification de l'administrateur pour accéder au back-end du blog.
@@ -112,7 +112,7 @@ def login_admin():
             if admin is not None and bcrypt.checkpw(password.encode('utf-8'), admin.password_hash):
 
                 # Authentification réussie.
-                if role == "SuperAdmin":
+                if role == "Admin":
                     current_app.logger.info(f"L'administrateur {admin.pseudo} s'est bien connecté.")
 
                     # Connexion de l'admin et stockage de ses informations dans la session.
@@ -135,19 +135,18 @@ def login_admin():
 
 
 # Route permettant de créer un utilisateur administrateur.
-@auth_bp.route("/creation_utilisateur_admin", methods=['GET', 'POST'])
+@auth_bp.route("/creation-utilisateur-admin", methods=['GET', 'POST'])
 def create_admin():
     """
-    Gère l'enregistrement d'un nouvel utilisateur avec le rôle administrateur.
+    Méthode qui gère l'enregistrement d'un nouvel utilisateur avec le rôle administrateur.
     """
     formadmin = AdminRecording()
 
     if formadmin.validate_on_submit():
-        # Assainissement des données.
-        nom = formadmin.nom.data
-        prenom = formadmin.prenom.data
+        # Assainissement des données du formulaire.
         pseudo = formadmin.pseudo.data
         role = formadmin.role.data
+        date_naissance = formadmin.date_naissance.data
         email = formadmin.email.data
         password_hash = formadmin.password.data
 
@@ -184,11 +183,10 @@ def create_admin():
             flash("Type de fichier non autorisé.", "error")
             return redirect(url_for('auth.create_admin'))
 
-        new_admin = Admin(
-            nom=nom,
-            prenom=prenom,
+        new_admin = User(
             role=role,
             pseudo=pseudo,
+            date_naissance=date_naissance,
             email=email,
             password_hash=password_hash,
             salt=salt,
@@ -209,7 +207,7 @@ def create_admin():
 
 
 # Route permettant à l'utilisateur de joindre le formulaire de connexion.
-@auth_bp.route("/connexion_utilisateur_formulaire", methods=['GET', 'POST'])
+@auth_bp.route("/connexion-utilisateur-formulaire", methods=['GET', 'POST'])
 def user_connection():
     """
     Permet à l'utilisateur d'accéder au formulaire de connexion afin de s'identifier.
@@ -238,7 +236,7 @@ def user_connection():
 
 
 # Route permettant à l'utilisateur de joindre le formulaire de connexion suite à une déconnexion.
-@auth_bp.route("/connexion_utilisateur_formulaire_erreur", methods=['GET', 'POST'])
+@auth_bp.route("/connexion-utilisateur-formulaire-erreur", methods=['GET', 'POST'])
 def user_connection_error():
     """
     Permet à l'utilisateur d'accéder au formulaire de connexion en cas d'erreur de connexion précédente.
@@ -260,7 +258,7 @@ def user_connection_error():
 
 
 # Route permettant de réinitialiser le mot de passe utilisateur.
-@auth_bp.route("/forgot_password", methods=['GET', 'POST'])
+@auth_bp.route("/forgot-password", methods=['GET', 'POST'])
 def password_reset():
     """
     Réinitialise le mot de passe utilisateur.
@@ -311,7 +309,7 @@ def wait():
 
 
 # Route permettant de réinitialiser son mot de passe.
-@auth_bp.route("/enregistrement_nouveau_mot_de_passe/<token>", methods=['GET', 'POST'])
+@auth_bp.route("/enregistrement-nouveau-mot-de-passe/<token>", methods=['GET', 'POST'])
 def recording_new_password(token):
     """
     Route permettant de réinitialiser son mot de passe.
@@ -339,7 +337,7 @@ def recording_new_password(token):
 
 
 # Route permettant à l'utilisateur de se déconnecter.
-@auth_bp.route("/deconnexion", methods=["GET"])
+@auth_bp.route("/déconnexion", methods=["GET"])
 @login_required
 def user_logout():
     """
@@ -360,7 +358,8 @@ def user_logout():
     return redirect(url_for('landing_page'))
 
 
-@auth_bp.route("/connexion_utilisateur", methods=['GET', 'POST'])
+# Route permettant de se connecter en tant qu'utilisateur.
+@auth_bp.route("/connexion-utilisateur", methods=['GET', 'POST'])
 def login():
     """
     Gère l'authentification de l'utilisateur.
@@ -425,7 +424,7 @@ def login():
 
 
 # Route permettant de renseigner l'utilisateur qu'il a été banni.
-@auth_bp.route("/utilisateur_banni,<int:user_id>", methods=['GET', 'POST'])
+@auth_bp.route("/utilisateur-banni,<int:user_id>", methods=['GET', 'POST'])
 def user_banned(user_id):
     """
     Route pour informer l'utilisateur qu'il a été banni.

@@ -1,0 +1,33 @@
+{% extends 'baseform.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Formulaire de modification d'un commentaire par l'utilisateur.">
+    <title>{% block title %}Modification d'un commentaire{% endblock %}</title>
+{% endblock %}
+
+{% block header_content %}
+
+{% endblock %}
+
+{% block body_content %}
+<div id="introduction">
+    <p>Voici le formulaire pour modifier un commentaire.</p>
+</div>
+<form method="POST" action="{{ url_for('user.change_comment', id=comment.id) }}">
+    <div class="imgcontainer">
+        <img src="" alt="Avatar" class="avatar">
+    </div>
+    <h3>Modification du commentaire</h3>
+     {{ formchange.hidden_tag() }}
+    <div class="container">
+        {{ formchange.comment_content.label }} {{ formchange.comment_content() }}
+        <input type="hidden" name="subject_id" value="{{ comment.subject_id }}">
+        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+
+        <div class="container">
+             <button type="submit" class="validatedbtn">Soumettre la réponse</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}

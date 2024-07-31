@@ -9,7 +9,7 @@ from datetime import datetime
 
 from app.Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
     NewSubjectForumForm, CommentLike, CommentBiographyForm, CommentBiographyLike, DislikeBiographyForm,\
-    LikeBiographyForm
+    LikeBiographyForm, SuppressCommentForm, SuppressReplySubject
 
 from app.Models.author import Author
 from app.Models.articles import Article
@@ -186,16 +186,18 @@ def forum_subject(subject_id):
     # Création de l'instance de formulaire.
     formcomment = CommentSubjectForm()
     formlikecomment = CommentLike()
+    formsuppress = SuppressCommentForm()
+    formsuppressreply = SuppressReplySubject()
 
     # Récupération du sujet spécifié par subject_id depuis la base de données.
     subject = SubjectForum.query.get_or_404(subject_id)
 
-    # Vérifier si l'article existe.
+    # Vérification de l'existence du sujet.
     if not subject:
-        # Si l'article n'existe pas, renvoyer une erreur 404.
+        # Si le sujet n'existe pas, erreur 404 renvoyée.
         abort(404)
 
-    # Récupération des commentaires associés à cet article.
+    # Récupération des commentaires associés à ce sujet.
     comment_subject = CommentSubject.query.filter_by(subject_id=subject_id).all()
 
     # Préparation des données de likes pour chaque commentaire.
@@ -211,12 +213,13 @@ def forum_subject(subject_id):
         }
 
     return render_template("Presentation/subject_forum.html", subject=subject, subject_id=subject_id,
-                           comment_subject=comment_subject, formcomment=formcomment, formlikecomment=formlikecomment,
+                           comment_subject=comment_subject, formcomment=formcomment, formsuppress=formsuppress,
+                           formsuppressreply=formsuppressreply, formlikecomment=formlikecomment,
                            comment_likes_data=comment_likes_data)
 
 
 # Route permettant d'accéder à la page Mangaka du blog.
-@frontend_bp.route("/biographie_mangaka")
+@frontend_bp.route("/biographie-mangaka")
 def biography():
     """
     Route permettant d'accéder à la page de la biographie des mangakas.
@@ -229,7 +232,8 @@ def biography():
     return render_template("Presentation/biography.html", biographies=biographies)
 
 
-@frontend_bp.route("/biographie_mangaka/<int:biography_mangaka_id>", methods=['GET', 'POST'])
+@frontend_bp.route("/biographie-mangaka/<int:biography_mangaka_id>", methods=['GET', 'POST'])
+@login_required
 def show_biography(biography_mangaka_id):
     """
     Route permettant d'afficher la biographie détaillée d'un mangaka.

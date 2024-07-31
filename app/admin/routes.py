@@ -31,7 +31,7 @@ from app.mail.routes import mail_banned_user, mail_deban_user, mail_edit_article
 
 
 # Route utilisée pour accéder au back_end du blog.
-@admin_bp.route("/back_end")
+@admin_bp.route("/back-end")
 def back_end():
     """
     Route utilisée pour accéder au back-end du blog après l'authentification de l'administrateur.
@@ -90,7 +90,7 @@ def back_end():
 
 
 # Route permettant d'accéder à la liste des articles.
-@admin_bp.route("/back_end_blog/articles")
+@admin_bp.route("/back-end-blog/articles")
 def articles_list():
     """
     Affiche la liste de tous les articles, par titre, pseudo d'auteur, date et nombre de commentaires.
@@ -115,7 +115,7 @@ def articles_list():
 
 
 # Route permettant de filtrer les articles par catégorie.
-@admin_bp.route("/back_end_blog/articles/by_category", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/articles-par-categorie", methods=['GET', 'POST'])
 def article_filter():
     """
     Affiche la liste des articles en filtrant par catégorie.
@@ -130,7 +130,7 @@ def article_filter():
     formfiltercategorie = FilterForm()
 
     # Peuplez les choix pour le champ category
-    formfiltercategorie.category.choices = [(cat.nom, cat.nom) for cat in Categorie.query.all()]
+    formfiltercategorie.category.choices = [(cat.name, cat.name) for cat in Categorie.query.all()]
 
     # Par défaut, récupérer tous les articles
     articles = Article.query.all()
@@ -167,7 +167,7 @@ def article_filter():
 
 
 # Route permettant de visualiser la liste des utilisateurs.
-@admin_bp.route("/back_end_blog/liste_utilisateur")
+@admin_bp.route("/back-end-blog/liste-utilisateur")
 def users_list():
     """
     Affiche la liste des utilisateurs enregistrés sur le blog.
@@ -196,7 +196,7 @@ def users_list():
 
 
 # Route permettant de supprimer d'un utilisateur.
-@admin_bp.route("/back_end_blog/supprimer_utilisateur/<int:id>", methods=["POST"])
+@admin_bp.route("/back-end-blog/supprimer-utilisateur/<int:id>", methods=["POST"])
 def suppress_user(id):
     """
     Supprime un utilisateur du système.
@@ -223,7 +223,7 @@ def suppress_user(id):
 
 
 # Route permettant de bannir un utilisateur.
-@admin_bp.route("/back_end_blog/bannir_utilisateur/<int:id>", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/bannir-utilisateur/<int:id>", methods=['GET', 'POST'])
 def banning_user(id):
     """
     Bannit un utilisateur.
@@ -259,7 +259,7 @@ def banning_user(id):
 
 
 # Route permettant de bannir un utilisateur.
-@admin_bp.route("/back_end_blog/débannir_utilisateur/<int:id>", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/débannir-utilisateur/<int:id>", methods=['GET', 'POST'])
 def unbanning_user(id):
     """
     Débannit un utilisateur.
@@ -297,7 +297,7 @@ def unbanning_user(id):
 
 
 # Route permettant de créer une nouvelle catégorie.
-@admin_bp.route("/back_end_blog/nouvelle_categorie", methods=["POST"])
+@admin_bp.route("/back-end-blog/nouvelle-categorie", methods=["POST"])
 def add_new_categorie():
     """
     Crée une nouvelle catégorie d'articles pour le blog.
@@ -324,7 +324,7 @@ def add_new_categorie():
 
 
 # Route permettant de supprimer d'une catégorie.
-@admin_bp.route("/back_end_blog/supprimer_catégorie/<int:id>", methods=["POST"])
+@admin_bp.route("/back-end-blog/supprimer-catégorie/<int:id>", methods=["POST"])
 def suppress_categorie(id):
     """
     Supprime une catégorie de la base de données.
@@ -352,7 +352,7 @@ def suppress_categorie(id):
 
 
 # Route permettant d'ajouter un nouvel auteur d'article.
-@admin_bp.route("/back_end_blog/nouvel_auteur", methods=["GET", "POST"])
+@admin_bp.route("/back-end-blog/nouvel-auteur", methods=["GET", "POST"])
 def add_new_author():
     """
     Crée un nouvel auteur pour les articles.
@@ -383,7 +383,7 @@ def add_new_author():
 
 
 # Route pour supprimer un auteur.
-@admin_bp.route("/back_end_blog/supprimer_auteur/<int:id>", methods=["POST"])
+@admin_bp.route("/back-end-blog/supprimer-auteur/<int:id>", methods=["POST"])
 def suppress_author(id):
     """
     Supprime un auteur de la base de données.
@@ -411,7 +411,7 @@ def suppress_author(id):
 
 
 # Route permettant de créer de nouveaux articles.
-@admin_bp.route("/back_end_blog/nouvel_article", methods=["GET", "POST"])
+@admin_bp.route("/back-end-blog/nouvel-article", methods=["GET", "POST"])
 def add_new_article():
     """
     Crée un nouvel article pour le blog.
@@ -461,7 +461,7 @@ def add_new_article():
 
 
 # Route permettant de supprimer un article du blog.
-@admin_bp.route("/back_end_blog/supprimer_article/<int:id>", methods=["POST"])
+@admin_bp.route("/back-end-blog/supprimer-article/<int:id>", methods=["POST"])
 def suppress_article(id):
     """
     Supprime un article du blog.
@@ -489,7 +489,7 @@ def suppress_article(id):
 
 
 # Route permettant de visualiser les commentaires des utilisateurs de la section article.
-@admin_bp.route("/back_end_blog/commentaires_article_utilisateurs", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/commentaires-article-utilisateurs", methods=['GET', 'POST'])
 def users_comments():
     """
     Filtre les utilisateurs par la première lettre de leur pseudo et affiche leurs commentaires sur les articles.
@@ -528,7 +528,7 @@ def users_comments():
 
 
 # Route permettant de rechercher les auteurs des commentaires par la première lettre de leur pseudo.
-@admin_bp.route("back_end_blog/filtrage_utilisateur_article_alphabet", methods=['GET', 'POST'])
+@admin_bp.route("back-end-blog/filtrage-utilisateur-article-alphabet", methods=['GET', 'POST'])
 def users_articles_alpha_filter():
     """
     Route permettant de filtrer les utilisateurs par la première lettre de leur pseudo.
@@ -558,7 +558,7 @@ def users_articles_alpha_filter():
 
 
 # Route permettant de supprimer le commentaire d'un utilisateur selon l'article.
-@admin_bp.route("/back_end_blog/supprimer_commentaires/<int:id>", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/supprimer-commentaires/<int:id>", methods=['GET', 'POST'])
 def suppress_comment_article(id):
     """
     Supprime un commentaire d'un article du blog.
@@ -586,7 +586,7 @@ def suppress_comment_article(id):
 
 
 # Route permettant à l'administrateur d'ajouter un sujet au forum.
-@admin_bp.route("/back_end_blog/ajouter_sujet", methods=['POST'])
+@admin_bp.route("/back-end-blog/ajouter-sujet", methods=['POST'])
 def add_subject_forum_back():
     """
     Permet à l'administrateur d'ajouter un nouveau sujet pour le forum à partir du back-end.
@@ -640,7 +640,7 @@ def suppress_subject(id):
 
 
 # Route permettant de visualiser les commentaires des utilisateurs en fonction du sujet du forum.
-@admin_bp.route("/back_end_blog/commentaires_sujets_utilisateurs", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/commentaires-sujets-utilisateurs", methods=['GET', 'POST'])
 def users_comments_subject():
     """
     Visualiser les commentaires des utilisateurs en fonction des sujets du forum.
@@ -682,7 +682,7 @@ def users_comments_subject():
 
 
 # Route permettant de filtrer les commentaires en fonction des utilisateurs dans la section des sujets du forum.
-@admin_bp.route("back_end_blog/filtrage_utilisateur_sujets_alphabet", methods=['GET', 'POST'])
+@admin_bp.route("back-end-blog/filtrage-utilisateur-sujets-alphabet", methods=['GET', 'POST'])
 def users_subject_alpha_filter():
     """
     Filtre les utilisateurs par la première lettre de leur pseudo et affiche leurs commentaires sur les sujets du forum.
@@ -730,7 +730,7 @@ def users_subject_alpha_filter():
 
 
 # Route permettant de supprimer un commentaire d'un sujet du forum.
-@admin_bp.route("/back_end_blog/supprimer_commentaires_sujets/<int:id>", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/supprimer-commentaires-sujets/<int:id>", methods=['GET', 'POST'])
 def suppress_subject_comment(id):
     """
     Supprime un commentaire d'un sujet du forum.
@@ -759,7 +759,7 @@ def suppress_subject_comment(id):
 
 
 # Route permettant de créer une biographie.
-@admin_bp.route("/back_end_blog/ajout_mangaka", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/ajout-mangaka", methods=['GET', 'POST'])
 def create_mangaka():
     """
     Crée une nouvelle biographie de mangaka.
@@ -811,7 +811,7 @@ def create_mangaka():
 
 
 # Route permettant de visualiser les commentaires des utilisateurs de la section biography.
-@admin_bp.route("/back_end_blog/commentaires_biography_utilisateurs", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/commentaires-biographie-utilisateurs", methods=['GET', 'POST'])
 def users_comments_biography():
     """
     Visualiser les commentaires des utilisateurs de la section biographie.
@@ -852,7 +852,7 @@ def users_comments_biography():
 
 # Route permettant de filtrer les auteurs des commentaires
 # de la section biographie par la première lettre de leur pseudo.
-@admin_bp.route("back_end_blog/filtrage_utilisateur_biographie_alphabet", methods=['GET', 'POST'])
+@admin_bp.route("back-end-blog/filtrage-utilisateur-biographie-alphabet", methods=['GET', 'POST'])
 def users_biography_alpha_filter():
     """
     Filtre les utilisateurs par la première lettre de leur pseudo et affiche leurs commentaires.
@@ -898,7 +898,7 @@ def users_biography_alpha_filter():
 
 
 # Route permettant de supprimer le commentaire d'un utilisateur dans la section biographie.
-@admin_bp.route("/back_end_blog/supprimer_commentaires_biographie/<int:id>", methods=['GET', 'POST'])
+@admin_bp.route("/back-end-blog/supprimer-commentaires-biographie/<int:id>", methods=['GET', 'POST'])
 def suppress_biography_comment(id):
     """
     Supprime un commentaire d'une biographie du blog.
@@ -928,7 +928,7 @@ def suppress_biography_comment(id):
 
 
 # Route permettant de chercher une biographie selon le nom du mangaka.
-@admin_bp.route("back_end_blog/filtrage_utilisateur_biographie_recherche", methods=['GET', 'POST'])
+@admin_bp.route("back-end-blog/filtrage-utilisateur-biographie-recherche", methods=['GET', 'POST'])
 def biography_search():
     """
     Rechercher des biographies de mangakas par leur nom ou prénom.
@@ -973,7 +973,7 @@ def biography_search():
 
 
 # Route permettant de supprimer une biographie des bases de données.
-@admin_bp.route("back_end_blog/supprimer_biographie/<int:biography_id>", methods=['POST'])
+@admin_bp.route("back-end-blog/supprimer-biographie/<int:biography_id>", methods=['POST'])
 def delete_biography(biography_id):
     """
     Supprime une biographie de la base de données.
