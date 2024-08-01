@@ -1,10 +1,33 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'baseform.html.jinja2' %}
+
+{% block head_content %}
+    <meta name="description" content="Formulaire de modification d'un commentaire par l'utilisateur dans la section article.">
+    <title>{% block title %}Modification d'un commentaire{% endblock %}</title>
+{% endblock %}
+
+{% block header_content %}
+
+{% endblock %}
+
+{% block body_content %}
+<div id="introduction">
+    <p>Voici le formulaire pour modifier un commentaire.</p>
+</div>
+<form method="POST" action="{{ url_for('user.change_comment_article', id=comment.id) }}">
+    <div class="imgcontainer">
+        <img src="" alt="Avatar" class="avatar">
+    </div>
+    <h3>Modification du commentaire</h3>
+     {{ formchange_article_comment.hidden_tag() }}
+    <div class="container">
+        {{ formchange_article_comment.comment_content.label }} {{ formchange_article_comment.comment_content() }}
+        <input type="hidden" name="article_id" value="{{ comment.article_id }}">
+        <input type="hidden" name="comment_id" value="{{ comment.id }}">
+
+        <div class="container">
+             <button type="submit" class="validatedbtn">Soumettre la réponse</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
