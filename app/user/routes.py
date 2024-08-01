@@ -19,7 +19,9 @@ from app.Models import db
 
 from app.Models.forms import LikeForm, DislikeForm, UserSaving, NewSubjectForumForm, CommentSubjectForm, \
     ChangeCommentSubjectForm, SuppressCommentForm, ReplyArticleForm, ReplySubjectForm, SuppressReplySubject, \
-    ChangeReplySubject, LikeBiographyForm, DislikeBiographyForm, ReplyBiographyForm
+    ChangeReplySubject, LikeBiographyForm, DislikeBiographyForm, ReplyBiographyForm, \
+    ChangeCommentArticleForm, SuppressCommentArticleForm, ChangeReplyArticle, SuppressReplyArticle, \
+    ChangeCommentBiographyForm, SuppressCommentBiographyForm2, ChangeReplyBiography, SuppressReplyBiography
 
 from app.Models.articles import Article
 from app.Models.comment_article import CommentArticle
@@ -306,6 +308,67 @@ def comment_article(user_pseudo):
             return redirect(url_for("functional.connection_requise"))
 
 
+# Route permettant à un utilisateur de modifier son commentaire dans la section article.
+@user_bp.route('/modification-commentaire-utilisateur-article/<int:id>', methods=['GET', 'POST'])
+@login_required
+def change_comment_article(id):
+    """
+    Permet à un utilisateur de modifier son commentaire.
+
+    Args:
+        id (int): L'id du commentaire à modifier.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après modification du commentaire.
+    """
+    comment = CommentArticle.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if comment.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à modifier ce commentaire.')
+        return redirect(url_for('frontend.show_article', article_id=comment.article_id))
+
+    formchange_article_comment = ChangeCommentArticleForm(obj=comment)
+
+    if formchange_article_comment.validate_on_submit():
+        comment.comment_content = formchange_article_comment.comment_content.data
+        db.session.commit()
+        flash('Commentaire modifié avec succès.')
+        return redirect(url_for('frontend.show_article', article_id=comment.article_id))
+    else:
+        flash('Erreur lors de la validation du commentaire.')
+
+    return render_template('user/edit_comment_article.html', formchange_article_comment=formchange_article_comment,
+                           comment=comment)
+
+
+# Route permettant à un utilisateur de supprimer son commentaire dans la section article.
+@user_bp.route('/suppression-commentaire-utilisateur-article/<int:id>', methods=['POST'])
+@login_required
+def delete_comment_article(id):
+    """
+    Permet à un utilisateur de supprimer son commentaire.
+
+    Args:
+        id (int): L'id du commentaire à supprimer.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après suppression du commentaire.
+    """
+    formsuppress_article_comment = SuppressCommentArticleForm()
+    comment = CommentArticle.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if comment.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à supprimer ce commentaire.')
+        return redirect(url_for('frontend.show_article', article_id=comment.article_id))
+
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Commentaire supprimé avec succès.')
+    return redirect(url_for('frontend.show_article', article_id=comment.article_id))
+
+
 # Route permettant de liker un commentaire de la section article.
 @user_bp.route("/likes-commentaire-article", methods=['POST'])
 @login_required
@@ -433,6 +496,70 @@ def comment_replies_article(comment_article_id, user_pseudo):
     return redirect(url_for('frontend.show_article', article_id=comment.article_id))
 
 
+# Route permettant à un utilisateur de modifier sa réponse à un commentaire de la section article.
+@user_bp.route('/modification-reponse-utilisateur-article/<int:id>', methods=['GET', 'POST'])
+@login_required
+def change_reply_article(id):
+    """
+    Permet à un utilisateur de modifier sa réponse à un commentaire.
+
+    Args:
+        id (int): L'id de la réponse à modifier.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après modification de la réponse
+    """
+    reply = ReplyArticle.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if reply.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à modifier cette réponse.')
+        return redirect(url_for('frontend.show_article', article_id=reply.comment.article_id))
+
+    formchangereply = ChangeReplyArticle(obj=reply)
+
+    if formchangereply.validate_on_submit():
+        reply.reply_content = formchangereply.reply_content.data
+        db.session.commit()
+        flash('Réponse modifiée avec succès.')
+        return redirect(url_for('frontend.show_article', article_id=reply.comment.article_id))
+    else:
+        flash('Erreur lors de la validation du commentaire.')
+
+    return render_template('user/edit_reply_article.html', formchangereply=formchangereply, reply=reply)
+
+
+# Route permettant à un utilisateur de supprimer sa réponse à un commentaire dans la section article.
+@user_bp.route('/suppression-reponse-utilisateur-article/<int:id>', methods=['POST'])
+@login_required
+def delete_reply_article(id):
+    """
+    Permet à un utilisateur de supprimer sa réponse à un commentaire.
+
+    Args:
+        id (int): L'id de la réponse à supprimer.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après suppression de la réponse.
+    """
+    formsuppressreply = SuppressReplyArticle()
+    reply = ReplyArticle.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire.
+    if reply.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à supprimer cette réponse.')
+        return redirect(url_for('frontend.show_article', article_id=reply.comment.article_id))
+
+    # Obtenir le subject_id avant de supprimer la réponse.
+    article_id = reply.comment.article_id
+
+    db.session.delete(reply)
+    db.session.commit()
+    flash('Réponse supprimée avec succès.')
+
+    return redirect(url_for('frontend.show_article', article_id=article_id))
+
+
 # Route permettant de joindre le formulaire afin de poster une réponse à un commentaire.
 @user_bp.route("/<string:user_pseudo>/comment<int:comment_id>/reply_form_article", methods=['GET'])
 @login_required
@@ -533,7 +660,7 @@ def change_comment(id):
     else:
         flash('Erreur lors de la validation du commentaire.')
 
-    return render_template('user/edit_comment.html', formchange=formchange, comment=comment)
+    return render_template('user/edit_comment_subject.html', formchange=formchange, comment=comment)
 
 
 @user_bp.route('/suppression-commentaire-utilisateur/<int:id>', methods=['POST'])
@@ -731,10 +858,10 @@ def change_reply(id):
     else:
         flash('Erreur lors de la validation du commentaire.')
 
-    return render_template('user/edit_reply.html', formchangereply=formchangereply, reply=reply)
+    return render_template('user/edit_reply_subject.html', formchangereply=formchangereply, reply=reply)
 
 
-# Route permettant à un utilisateur de supprimer sa réponse à un commentaire.
+# Route permettant à un utilisateur de supprimer sa réponse à un commentaire de la section forum.
 @user_bp.route('/suppression-reponse-utilisateur/<int:id>', methods=['POST'])
 @login_required
 def delete_reply(id):
@@ -851,6 +978,67 @@ def comment_biography(user_pseudo):
         else:
             # Redirection vers une autre page si l'utilisateur n'existe pas.
             return redirect(url_for("functional.connection_requise"))
+
+
+# Route permettant à un utilisateur de modifier son commentaire dans la section biographie.
+@user_bp.route('/modification-commentaire-utilisateur-biographie/<int:id>', methods=['GET', 'POST'])
+@login_required
+def change_comment_biography(id):
+    """
+    Permet à un utilisateur de modifier son commentaire.
+
+    Args:
+        id (int): L'id du commentaire à modifier.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après modification du commentaire.
+    """
+    comment = CommentBiography.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if comment.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à modifier ce commentaire.')
+        return redirect(url_for('frontend.biography_mangaka', biography_mangaka_id=comment.biography_mangaka_id))
+
+    formchange_biography_comment = ChangeCommentBiographyForm(obj=comment)
+
+    if formchange_biography_comment.validate_on_submit():
+        comment.comment_biography_content = formchange_biography_comment.comment_biography_content.data
+        db.session.commit()
+        flash('Commentaire modifié avec succès.')
+        return redirect(url_for('frontend.show_biography', biography_mangaka_id=comment.biography_mangaka_id))
+    else:
+        flash('Erreur lors de la validation du commentaire.')
+
+    return render_template('user/edit_comment_biography.html',
+                           formchange_biography_comment=formchange_biography_comment, comment=comment)
+
+
+# Route permettant à un utilisateur de supprimer son commentaire dans la section biographie.
+@user_bp.route('/suppression-commentaire-utilisateur-biographie/<int:id>', methods=['POST'])
+@login_required
+def delete_comment_biography(id):
+    """
+    Permet à un utilisateur de supprimer son commentaire.
+
+    Args:
+        id (int): L'id du commentaire à supprimer.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après suppression du commentaire.
+    """
+    formsuppress = SuppressCommentBiographyForm2()
+    comment = CommentBiography.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if comment.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à supprimer ce commentaire.')
+        return redirect(url_for('frontend.show_biography', biography_mangaka_id=comment.biography_mangaka_id))
+
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Commentaire supprimé avec succès.')
+    return redirect(url_for('frontend.show_biography', biography_mangaka_id=comment.biography_mangaka_id))
 
 
 # Route permettant de liker une biographie.
@@ -1095,6 +1283,71 @@ def reply_form_biography(comment_id, user_pseudo):
     user = User.query.filter_by(pseudo=user_pseudo).first()
 
     return render_template("User/reply_form_biography.html", form=formbiographyreply, comment=comment, user=user)
+
+
+# Route permettant à un utilisateur de modifier sa réponse à un commentaire de la section biographie.
+@user_bp.route('/modification-reponse-utilisateur-biographie/<int:id>', methods=['GET', 'POST'])
+@login_required
+def change_reply_biography(id):
+    """
+    Permet à un utilisateur de modifier sa réponse à un commentaire.
+
+    Args:
+        id (int): L'id de la réponse à modifier.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après modification de la réponse
+    """
+    reply = ReplyBiography.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire
+    if reply.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à modifier cette réponse.')
+        return redirect(url_for('frontend.show_biography', biography_mangaka_id=reply.comment.biography_mangaka_id))
+
+    formchange_biography_reply = ChangeReplyBiography(obj=reply)
+
+    if formchange_biography_reply.validate_on_submit():
+        reply.reply_content = formchange_biography_reply.reply_content.data
+        db.session.commit()
+        flash('Réponse modifiée avec succès.')
+        return redirect(url_for('frontend.show_biography', biography_mangaka_id=reply.comment.biography_mangaka_id))
+    else:
+        flash('Erreur lors de la validation du commentaire.')
+
+    return render_template('user/edit_reply_biography.html', formchange_biography_reply=formchange_biography_reply,
+                           reply=reply)
+
+
+# Route permettant à un utilisateur de supprimer sa réponse à un commentaire dans la section biography.
+@user_bp.route('/suppression-reponse-utilisateur-biography/<int:id>', methods=['POST'])
+@login_required
+def delete_reply_biography(id):
+    """
+    Permet à un utilisateur de supprimer sa réponse à un commentaire.
+
+    Args:
+        id (int): L'id de la réponse à supprimer.
+
+    Returns:
+        redirect: Redirige vers la page du sujet du forum après suppression de la réponse.
+    """
+    formsuppress_biography_reply = SuppressReplyBiography()
+    reply = ReplyBiography.query.filter_by(id=id).first_or_404()
+
+    # Vérification que l'utilisateur actuel est l'auteur du commentaire.
+    if reply.user_id != current_user.id:
+        flash('Vous n\'êtes pas autorisé à supprimer cette réponse.')
+        return redirect(url_for('frontend.show_biography', biography_mangaka_id=reply.comment.biography_mangaka_id))
+
+    # Obtenir le subject_id avant de supprimer la réponse.
+    biography_mangaka_id = reply.comment.biography_mangaka_id
+
+    db.session.delete(reply)
+    db.session.commit()
+    flash('Réponse supprimée avec succès.')
+
+    return redirect(url_for('frontend.show_biography', biography_mangaka_id=biography_mangaka_id))
 
 
 # Route permettant de chercher une biographie selon le nom du mangaka.

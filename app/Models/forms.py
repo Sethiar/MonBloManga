@@ -359,6 +359,34 @@ class CommentArticleForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant à un utilisateur de modifier son commentaire pour la section article.
+class ChangeCommentArticleForm(FlaskForm):
+    """
+    Formulaire permettant de supprimer un commentaire par l'utilisateur.
+    Attributes :
+        comment_content : Contenu du commentaire de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+
+    comment_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                    render_kw={"placeholder": "Veuillez entrer votre commentaire."})
+    submit = SubmitField("Soumettre le commentaire")
+    csrf_token = HiddenField()
+
+
+# Formulaire permettant à un utilisateur de supprimer son commentaire pour la section article.
+class SuppressCommentArticleForm(FlaskForm):
+    """
+    Formulaire permettant de supprimer un commentaire par l'utilisateur.
+    Attributes :
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+    submit = SubmitField('Supprimer le commentaire')
+    csrf_token = HiddenField()
+
+
 # Formulaire permettant à un utilisateur de créer un commentaire pour la section forum.
 class CommentSubjectForm(FlaskForm):
     """
@@ -470,6 +498,35 @@ class ReplyArticleForm(FlaskForm):
 
     # Action de soumettre le formulaire.
     submit = SubmitField()
+
+
+# Formulaire permettant à un utilisateur de modifier sa réponse à un commentaire dans la section article.
+class ChangeReplyArticle(FlaskForm):
+    """
+    Formulaire permettant de modifier une réponse par l'utilisateur.
+    Attributes :
+        reply_content : Contenu du commentaire de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+
+    reply_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                  render_kw={"placeholder": "Veuillez entrer votre réponse."})
+    submit = SubmitField("Soumettre la réponse.")
+    csrf_token = HiddenField()
+
+
+# Formulaire permettant à un utilisateur de supprimer sa réponse à un commentaire dans la section article.
+class SuppressReplyArticle(FlaskForm):
+    """
+    Formulaire permettant à un utilisateur de supprimer sa réponse à un commentaire de la section forum.
+
+    Attributes :
+        comment_id (HiddenField) : Champ caché pour l'ID de la réponse à supprimer.
+        submit (SubmitField): Bouton de soumission du formulaire.
+    """
+    reply_id = HiddenField('reply_id', validators=[DataRequired()])
+    submit = SubmitField('Supprimer')
 
 
 # Formulaire permettant de répondre à un commentaire dans la section forum.
@@ -607,6 +664,34 @@ class CommentBiographyForm(FlaskForm):
     csrf_token = HiddenField()
 
 
+# Formulaire permettant à un utilisateur de modifier son commentaire pour la section biographie.
+class ChangeCommentBiographyForm(FlaskForm):
+    """
+    Formulaire permettant de supprimer un commentaire par l'utilisateur.
+    Attributes :
+        comment_content : Contenu du commentaire de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+
+    comment_biography_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                              render_kw={"placeholder": "Veuillez entrer votre commentaire."})
+    submit = SubmitField("Soumettre le commentaire")
+    csrf_token = HiddenField()
+
+
+# Formulaire permettant à un utilisateur de supprimer son commentaire pour la section biographie.
+class SuppressCommentBiographyForm2(FlaskForm):
+    """
+    Formulaire permettant de supprimer un commentaire par l'utilisateur.
+    Attributes :
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+    submit = SubmitField('Supprimer le commentaire')
+    csrf_token = HiddenField()
+
+
 # Formulaire permettant de liker une biographie.
 class LikeBiographyForm(FlaskForm):
     """
@@ -679,6 +764,35 @@ class SuppressCommentBiographyForm(FlaskForm):
         submit (SubmitField): Bouton de soumission du formulaire pour supprimer le commentaire.
     """
     comment_id = HiddenField('Comment_id', validators=[DataRequired()])
+    submit = SubmitField('Supprimer')
+
+
+# Formulaire permettant à un utilisateur de modifier sa réponse à un commentaire dans la section biographie.
+class ChangeReplyBiography(FlaskForm):
+    """
+    Formulaire permettant de modifier une réponse par l'utilisateur.
+    Attributes :
+        reply_content : Contenu du commentaire de l'utilisateur.
+        submit (SubmitField): Bouton de soumission du formulaire.
+        csrf_token (HiddenField) : Jeton CSRF pour la sécurité du formulaire.
+    """
+
+    reply_content = TextAreaField("Contenu du commentaire", validators=[DataRequired()],
+                                  render_kw={"placeholder": "Veuillez entrer votre réponse."})
+    submit = SubmitField("Soumettre la réponse.")
+    csrf_token = HiddenField()
+
+
+# Formulaire permettant à un utilisateur de supprimer sa réponse à un commentaire dans la section biographie.
+class SuppressReplyBiography(FlaskForm):
+    """
+    Formulaire permettant à un utilisateur de supprimer sa réponse à un commentaire de la section forum.
+
+    Attributes :
+        comment_id (HiddenField) : Champ caché pour l'ID de la réponse à supprimer.
+        submit (SubmitField): Bouton de soumission du formulaire.
+    """
+    reply_id = HiddenField('reply_id', validators=[DataRequired()])
     submit = SubmitField('Supprimer')
 
 

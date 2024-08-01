@@ -9,7 +9,9 @@ from datetime import datetime
 
 from app.Models.forms import CommentArticleForm, CommentSubjectForm, LikeForm, DislikeForm, \
     NewSubjectForumForm, CommentLike, CommentBiographyForm, CommentBiographyLike, DislikeBiographyForm,\
-    LikeBiographyForm, SuppressCommentForm, SuppressReplySubject
+    LikeBiographyForm, SuppressCommentForm, SuppressReplySubject, ChangeCommentArticleForm, \
+    SuppressCommentArticleForm, ChangeReplyArticle, SuppressReplyArticle, ChangeCommentBiographyForm, \
+    SuppressCommentBiographyForm, ChangeReplyBiography, SuppressReplyBiography
 
 from app.Models.author import Author
 from app.Models.articles import Article
@@ -93,6 +95,10 @@ def show_article(article_id):
     formlike = LikeForm()
     formdislike = DislikeForm()
     formlikecomment = CommentLike()
+    formchange_article_comment = ChangeCommentArticleForm()
+    formsuppress_article_comment = SuppressCommentArticleForm()
+    formchange_article_reply = ChangeReplyArticle()
+    formsuppress_article_reply = SuppressReplyArticle()
 
     # Récupération de l'article depuis la base de données en utilisant son id.
     article = Article.query.get_or_404(article_id)
@@ -120,7 +126,11 @@ def show_article(article_id):
     # Récupération des commentaires associés à cet article.
     comments = CommentArticle.query.filter_by(article_id=article_id).all()
 
-    return render_template("Presentation/article.html", article=article, article_id=article_id, comments=comments,
+    return render_template("Presentation/article.html", article=article, article_id=article_id,
+                           formchange_article_comment=formchange_article_comment,
+                           formsuppress_article_comment=formsuppress_article_comment,
+                           formchange_article_reply=formchange_article_reply,
+                           formsuppress_article_reply=formsuppress_article_reply, comments=comments,
                            formcomment=formcomment, formlike=formlike, formdislike=formdislike,
                            formlikecomment=formlikecomment, comment_likes_data=comment_likes_data)
 
@@ -251,6 +261,10 @@ def show_biography(biography_mangaka_id):
     formdislike = DislikeForm()
     formlike = LikeBiographyForm()
     formlikecomment = CommentBiographyLike()
+    formchange_biography_comment = ChangeCommentBiographyForm()
+    formsuppress_biography_comment = SuppressCommentBiographyForm()
+    formchange_biography_reply = ChangeReplyBiography()
+    formsuppress_biography_reply = SuppressReplyBiography()
 
     # Récupération de la biographie si elle existe.
     biography = BiographyMangaka.query.get_or_404(biography_mangaka_id)
@@ -280,5 +294,9 @@ def show_biography(biography_mangaka_id):
 
     return render_template("Presentation/biography_mangaka.html", biography=biography,
                            biography_mangaka_id=biography_mangaka_id, comments=comments,
-                           formcomment=formcomment, formlike=formlike, formdislike=formdislike,
-                           formlikecomment=formlikecomment, comment_likes_data=comment_likes_data)
+                           formcomment=formcomment,  formchange_biography_comment=formchange_biography_comment,
+                           formsuppress_biography_comment=formsuppress_biography_comment,
+                           formchange_biography_reply=formchange_biography_reply,
+                           formsuppress_biography_reply=formsuppress_biography_reply, formlike=formlike,
+                           formdislike=formdislike, formlikecomment=formlikecomment,
+                           comment_likes_data=comment_likes_data)
